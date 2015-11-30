@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.springsource.training.module</groupId>
+    <artifactId>springWeb</artifactId>
+    <version>4.0.a.RELEASE</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <!--
+          // DO NOT MODIFY THESE MODULE ELEMENTS - GENERATED AUTOMATICALLY
+          -->
+        <module>parentSpringWebProject</module>
+
+        <!-- Section: intro -->
+        <module>rewards</module>
+        <module>rewards-online</module>
+
+        <!-- Section: mvc -->
+        <module>mvc-getting-started</module>
+        <module>mvc-getting-started-solution</module>
+        <module>mvc-layout</module>
+        <module>mvc-layout-solution</module>
+        <module>mvc-views</module>
+        <module>mvc-views-solution</module>
+        <module>mvc-forms-setup</module>
+        <module>mvc-forms-setup-solution</module>
+        <module>mvc-forms-submit</module>
+        <module>mvc-forms-submit-solution</module>
+        <module>mvc-personalization</module>
+        <module>mvc-personalization-solution</module>
+
+        <module>rest-ws-intro</module>
+        <module>rest-ws-intro-solution</module>
+        <module>rest-ws-mvc</module>
+        <module>rest-ws-mvc-solution</module>
+        <module>ajax</module>
+        <module>ajax-solution</module>
+
+        <module>webflow-getting-started</module>
+        <module>webflow-getting-started-solution</module>
+        <module>webflow-language-essentials</module>
+        <module>webflow-language-essentials-solution</module>
+        <module>webflow-actions</module>
+        <module>webflow-actions-solution</module>
+        <module>webflow-action-states</module>
+        <module>webflow-action-states-solution</module>
+
+        <module>web-security</module>
+        <module>web-security-solution</module>
+        <module>web-test</module>
+        <module>web-test-solution</module>
+        <!-- Section: web-flow -->
+        <!-- Section: optional -->
+        <!-- Section: appendix -->
+    </modules>
+</project>
+
+
+
