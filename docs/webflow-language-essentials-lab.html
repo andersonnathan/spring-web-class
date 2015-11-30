@@ -1,0 +1,261 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;12.&nbsp;webflow-language-essentials: Web Flow Language Essentials Lab</title><link rel="stylesheet" href="css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.0"><link rel="start" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="up" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="prev" href="webflow-getting-started.html" title="Chapter&nbsp;11.&nbsp;webflow-getting-started: Getting Started with Spring Web Flow"><link rel="next" href="web-security-lab.html" title="Chapter&nbsp;13.&nbsp;web-security: Securing the Web Tier"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="background-color:white;border:none;height:73px;border:1px solid black;"><a style="border:none;" href="http://www.pivotal.io" title="Pivotal"><img style="border:none;" src="images/heading-logo-lhs.jpg"></img></a><a style="border:none;" href="http://www.spring.io" title="The Spring Framework"><img style="border:none;position:absolute;padding-top:5px;right:42px;" src="images/heading-logo-rhs.jpg"></img></a></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="webflow-language-essentials-lab"></a>Chapter&nbsp;12.&nbsp;webflow-language-essentials: Web Flow Language Essentials Lab</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="webflow-language-essentials-lab-introduction"></a>12.1.&nbsp;Introduction</h2></div></div></div><p>
+            In this lab, you will implement your first web flow to guide users through a process to create a new reward.
+            In-line with Spring Web Flow best practices, you will design and implement your flow's navigation logic first, before adding more complex behavior.
+            You will use mock views provided by your UI designer to quickly iterate on your flow logic with a business analyst.
+            By the end of this lab, you should understand the essentials of the Web Flow definition language, and how to author your own flows.
+        </p><div class="orderedlist"><p class="title"><b>What you will learn:</b></p><ol type="1" compact><li><p>How to define the steps of a flow</p></li><li><p>How to trigger transitions that move between steps</p></li><li><p>How to integrate mock views for UI acceptance reviews</p></li></ol></div><p>Estimated time to complete: 30 minutes</p><p>URL for this project <a href="http://localhost:8080/webflow-essentials" target="_top">
+            http://localhost:8080/webflow-essentials/</a>.</p><p>Solution URL: <a href="http://localhost:8080/webflow-essentials-solution" target="_top">
+            http://localhost:8080/webflow-essentials-solution/</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="webflow-language-essentials-lab-tasks"></a>12.2.&nbsp;The Task: Implement the Basic Flow</h2></div></div></div><p>
+            The New Reward flow should guide users through the process of rewarding
+            a member account manually for dining at a restaurant.  The first
+            step of this process should prompt the user to fill out a dining form.
+            On the form, the user must provide the credit card number used to purchase
+            the dining, the restaurant where the dining occurred, the dining amount,
+            and the dining date.
+            After submitting the form, the user should be taken to a screen to
+            review the reward before it is confirmed.
+            After review, the user should be able to confirm the reward.
+            Once confirmed, the user should be redirected to a screen displaying
+            the details of the completed reward transaction.
+        </p><p>
+            A graphical illustration of the New Reward flow is shown below:
+        </p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="webflow-language-essentials-lab-flow-diagram"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/webflow-language-essentials/newReward-flow.png" align="middle" width="810" alt="Reminder: The New Reward Flow"></div></div><p class="title"><b>Figure&nbsp;12.1.&nbsp;Reminder: The New Reward Flow</b></p></div><br xmlns="" class="figure-break"></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="webflow-language-essentials-quick-instructions"></a>12.3.&nbsp;Quick Instructions</h2></div></div></div><p>Quick instructions for this exercise have been embedded within the
+        lab materials  in the form of TODO comments.  To display them, open the
+        <code class="literal">Tasks</code> view  (Window -&gt; Show view -&gt; Tasks
+        (<span class="emphasis"><em>not Task List</em></span>)).  Following the TODOs is the
+        recommended way to do this lab.  Each TODO step is describe in
+        detail below if you need more help. Just search for TODO-XX in the 
+        current chapter.
+        <span class="emphasis"><em>Use the flow diagram above to help you</em></span>.
+        </p><p>Occasionally, TODO'S defined within XML files may fail to appear in 
+        the <code class="literal">Tasks</code> view (i.e. gaps in the number sequence).  To
+        correct this, go to <code class="literal">Preferences -&gt; General -&gt; Editors -&gt;
+        Structured Text Editor -&gt; Task Tags</code> pane.  Check <code class="literal">Enable
+        searching for Task Tags</code> and click <code class="literal">Clean and Redetect
+        Tasks</code>.  On the <code class="literal">Filters</code> tab, ensure XML content
+        type is checked.  Changes may take 3-5 secs to take effect.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="webflow-language-essentials-lab-instructions"></a>12.4.&nbsp;Instructions</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="webflow-language-essentials-lab-render-form"></a>12.4.1.&nbsp;Render the Dining Form</h3></div></div></div><p>
+                In the previous lab, you set up the Spring Web Flow infrastructure
+                and registered a flow definition with an incomplete view state.
+                This lab picks up where the previous lab left off.
+                Confirm this by deploying the webflow-language-essentials project to
+                your server (TODO-01) and accessing it at
+                <a href="http://localhost:8080/webflow-essentials" target="_top">
+                http://localhost:8080/webflow-essentials</a>.
+                Select the New Reward link, and note the 404 error indicating
+                the Web Flow system attempted to render the
+                <code class="filename">enterDiningInformation</code> view but failed to find the
+                JSP.
+            </p><p>
+                Now navigate to the newReward-flow.xml definition in your Package Explorer and open it.
+                As you can see, it has only one view state.
+                Your goal in this lab is to fully implement the flow logic illustrated above in this file.
+            </p><p>
+                Get started by completing the first state of the flow that renders the dining form.
+                The UI design team has provided this mock JSP template for you to use during the prototyping phase.
+                You will find it in <code class="filename">/WEB-INF/rewards/newReward/enterDiningInformation.jsp</code>:
+                </p><pre class="programlisting">
+&lt;h1&gt;
+    Reward an Account for Dining
+&lt;/h1&gt;
+
+&lt;form id="diningForm" method="post"&gt;
+    &lt;fieldset&gt; 
+        &lt;legend&gt;
+            Dining Information
+        &lt;/legend&gt;
+        &lt;ul&gt;
+            &lt;li&gt;
+                &lt;label for="creditCardNumber"&gt;
+                    Credit Card
+                &lt;/label&gt;
+                &lt;div class="control"&gt;
+                    &lt;input id="creditCardNumber" name="creditCardNumber" type="text" /&gt;
+                &lt;/div&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;label for="merchantNumber"&gt;
+                    Restaurant
+                &lt;/label&gt;
+                &lt;div class="control"&gt;
+                    &lt;select id="merchantNumber" name="merchantNumber"&gt;
+                        &lt;option value="1"&gt;Applebees&lt;/option&gt;
+                        &lt;option value="2"&gt;Subway&lt;/option&gt;
+                    &lt;/select&gt;
+                &lt;/div&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;label for="amount"&gt;
+                    Dining Amount
+                &lt;/label&gt;
+                &lt;div class="control"&gt;
+                    &lt;input id="amount" name="amount" type="text" /&gt;
+                &lt;/div&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;label for="date"&gt;
+                    Dining Date
+                &lt;/label&gt;
+                &lt;div class="control"&gt;
+                    &lt;input id="date" name="date" type="text" value="2009-01-20" /&gt;
+                &lt;/div&gt;
+            &lt;/li&gt;
+        &lt;/ul&gt;
+        
+        &lt;button type="submit"&gt;
+            Reward
+        &lt;/button&gt;
+        
+    &lt;/fieldset&gt;
+&lt;/form&gt;
+                </pre><p>
+                You will need to configure it as a tiles view to use it (TODO-02 has 
+                three parts - look for TODO-02a, TODO-02b and TODO-02c).
+            </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                    Consider taking advantage of the convention that maps
+                    a view-state identifier to a JSP template.
+                </p></td></tr></table></div><p>
+                After you have finished the implementation, open
+                <code class="filename">webflow-config.xml</code> (Ctrl+Shift+R).
+                Verity that the development mode is enabled.
+                If it is you won't have to restart your server to see the
+                on-the-fly changes you make to your flow definition.
+                When this is done try testing your changes by selecting the
+                New Reward link.  You have completed this step once the flow
+                starts and renders the dining form successfully.
+            </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="webflow-language-essentials-lab-transition-to-review"></a>12.4.2.&nbsp;Transition to the Review Screen</h3></div></div></div><p>
+                (TODO-03) When the dining form is submitted, the user should be taken to
+                a screen allowing him or her to review the reward before confirming it.
+                Complete this step by defining a transition to a state that renders this review screen.
+                The transition should trigger when the submit button is selected on the dining form.
+                The mock screen definition for the review screen has also been provided by the UI design team.
+                You will find it in <code class="filename">/WEB-INF/rewards/newReward/reviewReward.jsp</code>:
+                </p><pre class="programlisting">
+&lt;h1&gt;
+    Review Reward
+&lt;/h1&gt;
+
+&lt;form id="reviewReward" method="post"&gt;
+    &lt;fieldset&gt;
+        &lt;legend&gt;
+            Reward
+        &lt;/legend&gt;
+        &lt;ul&gt;
+            &lt;li&gt;
+                &lt;label&gt;Account Number&lt;/label&gt; 1234123412341234
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;label&gt;Reward Amount&lt;/label&gt; $10.00
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;label&gt;
+                    Distributions
+                &lt;/label&gt;
+                &lt;table&gt;
+                    &lt;thead&gt;
+                        &lt;tr&gt;
+                            &lt;td&gt;Beneficiary&lt;/td&gt;
+                            &lt;td&gt;Amount&lt;/td&gt;
+                            &lt;td&gt;Percentage&lt;/td&gt;
+                            &lt;td&gt;Total Savings&lt;/td&gt;
+                        &lt;/tr&gt;
+                    &lt;/thead&gt;
+                    &lt;tbody&gt;
+                        &lt;tr&gt;
+                            &lt;td&gt;Annabelle&lt;/td&gt;
+                            &lt;td&gt;$5.00&lt;/td&gt;
+                            &lt;td&gt;50%&lt;/td&gt;
+                            &lt;td&gt;$60.34&lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr&gt;
+                            &lt;td&gt;Corgan&lt;/td&gt;
+                            &lt;td&gt;$5.00&lt;/td&gt;
+                            &lt;td&gt;50%&lt;/td&gt;
+                            &lt;td&gt;$34.86&lt;/td&gt;
+                        &lt;/tr&gt;
+                    &lt;/tbody&gt;
+                &lt;/table&gt;
+            &lt;/li&gt;
+        &lt;/ul&gt;
+        
+        &lt;button type="submit"&gt;
+            Confirm
+        &lt;/button&gt;
+        
+    &lt;/fieldset&gt;
+&lt;/form&gt;
+                </pre><p>
+                </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                        Keep in mind the UI design team does not know anything about
+                        Spring Web Flow.
+                        You will have to make a small change to the screen definitions
+                        they provide to encode Web Flow specifics into the form.
+                    </p></td></tr></table></div><p>
+            </p><p>
+                When you are done, submit the dining form to test your work.
+                If you got it right the first time, you should be taken to the
+                review reward screen.
+                Once on the review screen, you should also be able to go back
+                using your browser's back button and resubmit.
+                No browser warnings should occur.
+                You have completed this step once you successfully transition to
+                the review reward page, and can go back, forward, and refresh freely.
+                </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                        Take note of the execution parameter that has been encoded
+                        into the flow URL.
+                        This parameter identifies the particular
+                        <span class="emphasis"><em>execution</em></span> of the New Reward flow definition
+                        you are interacting with.
+                        Each flow execution is scoped to the user's session and has a
+                        unique two-part key in the format e&lt;x&gt;s&lt;y&gt;.
+                        The "e" part stands for "execution": the ongoing flow instance
+                        you are having a conversation with.
+                        The "s" part stands for "snapshot" or "step": a particular step
+                        of the flow instance where you can continue from.
+                        Notice when you move from the dining form to the review screen,
+                        the "s" part changes from 1 to 2, while the "e" part stays the same.
+                        This means you are moving from step 1 to step 2 of the
+                        1st execution of the New Reward flow.
+                        From step 2, you can go back and resume from step 1.
+                    </p></td></tr></table></div><p>
+            </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="webflow-language-essentials-lab-confirm-reward"></a>12.4.3.&nbsp;Confirm the Reward</h3></div></div></div><p>
+                (TODO-04, TODO-05) Complete this final step by implementing the
+                reward confirmation navigation logic.
+                From the review reward screen, when the user selects the confirm
+                button the flow should end, then redirect the user to a screen
+                displaying details of the confirmed reward transaction.
+                A <code class="classname">RewardController</code> to handle showing
+                reward details has already been written for you, so you just need
+                to have the flow redirect using it.
+                After the flow has completed, it should not be possible to go back
+                and resubmit the same reward transaction.
+                </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                        Spend some time thinking about what makes a good end-state identifier.
+                        End-states describe flow outcomes, or results. 
+                        They communicate an overall outcome that has already happened,
+                        something you potentially want to report back to the flow's caller.
+                        In this case, the outcome is the reward has been confirmed.
+                    </p><p>
+                        The special externalRedirect: directive can be used in
+                        conjunction with the view attribute to request a redirect
+                        to another resource from an end-state.
+                    </p><p>
+                        There is only one reward in the system currently, it has id 1.
+                        Use this reward number in the redirect for now.
+                    </p><p>
+                        After a flow execution ends, its execution key is invalidated
+                        and allocated resources are cleaned up. You can confirm this
+                        by going back in your browser--all previous snapshots of
+                        execution 1, for example, are no longer resumable; they have
+                        been cleaned up automatically by the system.
+                        When you click the New Reward link again, notice how the
+                        execution number now increments from 1 to 2, etc, indicating
+                        you are starting entirely new flow executions.
+                    </p></td></tr></table></div><p>
+                </p><p>
+                    After confirming the reward, once you are successfully
+                    redirected to the confirmed reward screen and cannot go back,
+                    you have fully implemented the flow logic and completed this lab!
+                </p><p>
+            </p></div></div></div><div xmlns="http://www.w3.org/TR/xhtml1/transitional" class="navfooter"><hr></hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="webflow-getting-started.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="web-security-lab.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;11.&nbsp;webflow-getting-started: Getting Started with Spring Web Flow&nbsp;</td><td width="20%" align="center"><span style="color:white;font-size:90%;"><a href="http://www.spring.io" title="The Spring Framework">Spring By Pivotal</a></span></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;13.&nbsp;web-security: Securing the Web Tier</td></tr></table></div></body></html>

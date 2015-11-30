@@ -1,0 +1,223 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;16.&nbsp;webflow-action-states: Using Action Objects and Actions States in Web Flow</title><link rel="stylesheet" href="css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.0"><link rel="start" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="up" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="prev" href="webflow-actions-lab.html" title="Chapter&nbsp;15.&nbsp;webflow-actions: Adding Actions to Web Flow"><link rel="next" href="appendix-spring-configuration.html" title="Appendix&nbsp;A.&nbsp;Spring XML Configuration Tips"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="background-color:white;border:none;height:73px;border:1px solid black;"><a style="border:none;" href="http://www.pivotal.io" title="Pivotal"><img style="border:none;" src="images/heading-logo-lhs.jpg"></img></a><a style="border:none;" href="http://www.spring.io" title="The Spring Framework"><img style="border:none;position:absolute;padding-top:5px;right:42px;" src="images/heading-logo-rhs.jpg"></img></a></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="webflow-action-states-lab"></a>Chapter&nbsp;16.&nbsp;webflow-action-states: Using Action Objects and Actions States in Web Flow</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="webflow-action-states-lab-introduction"></a>16.1.&nbsp;Introduction</h2></div></div></div><p>
+            In the previous lab you learned how to make flows dynamic with the help of actions.
+            In this lab you will work on more advanced scenarios with actions including exception handling.
+        </p><div class="orderedlist"><p class="title"><b>What you will learn:</b></p><ol type="1" compact><li><p>Deal with exceptions using a MultiAction</p></li><li><p>Reuse a sequence of actions with an action state</p></li><li><p>Add decisions to flow's algorithm</p></li></ol></div><p>Estimated time to complete: 45 minutes</p><p>URL for this project <a href="http://localhost:8080/webflow-action-states" target="_top">
+            http://localhost:8080/webflow-action-states/</a>.</p><p>Solution URL: <a href="http://localhost:8080/webflow-action-states-solution" target="_top">
+            http://localhost:8080/webflow-action-states-solution/</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="webflow-action-states-lab-quick-instructions"></a>16.2.&nbsp;Quick Instructions</h2></div></div></div><p>
+            In this lab we will implement three new requirements.
+        </p><div class="orderedlist"><ol type="1" compact><li><p>Refuse form submit if the credit-card number is
+                not associated with an actual account. Details 
+                <a href="webflow-action-states-lab.html#webflow-action-states-invalid-credit-card" title="16.3.2.&nbsp;Requirement #1: Handle the InvalidCreditCardException">here</a>.</p></li><li><p>Provide a one-click option - experienced uses can
+                submit the new reward skipping the review page. Details 
+                <a href="webflow-action-states-lab.html#webflow-action-states-one-click-reward" title="16.3.3.&nbsp;Requirement #2: Implement One-Click Reward">here</a>.</p></li><li><p>Allow users to go back and modify the reward details
+                from the review page. Details 
+                <a href="webflow-action-states-lab.html#webflow-actions-2-modify-reward" title="16.3.4.&nbsp;Requirement #3: Enable Reward Modification">here</a>.</p></li></ol></div><p>Quick instructions for this exercise have been embedded within the
+        lab materials  in the form of TODO comments.  To display them, open the
+        <code class="literal">Tasks</code> view  (Window -&gt; Show view -&gt; Tasks
+        (<span class="emphasis"><em>not Task List</em></span>)).  Following the TODOs is the
+        recommended way to do this lab.  Each TODO step is describe in
+        detail below if you need more help. Just search for TODO-XX in the 
+        current chapter.</p><p><span class="strong"><strong>Important:</strong></span> Use the flow-diagram
+        <a href="webflow-action-states-lab.html#webflow-actions-new-reward-flow-diagram-2" title="Figure&nbsp;16.1.&nbsp;Enhanced Flow for New Reward">below</a>
+        to help you.
+        </p><p>Occasionally, TODO'S defined within XML files may fail to appear in 
+        the <code class="literal">Tasks</code> view (i.e. gaps in the number sequence).  To
+        correct this, go to <code class="literal">Preferences -&gt; General -&gt; Editors -&gt;
+        Structured Text Editor -&gt; Task Tags</code> pane.  Check <code class="literal">Enable
+        searching for Task Tags</code> and click <code class="literal">Clean and Redetect
+        Tasks</code>.  On the <code class="literal">Filters</code> tab, ensure XML content
+        type is checked.  Changes may take 3-5 secs to take effect.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="webflow-action-states-lab-instructions"></a>16.3.&nbsp;Instructions</h2></div></div></div><p>
+            This lab is divided into several sections. 
+            In the first section you'll review the goals for this lab.  
+            Subsequent sections will guide you through the details of the implementation.
+        </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="webflow-action-states-requirements"></a>16.3.1.&nbsp;Existing Code and New Requirements</h3></div></div></div><p>
+                Begin by deploying the <code class="code">webflow-action-states</code> project
+                to the server.
+            </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-action-states-flow-description"></a>16.3.1.1.&nbsp;Flow definition</h4></div></div></div><p>
+                    Open <code class="filename">newReward-flow.xml</code>. 
+                    As you recall the flow declares a <code class="classname">DiningForm</code>
+                    variable and binds it to the "Enter Dining Information" view. 
+                    This enables data binding and validation.
+                    In addition the flow also invokes several actions.
+                    It loads restaurants when the initial view is rendered.
+                    It calculates contributions before getting to the review page.
+                    Lastly it creates the reward upon confirmation.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-action-states-req-check-credit-card"></a>16.3.1.2.&nbsp;Invalid credit card exceptions</h4></div></div></div><p>
+                    One of the things to consider when invoking actions is how to
+                    deal with exceptions. To illustrate this go to your browser,
+                    create a new reward, and enter an invalid credit card number
+                    (e.g. 1111222233334444). 
+                    Press the Reward button and examine the resulting exception.
+                    It is <code class="classname">ActionExecutionException</code> and it's
+                    thrown while evaluating the expression
+                    <code class="code">rewardNetwork.calculateContributionFor</code>. 
+                    Scroll further down and see that the root cause is an
+                    <code class="classname">InvalidCreditCardException</code>. 
+                    The credit card number is not known to the system (it is not
+                    associated with any account)  We know this might happen,
+                    and have created a specific exception for it, yet the flow makes
+                    no attempt to deal with it. 
+                 </p><p>
+                    To fix this problem, the application must catch the exception,
+                    define an error message, return to the Enter Dining Information page
+                    and show the error next to the Credit Card Number field. 
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-action-states-new-requirements"></a>16.3.1.3.&nbsp;New application requirements</h4></div></div></div><p>
+                    After reviewing the results from the last iteration, the business
+                    users have formulated two new enhancement requests. 
+                    The first is to add a checkbox on the "Enter Dining Information" page
+                    that allows advanced users to skip the "Review Reward"
+                    stage and proceed directly to create the reward.
+                </p><p>
+                    The second request is to enhance the "Review Reward" screen to
+                    give users the option of modifying the dining information by
+                    going back to the "Enter Dining Information" page.
+                </p><p>
+                    Here is the design of what the finished flow should look like:
+                </p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="webflow-actions-new-reward-flow-diagram-2"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/webflow-action-states/new-reward-flow-2.png" align="middle" width="702" alt="Enhanced Flow for New Reward"></div></div><p class="title"><b>Figure&nbsp;16.1.&nbsp;Enhanced Flow for New Reward</b></p></div><br xmlns="" class="figure-break"></div><p>
+                    Now that you have your goals set, the remaining sections will guide
+                    you through the implementation.
+                </p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="webflow-action-states-invalid-credit-card"></a>16.3.2.&nbsp;Requirement #1: Handle the InvalidCreditCardException</h3></div></div></div><p>
+                You're already seen this. 
+                The approach you'll use will be to wrap the
+                <code class="classname">RewardNetwork</code> call with a
+                thin layer of Java code.  The goal is to stop the exception, define
+                a field-specific error and remain in the same view.
+            </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-action-states-add-multi-action"></a>16.3.2.1.&nbsp;Introduce a MultiAction </h4></div></div></div><p>
+                    (TODO-01 to TODO-04) Web Flow provides a base class called
+                    <code class="classname">MultiAction</code>, which can be used for web layer
+                    logic. A <code class="classname">MultiAction</code> has one or more methods
+                    with a common signature and a typical implementation is shown below:
+                    </p><pre class="programlisting">public Event someMethod(RequestContext context) {
+    try {
+        ...
+        return success();
+    } catch (SomeException e) {
+        ...
+        return error();
+    }
+}
+</pre><p>                    
+                    We need an action class with a method that will wrap the invocation
+                    to the RewardNetwork to calculate the contributions.
+                    Find the class <code class="classname">NewRewardActions</code> in package
+                    <code class="classname">rewardsonline.rewards.newreward</code>.
+                    The method you need to modify is
+                    <code class="methodname">calculateAccountContribution</code>.
+                    It needs to obtain the diningForm, invoke the RewardNetwork,
+                    and store the result as a flow scoped variable.
+                    It should also catch <code class="classname">InvalidCreditCardException</code>
+                    and add a field specific error.
+                    Below is an example of defining a field-specific error:
+                    </p><pre class="programlisting">context.getMessageContext().addMessage(
+    new MessageBuilder().error().source("fieldName").defaultText("Text to display").build() ); 
+</pre><p>                    
+                    Remember to configure the new class as a Spring bean (with a name)
+                    and also to dependency-inject it with a RewardNetwork instance.
+                    You will need the bean name in the next step.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-action-states-use-new-action"></a>16.3.2.2.&nbsp;Use the Action in the Flow</h4></div></div></div><p>
+                    (TODO-05) When the method is ready, go back to
+                    <code class="filename">newReward-flow.xml</code> and replace the call
+                    to <code class="code">RewardNetwork.calculateContributionFor()</code>
+                    with your new action method instead. 
+                    Rather than using an <code class="code">action-state</code>, simply modify the
+                    <code class="code">&lt;evaluate&gt;</code> expression.
+                    (We'll add some action states when we implement requirement #2).
+                </p><p>
+                    Lastly use the browser to verify the change. 
+                    Using an invalid credit card number (like 1111222233334444)
+                    should keep you on the same page and show the error message.  
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-action-states-rewardAccountFor"></a>16.3.2.3.&nbsp;Add method to wrap the rewardAccountFor() method</h4></div></div></div><p>
+                    (TODO-06, TODO-07) Now that you've done this once, use the same
+                    approach to wrap the other service-layer invocation.
+                    That's the call to the <code class="code">RewardNetwork.rewardAccountFor()</code>
+                    in the final transition This method invocation is exposed.
+                    to the same issue.
+                    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+                            In theory this should never happen - because the previous
+                            change will prevent a bad credit-card number being entered
+                            in the first place. It is best-practice to always code
+                            defensively.  A later modification might expose this weakness.
+                        </p></td></tr></table></div><p>
+                </p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="webflow-action-states-one-click-reward"></a>16.3.3.&nbsp;Requirement #2: Implement One-Click Reward</h3></div></div></div><p>
+                Currently the flow assumes the reward will be created in two steps.
+                Dining information is submitted, the transition calculates the
+                contribution amounts and displays them on the review-page.  Then the
+                new reward is confirmed.  An expert user should be able to skip
+                the review and create the new reward directly, saving time and enhancing
+                the user experience.</p><p>
+                To support this new requirement you will need to add a checkbox to the
+                view and at the same time introduce a decision point in the flow definition.
+            </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-action-states-one-click-reward-steps"></a>16.3.3.1.&nbsp;Implementation Steps</h4></div></div></div><p>
+                    (TODO-08) Open <code class="classname">DiningForm.java</code> and verify it
+                    already contains the field <code class="code">oneClickReward</code>.
+                    Next open <code class="filename">enterDiningInformation.jsp</code> and create
+                    a checkbox using the Spring form tags and bind it to the
+                    <code class="code">oneClickReward</code> field.  
+                </p><p>
+                    (TODO-09, TODO-10) Open <code class="filename">newReward-flow.xml</code>. 
+                    Your goal is to introduce a decision state between the
+                    <code class="code">enterDiningInformation</code> and the
+                    <code class="code">reviewReward</code> states.
+                    The decision state should test the
+                    <code class="code">diningForm.oneClickReward</code> field and result in one
+                    of two outcomes. Either reward the account for the dining event
+                    and proceed to the end state. Or calculate the account
+                    contribution amounts and proceed to the
+                    <code class="filename">reviewReward</code> state.
+                    For now, just insert your decision state into the flow and
+                    try creating a new reward.</p><p>If the one-click option works successfully you should get 
+                    an HTTP 500 Server error because by skipping
+                    <code class="literal">reviewReward</code>, no reward was actually created so
+                    there is no <code class="literal">rewardConfirmation</code> for the end-state
+                    to use in its redirect. We will fix that next.
+                </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                        If your flow still goes to the review reward 
+                        page even when the checkbox is selected, make 
+                        sure you added a binder statement to the 
+                        <code class="code">enterDiningInformation</code> state for the new field,
+                        otherwise it will be ignored and not bound.
+                    </p></td></tr></table></div><p>(TODO-11) Refer back to the flow-diagram 
+                    <a href="webflow-action-states-lab.html#webflow-actions-new-reward-flow-diagram-2" title="Figure&nbsp;16.1.&nbsp;Enhanced Flow for New Reward">above</a>
+                    and you can see that you need to add 2 action-states
+                    to put the calculations into.  (We used to do all the work in the
+                    transitions, but that is not enough any more).  Create the
+                    two states you need and insert them into the flow using the
+                    diagram as a guide. The actions you need are methods on the 
+                    <code class="classname">NewRewardActions</code> class.</p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                        Actions states can contain one or more actions (as
+                        <code class="code">set</code> or <code class="code">evaluate</code> elements - which
+                        will you use here? Why?) and also deal
+                        with standard success or error events as follows:
+                        </p><pre class="programlisting">&lt;action-state id="..."&gt;
+    &lt;evaluate ... /&gt;
+    &lt;transition on="success" to="abc" /&gt;
+    &lt;transition on="error" to="xyz" /&gt;
+&lt;/action-state&gt;
+</pre><p>
+                    </p></td></tr></table></div><p>(TODO-12) Remove the
+                    <code class="code">evaluate</code> from the <code class="literal">reward</code> transition
+                    of the <code class="literal">enterDiningInformation</code> state - we can't
+                    do it until after we have checked the on-click flag in our decision
+                    state.
+                </p><p>When you're done making the change test it in the browser.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="webflow-actions-2-modify-reward"></a>16.3.4.&nbsp;Requirement #3: Enable Reward Modification</h3></div></div></div><p>Finally we need to allow users to navigate back from the
+                review reward page and re-enter the details in the reward form.  We
+                need a new button on the review page and a new transition in the
+                flow.
+            </p><p>
+                 (TODO-13) Edit the reviewReward.jsp and add a second
+                 button.  The button text is already defined for you in
+                 <code class="filename">messages.properties</code> - the property
+                 <span class="property">command.modifyReward</span>.   Don't forget
+                  that the button name is used to determine the Web Flow transition
+                  event and must be in the format '<code class="code">_eventId_XXX</code>'. 
+            </p><p>(TODO-14) Now go to <code class="filename">newReward-flow.xml</code> and add a 
+            new transition to allow the user to go back and modify the details of
+            the new reward.</p><p>In the browser enter a new Reward and see if you can go back and
+            modify it using your new "Modify Reward" button.  Also, make sure that
+            you can still Confirm - that you haven't broken what was already there.
+            </p><p>
+                Once everything is working, you've completed this lab.
+                Congratulations.
+            </p></div></div></div><div xmlns="http://www.w3.org/TR/xhtml1/transitional" class="navfooter"><hr></hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="webflow-actions-lab.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="appendix-spring-configuration.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;15.&nbsp;webflow-actions: Adding Actions to Web Flow&nbsp;</td><td width="20%" align="center"><span style="color:white;font-size:90%;"><a href="http://www.spring.io" title="The Spring Framework">Spring By Pivotal</a></span></td><td width="40%" align="right" valign="top">&nbsp;Appendix&nbsp;A.&nbsp;Spring XML Configuration Tips</td></tr></table></div></body></html>

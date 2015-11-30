@@ -1,0 +1,248 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;15.&nbsp;webflow-actions: Adding Actions to Web Flow</title><link rel="stylesheet" href="css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.0"><link rel="start" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="up" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="prev" href="web-testing-lab.html" title="Chapter&nbsp;14.&nbsp;web-test: Functional Web Application Testing"><link rel="next" href="webflow-action-states-lab.html" title="Chapter&nbsp;16.&nbsp;webflow-action-states: Using Action Objects and Actions States in Web Flow"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="background-color:white;border:none;height:73px;border:1px solid black;"><a style="border:none;" href="http://www.pivotal.io" title="Pivotal"><img style="border:none;" src="images/heading-logo-lhs.jpg"></img></a><a style="border:none;" href="http://www.spring.io" title="The Spring Framework"><img style="border:none;position:absolute;padding-top:5px;right:42px;" src="images/heading-logo-rhs.jpg"></img></a></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="webflow-actions-lab"></a>Chapter&nbsp;15.&nbsp;webflow-actions: Adding Actions to Web Flow</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="webflow-actions-lab-introduction"></a>15.1.&nbsp;Introduction</h2></div></div></div><p>
+            In this lab you will be introduced to actions inside Web Flow.
+            In the previous lab, you created a basic flow that outlined the steps to
+            complete a task.  Now you will apply behavior to the flow, processing user
+            input and integrating with the <code class="code">rewardNetwork</code> back-end 
+            infrastructure.
+        </p><div class="orderedlist"><p class="title"><b>What you will learn:</b></p><ol type="1" compact><li><p>How to define variables that persist during the flow execution</p></li><li><p>How to apply automatic binding to a model object for a view-state</p></li><li><p>Evaluate actions in different phases of the flow</p></li></ol></div><p>Estimated time to complete: 45 minutes</p><p>URL for this project <a href="http://localhost:8080/webflow-actions" target="_top">
+            http://localhost:8080/webflow-actions/</a>.</p><p>Solution URL: <a href="http://localhost:8080/webflow-actions-solution" target="_top">
+            http://localhost:8080/webflow-actions-solution/</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="webflow-actions-lab-quick-instructions"></a>15.2.&nbsp;Quick Instructions</h2></div></div></div><p>Quick instructions for this exercise have been embedded within the
+        lab materials  in the form of TODO comments.  To display them, open the
+        <code class="literal">Tasks</code> view  (Window -&gt; Show view -&gt; Tasks
+        (<span class="emphasis"><em>not Task List</em></span>)).  Following the TODOs is the
+        recommended way to do this lab.  Each TODO step is describe in
+        detail below if you need more help. Just search for TODO-XX in the 
+        current chapter.
+        </p><p><span class="strong"><strong>Important:</strong></span> Use the flow-diagram
+        <a href="webflow-actions-lab.html#webflow-actions-new-reward-flow-diagram" title="Figure&nbsp;15.1.&nbsp;Create New Reward Flow">below</a>
+        to help you.
+        </p><p>Occasionally, TODO'S defined within XML files may fail to appear in 
+        the <code class="literal">Tasks</code> view (i.e. gaps in the number sequence).  To
+        correct this, go to <code class="literal">Preferences -&gt; General -&gt; Editors -&gt;
+        Structured Text Editor -&gt; Task Tags</code> pane.  Check <code class="literal">Enable
+        searching for Task Tags</code> and click <code class="literal">Clean and Redetect
+        Tasks</code>.  On the <code class="literal">Filters</code> tab, ensure XML content
+        type is checked.  Changes may take 3-5 secs to take effect.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="webflow-actions-lab-instructions"></a>15.3.&nbsp;Detailed Instructions</h2></div></div></div><p>
+            Currently the flow consists of static views connected with transitions.
+            The transitions are initiated with button clicks that in turn are translated
+            into Web Flow events.  Although the views are static, the navigation is 
+            driven with an actual flow instance, which means you have developed and
+            road-tested your navigation logic.  With that out of the way you can turn
+            your attention to flow behavior.
+        </p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure-float" style="float: right;"><div class="figure"><a name="webflow-actions-new-reward-flow-diagram"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/webflow-actions/new-reward-flow.png" align="middle" width="513" alt="Create New Reward Flow"></div></div><p class="title"><b>Figure&nbsp;15.1.&nbsp;Create New Reward Flow</b></p></div><br class="figure-break"></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="webflow-actions-making-flow-dynamic"></a>15.3.1.&nbsp;Making the flow dynamic</h3></div></div></div><p>
+                In this lab we will add the actions (indicated by the blue arrows
+                on the diagram).
+            </p><p>
+                Initially you will declare a flow variable that will be used to collect dining information.
+                You will bind this variable to the <code class="code">enterDiningInformation</code> view and apply type conversion and validation as necessary.
+                Then you will invoke the <code class="code">diningFormDataProvider</code> repository to load and expose a list of <code class="classname">Restaurant</code> objects to fill the Restaurants drop-down.
+                Lastly you will invoke the <code class="code">rewardNetwork</code> one time to calculate reward contributions before the review page and a second time to create the reward once the user confirms the change.
+            </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="webflow-actions-collect-dining-info"></a>15.3.2.&nbsp;Collect Dining Information</h3></div></div></div><p>
+                (TODO 01) Begin by deploying the <code class="filename">webflow-actions</code>
+                project and then proceed with the steps below.
+            </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-actions-declare-flow-variable"></a>15.3.2.1.&nbsp;Declare a flow variable</h4></div></div></div><p>
+                    (TODO 02) You first task is to declare a <code class="classname">DiningForm</code> variable.
+                    Open <code class="filename">newReward-flow.xml</code> and add the variable giving it the name <code class="code">diningForm</code>. 
+                       Variables declared here will remain available for the duration of the flow.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-actions-add-spring-form-tags"></a>15.3.2.2.&nbsp;Add Spring form tags</h4></div></div></div><p>
+                    (TODO 03) Open <code class="filename">enterDiningInformation.jsp</code>. 
+                    Make the form dynamic using the Spring form tag library and use the new flow variable as the model attribute for the form.
+                    You can begin by adding the necessary taglib declaration at the top of the page.
+                    Then go through and convert all form tags from plain HTML to Spring form custom tags.
+                    And don't forget to enable showing field specific errors.</p><p>
+                    When this is done re-enter the flow using the New Reward link.
+                    This will start a new flow and cause the <code class="code">diningForm</code> variable to be created. 
+                    If your changes are correct you should see a blank form with empty fields.
+                    The form is empty because the newly created <code class="code">diningForm</code> variable does not contain any values. 
+                </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                        To enter a taglib declaration, copy the previous taglib
+                        declaration, place your cursor at the start of the uri
+                        value and use Ctrl+Space to pick a new uri.
+                    </p><p>
+                        For the time being you can ignore the restaurant &lt;select&gt;. 
+                        In the next step you will make sure it's populated.
+                    </p></td></tr></table></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-actions-populate-restaurants-drop-down"></a>15.3.2.3.&nbsp;Populate the Restaurants drop-down</h4></div></div></div><p>
+                   (TODO 04)  Before the drop-down can be populated you must retrieve the data required to populate it.
+                    Open <code class="classname">DiningFormDataProviderImpl</code> and review its content.
+                    Observe the name of this Spring bean and the method that finds all restaurants.
+                    This method returns a map of restaurant names keyed by merchant number. 
+                    That is all you need for a simple drop-down.
+                  </p><p>
+                    Next open <code class="filename">newReward-flow.xml</code> and add an action
+                    that is invoked when the <code class="code">enterDiningInformation</code> view is 
+                    rendered. The action must use the above method to find all restaurants 
+                    and save them to a variable so it is accessible to the view.</p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                            When saving to a variable remember that Web Flow has
+                            several reserved EL variables. Those are
+                            <code class="code">flowScope</code>, <code class="code">viewScope</code>,
+                            <code class="code">flashScope</code>, <code class="code">requestScope</code>.
+                            Try to select the most appropriate scope for the list
+                            of restaurants. If you are not sure ask the instructor.
+                        </p></td></tr></table></div><p>
+                        When this is done, go back to
+                        <code class="filename">enterDiningInformation.jsp</code> and convert
+                        the restaurants <code class="code">&lt;select&gt;</code> to a
+                        <code class="code">&lt;form:select&gt;</code>.
+                        Initialize the <code class="code">items</code> attribute
+                        of the <code class="code">&lt;form:select&gt;</code> from the saved variable.  
+                        Refresh the page and verify the drop-down has live data.
+                    </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-actions-submit-new-reward-form"></a>15.3.2.4.&nbsp;Submit the form</h4></div></div></div><p>
+                    (TODO 05) Enter some data and submit the form. 
+                </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                        Don't forget that credit card number 1234123412341234 is a valid credit card in the database.
+                    </p></td></tr></table></div><p>
+                    Return with the browser back button - is the form blank?
+                    If the submitted values were applied correctly through data binding
+                    the form will not be been blank.  If you have not done so before,
+                    add a <code class="code">model</code> attribute to the
+                    <code class="code">enterDiningInformation</code> view state and set it to
+                    the <code class="code">diningForm</code> variable you created earlier. 
+                </p><p>
+                    If necessary, submit the form again. This time if you go back you
+                    should see a form with the values you entered. This confirms data
+                    binding is taking place.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-actions-review-type-conversion"></a>15.3.2.5.&nbsp;Review Type Conversion</h4></div></div></div><p>
+                    (TODO-06) You may have already noticed you cannot submit invalid
+                    amounts or dates (if not give it a try now). How does this work?
+                 </p><p>
+                     Open <code class="filename">mvc-config.xml</code> and you will see a
+                     <code class="code">typeConversionService</code> bean (generated by a
+                     Spring FactoryBean). The <code class="code">formatters</code> property allows
+                     you to register your own custom formatters and we have already
+                     setup formatters for <code class="classname">MonetaryAmount</code> and
+                     <code class="classname">SimpleDateFormatter</code> for you.
+                     If you look at the <code class="code">mvc:annotation-driven</code> definition 
+                     you will see this bean is registered for MVC to use.
+                     </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+                         In previous versions of Spring MVC you were required to create your
+                         own subclass of <code class="classname">TypeConversionService</code> to
+                         register custom formatters.  This new approach is much simpler.
+                         </p></td></tr></table></div><p>
+                 </p><p>
+                     Now open <code class="filename">webflow-config.xml</code> and see how the
+                     same conversion service is registered with the <code class="code">flowBuilderServices</code>.
+                 </p><p>
+                     If you want to experiment, remove the conversion service from
+                     your <code class="code">flowBuilderServices</code> and verify
+                     the form fails due to type conversion errors.  When you're
+                     satisfied put the service back in and proceed to the next section. 
+                </p><p>Note the errors that are dispayed when bad data is submitted.
+                    These have been defined for you and are local to this flow - see
+                    <code class="filename">/WEB-INF/rewards/newRewards/messages.properties</code>.
+                </p><p>You can enter any data you like for the credit-card number - we
+                    will fix this later.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-actions-add-required-fields"></a>15.3.2.6.&nbsp;Add required fields</h4></div></div></div><p>
+                    (TODO-07) Try submitting without any values to see what happens.
+                    All fields are indeed required but the flow will take you to the
+                    review page with or without values. Fortunately the flow definition
+                    syntax allows adding required fields for a given view state. 
+                    Go ahead and use this syntax to designate all required fields of
+                    the <code class="code">diningForm</code> variable.
+                </p><p>
+                    When that's done try submitting again.
+                    This time you should remain on the same page and see required field errors.
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                            If you remain in place but don't see errors you probably
+                            didn't add any <code class="code">&lt;form:errors&gt;</code>
+                            tags in the earlier step.
+                        </p></td></tr></table></div><p> 
+                </p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="webflow-actions-review-reward"></a>15.3.3.&nbsp;Review Reward</h3></div></div></div><p>
+                In this section you will make the Review Reward page dynamic. 
+            </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-actions-calc-account-contributions"></a>15.3.3.1.&nbsp;Invoke the RewardNetwork to calculate account contributions</h4></div></div></div><p>
+                    (TODO-08) Return to <code class="filename">newReward-flow.xml</code>.  Add an action to 
+                    call the Reward Network <code class="code">calculateContributionFor</code>
+                    method and store the result as a variable.
+                    This action must be invoked at some point before the
+                    <code class="code">reviewReward</code> view state is rendered.
+
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                            Recall that you can embed actions in various places
+                            in a flow - during a transition, upon entering a state,
+                            before rendering a view state.  Try to select the most
+                            appropriate place for adding this action. 
+                        </p><p>
+                            You'll probably need the <code class="classname">DiningForm</code>
+                            <code class="code">createDining()</code> method to create the Dining
+                            object required as input to the Reward Network. 
+                        </p><p>
+                            Once again consider the best scope to store the resulting
+                            account contribution in.
+                        </p></td></tr></table></div><p>
+
+                    Verify the change by re-submitting the form and check for exceptions.
+                    When you can re-submit without exceptions you are ready to move on.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-actions-display-account-contributions"></a>15.3.3.2.&nbsp;Display the account contribution</h4></div></div></div><p>
+                    (TODO-08) Open <code class="filename">reviewReward.jsp</code> and check how it
+                    displays actual account contribution data.  Remember this page is
+                    read-only, there is no need to modify it to use the Spring form tags.
+                    It should just work.  Try submitting a new reward and make sure the
+                    review page contains the right data.
+                </p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="webflow-actions-create-reward"></a>15.3.4.&nbsp;Create the reward</h3></div></div></div><p>
+                After the user presses Confirm, you need to make sure the reward is
+                created, and a redirect is made to an external confirmation page with
+                the actual confirmation number. 
+            </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-actions-call-reward-network"></a>15.3.4.1.&nbsp;Invoke the rewardNetwork to create the reward</h4></div></div></div><p>
+                    (TODO-09) Open <code class="filename">newReward-flow.xml</code> and add an
+                    action to create the reward after the user has confirmed the changes.
+                    Check the methods of the Reward Network for the appropriate method
+                    signature. Save the return value as a variable that will be accessible
+                    in the end state where you'll need the confirmation number.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-actions-redirect-to-show-reward"></a>15.3.4.2.&nbsp;Redirect with the confirmation number</h4></div></div></div><p>
+                    (TODO-10) It's common for a flow to perform a redirect to an external resource.
+                    Recall that the end-state currently uses a hard-coded confirmation
+                    number (always redirects to reward #1).  Make this number dynamic by
+                    using the variable you created in the previous step.  To do
+                    that you'll need to embed an EL expression within the view string.
+                    Something like:
+                    </p><pre class="programlisting">view="externalRedirect:externalRedirect:contextRelative/rewards/#{xxx}"</pre><p>
+                    where <code class="literal">xxx</code> is the variable you specified in the 
+                    previous step. Confirm the changes in the browser.</p><p>
+                    (TODO-11) You will also need to modify <code class="filename">show.jsp</code>
+                    so that it displays the actual values from the reward
+                    instance rather than the mock values that are currently
+                    being displayed.
+                </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                        The <code class="classname">RewardsController</code> is already setup
+                        to display the Reward object for a given confirmation number.
+                        See <code class="methodname">show()</code>.  You need to redirect to
+                        the right URL to invoke it. Also, check the model
+                        attributes available for use in
+                        <code class="filename">show.jsp</code>.
+                    </p></td></tr></table></div><p>
+                    Congratulations, you've now completed this lab.  If you have
+                    time, try one or both  of the optional sections if you wish -
+                    either add credit-card validation and/or write a unit-test for
+                    the flow. Do whichever one you find most interesting first.
+                </p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="webflow-actions-custom-validation"></a>15.3.5.&nbsp;Optional Bonus 1: Add custom validation</h3></div></div></div><p>
+                (TODO-12) Recall that Web Flow will automatically invoke validation on
+                a model. One convenient place to add you validation logic is directly in
+                the model object. A suitable method with the right signature already
+                exists on <code class="classname">DiningForm</code> but it is empty.
+            </p><p>
+                This method should verify that a credit card number is 16 characters long
+                and that there it really exists (there is an account associated with it).
+                For convenience the <code class="classname">AccountManager</code> has been
+                injected into the form for you to use (use CTRL-SPACE to check its methods
+                for something suitable).</p><p>
+                If the credit-card number is invalid, register a field-specific error.
+                The error code you need is
+                <code class="code">error.invalidFormat.DiningForm.creditCardNumber</code> which
+                is already defined for you in <code class="filename">messages.properties</code>.  
+            </p><p>
+                Verify the change by entering an invalid credit card number.  
+            </p><p>
+                If you do the next lab, you will implement the check that the
+                credit-card number is associated with an account using an
+                <span class="emphasis"><em>Action</em></span> class.  This makes the
+                <code class="classname">DiningForm</code> simpler - no
+                <code class="classname">AccountManager</code> dependency.
+            </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="webflow-actions-flow-unit-tests"></a>15.3.6.&nbsp;Optional Bonus 2: Define a Unit Test for the Flow</h3></div></div></div><p>
+                Open <code class="classname">NewRewardFlowTests</code> and review
+                TODO-13 - TODO-15 comments. Essentially, there are two things to do. 
+                Register the Spring beans referenced in the flow definition and
+                test for the presence of variables created by actions.
+                Fortunately stub implementations for the Spring beans you need
+                are already available as inner classes. Have a look at them and
+                then work on adding the tests and making them green.
+            </p></div></div></div><div xmlns="http://www.w3.org/TR/xhtml1/transitional" class="navfooter"><hr></hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="web-testing-lab.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="webflow-action-states-lab.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;14.&nbsp;web-test: Functional Web Application Testing&nbsp;</td><td width="20%" align="center"><span style="color:white;font-size:90%;"><a href="http://www.spring.io" title="The Spring Framework">Spring By Pivotal</a></span></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;16.&nbsp;webflow-action-states: Using Action Objects and Actions States in Web Flow</td></tr></table></div></body></html>

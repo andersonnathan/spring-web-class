@@ -1,0 +1,178 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;11.&nbsp;webflow-getting-started: Getting Started with Spring Web Flow</title><link rel="stylesheet" href="css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.0"><link rel="start" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="up" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="prev" href="ajax-lab.html" title="Chapter&nbsp;10.&nbsp;ajax: Building an AJAX Search"><link rel="next" href="webflow-language-essentials-lab.html" title="Chapter&nbsp;12.&nbsp;webflow-language-essentials: Web Flow Language Essentials Lab"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="background-color:white;border:none;height:73px;border:1px solid black;"><a style="border:none;" href="http://www.pivotal.io" title="Pivotal"><img style="border:none;" src="images/heading-logo-lhs.jpg"></img></a><a style="border:none;" href="http://www.spring.io" title="The Spring Framework"><img style="border:none;position:absolute;padding-top:5px;right:42px;" src="images/heading-logo-rhs.jpg"></img></a></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="webflow-getting-started"></a>Chapter&nbsp;11.&nbsp;webflow-getting-started: Getting Started with Spring Web Flow</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="webflow-geting-started-introduction"></a>11.1.&nbsp;Introduction</h2></div></div></div><p>
+            In this lab, you will set up the Spring Web Flow system in a Spring MVC environment.
+            You will learn how to register flow definitions and start executions of them from your web browser.
+        </p><div class="orderedlist"><p class="title"><b>What you will learn:</b></p><ol type="1" compact><li><p>How to configure a flow registry and register flows with it</p></li><li><p>How to configure the Web Flow execution engine</p></li><li><p>How to hook Web Flow up in Spring MVC as the request handler for specific resource URLs</p></li></ol></div><p>Estimated time to complete: 30 minutes</p><p>URL for this project <a href="http://localhost:8080/webflow-getting-started" target="_top">
+            http://localhost:8080/webflow-getting-started/</a>.</p><p>Solution URL: <a href="http://localhost:8080/webflow-getting-started-solution" target="_top">
+            http://localhost:8080/webflow-getting-started-solution/</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="webflow-getting-started-background"></a>11.2.&nbsp;Background Briefing</h2></div></div></div><p>
+            This lab is split into two sections:
+        </p><div class="orderedlist"><ol type="1" compact><li><p>
+                    In the first section, you will become familiar with a new
+                    RewardsOnline use case that is a good candidate for implementation
+                    using Spring WebFlow.
+                </p></li><li><p>
+                    Implementing it will take several labs, so the next section of
+                    this lab just gets you to set up the infrastructure needed to
+                    execute the flow.  As usual you can follow the TODOs or
+                    the detailed instructions in this document.
+                </p></li></ol></div><p>
+            Subsequent labs will implement the flow transitions and then
+            add actions to make the flow actually do something.
+        </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="webflow-getting-started-requirement"></a>11.2.1.&nbsp;The Task: Manual Creation of New Rewards</h3></div></div></div><p>
+                The RewardsOnline application used in this lab consists of a
+                mix of free and controlled navigation.  Users may freely search
+                accounts to view and edit. This is well suited to the MVC
+                Controllers we have written so far.
+            </p><p>
+                The next requirement is to guide the user through a controlled process
+                to create new rewards.  The New Reward flow looks like this:
+            </p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="webflow-getting-started-lab-flow-diagram"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/webflow-language-essentials/newReward-flow.png" align="middle" width="810" alt="The New Reward Flow"></div></div><p class="title"><b>Figure&nbsp;11.1.&nbsp;The New Reward Flow</b></p></div><br xmlns="" class="figure-break"></div><p>
+                This type of controlled process (or flow) is a good use case for a 
+                Web-Flow.  The process takes place over a series of steps and
+                executes independently of other users.
+                In this section, you will see how the New Reward flow should be
+                invoked by users of the RewardsOnline application.
+            </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="webflow-getting-started-lab-starting-new-flow"></a>11.2.2.&nbsp;Starting the New Reward Flow from RewardsOnline</h3></div></div></div><p>
+                A new navigation menu item has been added to the RewardsOnline
+                application that should start the New Reward flow when selected.
+                You will review this new feature in this step.
+            </p><p>
+                (TODO-01) First, deploy the <code class="code">webflow-getting-started</code> project to
+                the server.
+                Access the the application at
+                <a href="http://localhost:8080/webflow-getting-started" target="_top">
+                http://localhost:8080/webflow-getting-started</a>.
+            </p><p>
+                Notice the <code class="code">New Reward</code> link in the navigation menu.
+                Select it, and note it fails with a 404.
+                This is because no handler has been registered for that resource URL
+                (Web flow, Controller, or otherwise).
+                In fact, the Web Flow system has not been set up at all.
+            </p><p>
+                As a first step, you will configure Web Flow and then map a
+                new flow definition to the <code class="code">/rewards/newReward</code> resource.
+                The flow itself will initially be empty.
+                Do not worry, you will implement its logic later, for now it is 
+                just important to understand how flows get registered and
+                configured.
+            </p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="webflow-getting-started-quick-instructions"></a>11.3.&nbsp;Quick Instructions</h2></div></div></div><p>Quick instructions for this exercise have been embedded within the
+        lab materials  in the form of TODO comments.  To display them, open the
+        <code class="literal">Tasks</code> view  (Window -&gt; Show view -&gt; Tasks
+        (<span class="emphasis"><em>not Task List</em></span>)).  Following the TODOs is the
+        recommended way to do this lab.  Each TODO step is describe in
+        detail below if you need more help. Just search for TODO-XX in the 
+        current chapter.
+        </p><p>Occasionally, TODO'S defined within XML files may fail to appear in 
+        the <code class="literal">Tasks</code> view (i.e. gaps in the number sequence).  To
+        correct this, go to <code class="literal">Preferences -&gt; General -&gt; Editors -&gt;
+        Structured Text Editor -&gt; Task Tags</code> pane.  Check <code class="literal">Enable
+        searching for Task Tags</code> and click <code class="literal">Clean and Redetect
+        Tasks</code>.  On the <code class="literal">Filters</code> tab, ensure XML content
+        type is checked.  Changes may take 3-5 secs to take effect.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="webflow-getting-started-instructions"></a>11.4.&nbsp;Detailed Instructions</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="webflow-getting-started-flow-system-setup"></a>11.4.1.&nbsp;Web Flow System Setup</h3></div></div></div><p>
+                Now you understand what the RewardsOnline application should be able
+                to do: allow users to create a new reward when they access
+                <code class="code">/rewards/newReward</code>.
+                In this section, you'll set up the Web Flow System and learn how to
+                register flows for execution.
+                By the end of this section, you should understand how to configure
+                Spring Web Flow inside Spring MVC.
+            </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-getting-started-lab-one-time-configuration"></a>11.4.1.1.&nbsp;One-time System Configuration</h4></div></div></div><p>
+                    Web Flow requires some one-time configuration to set it up.
+                    You must define two central Web Flow services, and a couple of
+                    adapters to plug it into the Spring MVC pipeline.
+                    You will do all that in this step.
+                </p><p>
+                    (TODO-02) First, inside <code class="code">webflow-config.xml</code> define a
+                    <code class="code">flow-executor</code> element with id <code class="code">flowExecutor</code>.
+                    This is the central flow execution engine.
+                    It has a number of configuration options, but just use the default
+                    configuration for now.
+                </p><p>
+                    (TODO-03) Next, define a <code class="code">flow-registry</code> and wire it with your <code class="code">flow-executor</code>.
+                    This is where you register your flows that can be executed.
+                    Each flow is assigned a unique id when registered, and flow ids are mapped to resource URLs.
+                    You will see how to register flows later, for now just focus on getting the flow-registry bean defined.
+                </p><p>
+                    (TODO-04) Next, you will register adapters that plug Spring Web Flow into the Spring MVC DispatcherServlet pipeline.
+                    These adapters allow Spring MVC to map requests for certain resources to flows.
+                </p><p>
+                    The first adapter allows a Web Flow to be a Spring MVC request handler, just like a @Controller is another kind of request handler.
+                    To install it, define a <code class="code">FlowHandlerAdapter</code> bean inside <code class="code">mvc-config.xml</code>.
+                    The bean will be picked up by the Spring MVC DispatcherServlet automatically.
+                </p><p>
+                    The second adapter creates resource URL mappings to flows from the contents of your flow-registry.
+                    For example, a flow registered with id <code class="code">rewards/newReward</code> will be mapped to the resource URL <code class="code">/rewards/newReward</code> automatically.
+                    To install this adapter, define a <code class="code">FlowHandlerMapping</code> bean at the top of the file.
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                            (TODO-05)
+                            Be sure to order your FlowHandlerMapping <span class="emphasis"><em>before</em></span> other handler mappings defined in your <code class="code">mvc-config.xml</code>.
+                            Ordering first allows flow mappings to be queried before mappings to other types of handlers such as Spring MVC @Controllers.
+                            Recall mappings are ordered in a chain, and if no mapping is found, the next one in the chain is tried until there is a match or the chain is exhausted.
+                        </p><p>
+                            When using the <code class="code">mvc:annotation-driven</code> tag, handler mappings will be defined starting with order 0.  
+                            As you cannot change the order of those mappings, make sure you give the FlowHandlerMapping an order of -1.
+                        </p></td></tr></table></div><p>
+                </p><p>
+                    Now that the core Web Flow infrastructure and Spring MVC adapters have been set up, make sure your application re-deploys successfully.
+                    Once you have a successful deployment, return to the welcome page and select the New Reward link again.
+                    It will still fail with a 404 resource not found.
+                    Even though flow mapping was attempted, no flow was found because you have not defined one yet.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-getting-started-lab-create-new-flow-xml"></a>11.4.1.2.&nbsp;Create a New Reward flow from the Flow Definition Template</h4></div></div></div><p>
+                    From here on out, the process of working with Spring Web Flow generally involves authoring your flow definitions, then registering them with the flow registry.
+                    Once registered, flows can be executed by accessing their resource URLs.
+                </p><p>                    
+                    A web flow is typically authored in a single XML file called a "flow definition".
+                    Each flow definition is typically packaged in its own working directory alongside its dependent resources such as JSP templates, message bundles, and other resources.
+                    In general, flow definitions should be organized functionally, similar to how you properly structure Java packages.
+                    To support automatic refresh of web content without redeployment, flows are typically packaged inside the /WEB-INF directory as well.
+                </p><p>
+                    With these best practices in mind, consider the specific characteristics of the New Reward flow.
+                    This flow is part of the "rewards" functional module, which is distinct from the "accounts" module.
+                    A good name for this flow is "newReward", which describes the goal this flow helps the user accomplish.
+                    It makes sense, then, that this flow be created in its own directory within the "rewards" namespace.
+                    That is exactly what you will do in this step.
+                </p><p>
+                    (TODO-06, TODO-07)Create the New Reward flow definition within a
+                    <code class="filename">/WEB-INF/rewards/newReward</code> directory by
+                    creating a file called <code class="filename">newReward-flow.xml</code>.
+                    An empty template, <code class="filename">empty-flow.xml</code>, is provided
+                    in the root of this project.  Copy its contents to define a flow body
+                    then add a single view state called "enterDiningInformation".  This
+                    is the finished <code class="filename">newReward-flow.xml</code>:
+                </p><p>
+                    </p><pre class="programlisting">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow 
+      http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"&gt;
+
+    &lt;view-state id="enterDiningInformation"/&gt;
+
+&lt;/flow&gt;                
+                    </pre><p>
+                </p><p>
+                    After creating and saving the flow definition, try accessing the New Rewards link again.
+                    Confirm it fails again with a 404.
+                    New flows do not automatically get detected; they must be registered in the flow registry.
+                    Do that in the next step.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="webflow-getting-started-lab-register-flow"></a>11.4.1.3.&nbsp;Register the New Reward flow</h4></div></div></div><p>
+                    (TODO-08) In this step, you will register the New Reward flow,
+                    then verify it tries to startup when accessed.
+                </p><p>
+                    Navigate to your flow-registry bean in webflow-config.xml.
+                    There, register your flow located at <code class="code">/WEB-INF/rewards/newReward/newReward-flow.xml</code>.
+                    Assign the flow the id <code class="code">rewards/newReward</code>.
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                            First, try registering the flow individually using the flow-location element.
+                            After you get that working, try using the flow-location-pattern element to register all flow definitions for the application in one concise statement.
+                            When you try this, also set the base-path attribute to specify a file-path-pattern relative to a directory such as /WEB-INF.
+                        </p></td></tr></table></div><p>
+                </p><p>
+                    (TODO-09) Once you have registered the flow, select the New Reward link for a third time.
+                    You should see a 404 error for <code class="filename">enterDiningInformation.jsp</code> and a URL with an execution parameter.
+                    The flow was launched but the <code class="code">enterDiningInformation</code> view failed to render because there is no JSP yet.
+                    You have completed this lab.
+                    In the next lab, you will implement the real New Reward flow logic!
+                </p></div></div></div></div><div xmlns="http://www.w3.org/TR/xhtml1/transitional" class="navfooter"><hr></hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ajax-lab.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="webflow-language-essentials-lab.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;10.&nbsp;ajax: Building an AJAX Search&nbsp;</td><td width="20%" align="center"><span style="color:white;font-size:90%;"><a href="http://www.spring.io" title="The Spring Framework">Spring By Pivotal</a></span></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;12.&nbsp;webflow-language-essentials: Web Flow Language Essentials Lab</td></tr></table></div></body></html>

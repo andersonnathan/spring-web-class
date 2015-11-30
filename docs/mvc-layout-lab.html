@@ -1,0 +1,274 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;3.&nbsp;mvc-layout: Using Tiles Layouts in Spring MVC</title><link rel="stylesheet" href="css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.0"><link rel="start" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="up" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="prev" href="mvc-getting-started-lab.html" title="Chapter&nbsp;2.&nbsp;mvc-getting-started: Spring MVC for Beginners"><link rel="next" href="mvc-views-lab.html" title="Chapter&nbsp;4.&nbsp;mvc-views: Views in Spring MVC"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="background-color:white;border:none;height:73px;border:1px solid black;"><a style="border:none;" href="http://www.pivotal.io" title="Pivotal"><img style="border:none;" src="images/heading-logo-lhs.jpg"></img></a><a style="border:none;" href="http://www.spring.io" title="The Spring Framework"><img style="border:none;position:absolute;padding-top:5px;right:42px;" src="images/heading-logo-rhs.jpg"></img></a></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="mvc-layout-lab"></a>Chapter&nbsp;3.&nbsp;mvc-layout: Using Tiles Layouts in Spring MVC</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mvc-layout-lab-introduction"></a>3.1.&nbsp;Introduction</h2></div></div></div><p>
+            In this lab, you will apply a common site layout to all existing pages.
+        </p><div class="orderedlist"><p class="title"><b>What you will learn:</b></p><ol type="1" compact><li><p>How to apply common layouts to your pages using Apache Tiles</p></li><li><p>How to configure Tiles for use with Spring MVC</p></li></ol></div><p>This lab requires no Java coding.  You will be modifying XML files -
+            so remember to restart your server to reflect each change.  You do not need to
+            restart when a JSP page changes - the new version is loaded on the next page
+            refresh.
+        </p><p>Estimated time to complete: 30 minutes</p><p>URL for this project: <a href="http://localhost:8080/mvc-layout" target="_top">
+                http://localhost:8080/mvc-layout</a>.</p><p>Solution URL: <a href="http://localhost:8080/mvc-layout-solution" target="_top">
+                http://localhost:8080/mvc-layout-solution</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mvc-layut-lab-quick-instructions"></a>3.2.&nbsp;Quick Instructions</h2></div></div></div><p>If you feel you have a good understanding of the material, just follow
+        the embedded <code class="literal">TODO</code> steps in order to complete the lab.
+        </p><p>
+            The tasks can be summarized as follows:
+        
+            </p><div class="orderedlist"><ol type="1" compact><li><p>First check the application is working by running
+                    it now and going here <a href="http://localhost:8080/mvc-layout" target="_top">
+                    http://localhost:8080/mvc-layout</a>.</p></li><li><p>Refactor welcome page to extract a standard layout.
+                    <a href="mvc-layout-lab.html#mvc-layout-apply-page-layout" title="3.3.1.&nbsp;Applying a page layout">here</a>.</p></li><li><p>Reimplement the application using Tiles.
+                    <a href="mvc-layout-lab.html#mvc-layout-configure-tiles" title="3.3.1.3.&nbsp;Configure Tiles">here</a>.</p></li><li><p>Fix page titles.
+                    <a href="mvc-layout-lab.html#mvc-layout-fix-page-titles" title="3.3.1.5.&nbsp;Fix Page Titles">here</a>.</p></li><li><p>Use <code class="literal">importAttribute</code> to highlight
+                       links.  The TODO shows you where to change the code - but
+                       you need to read the instructions
+                    <a href="mvc-layout-lab.html#mvc-layout-add-imported-attributes" title="3.3.1.6.&nbsp;Optional 1: Add imported attributes">here</a>.</p></li><li><p><span class="emphasis"><em>Optional 1:</em></span> 
+                    Use <code class="literal">importAttribute</code> to highlight
+                       navigation links.  The TODO shows you where to change the code
+                       - but you need to read the instructions
+                    <a href="mvc-layout-lab.html#mvc-layout-add-imported-attributes" title="3.3.1.6.&nbsp;Optional 1: Add imported attributes">here</a>.</p></li><li><p><span class="emphasis"><em>Optional 2:</em></span> Make the &lt;h1&gt;
+                    heading part of the standard layout.  Modify
+                    <code class="filename">standard.jsp</code> to use the same Tiles
+                    code in the &lt;h1&gt; element as it already uses in the
+                    &lt;title&gt;.  Remove all the &lt;h1&gt; elements from the
+                    other 3 JSPs and the pages should still look the same.
+                    There are no TODOs for this step.</p></li></ol></div><p>
+        </p><p>
+            If you have any problem seeing the <code class="literal">TODO</code> steps in the
+            Tasks view, follow the instructions from the getting started lab
+            <a href="mvc-getting-started-lab.html#mvc-getting-started-task-view-setup" title="2.3.&nbsp;Configure the TODOs in STS">here</a>.
+        </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mvc-layout-lab-instructions"></a>3.3.&nbsp;Instructions</h2></div></div></div><p>
+            The instructions for this lab will have you begin by factoring out common
+            layout from <code class="filename">welcome.jsp</code> into a template.
+            Next you will put together the Tiles configuration necessary to re-use
+            the common layout for the <code class="filename">welcome.jsp</code> page.
+        </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="mvc-layout-apply-page-layout"></a>3.3.1.&nbsp;Applying a page layout</h3></div></div></div><p>
+                The pages of most web applications share a common structure.
+                A typical page structure consists of a header at the top, content in
+                the middle, and a footer at the bottom:
+            </p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="mvc-layout-typical-page-structure"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/mvc-layout/typical-page-structure.png" align="middle" alt="Typical Page Structure"></div></div><p class="title"><b>Figure&nbsp;3.1.&nbsp;Typical Page Structure</b></p></div><br xmlns="" class="figure-break"></div><p>
+                Good templating systems allow you to define such a shared page
+                structure in a single template called a layout.
+                A layout is then applied to a page by inserting individual page
+                elements into its structure.
+                For any given page, the content usually varies while the header
+                and footer elements usually remain the same.
+            </p><p>
+                Apache Tiles is a popular layout engine that works well with
+                JSP templates. In this section, you will use Apache Tiles to apply
+                a common layout to all of your pages.
+            </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-layout-review-technical-aproach"></a>3.3.1.1.&nbsp;Review technical approach</h4></div></div></div><p>
+                    <span class="bold"><strong>TASK 1:</strong></span>
+                    This lab picks up where the last lab left off.
+                    Confirm this by deploying the mvc-layout application to the server
+                    and accessing it at <a href="http://localhost:8080/mvc-layout" target="_top">
+                    http://localhost:8080/mvc-layout</a>.
+                    You should see the familiar welcome screen.
+                </p><p>
+                    Now select the Accounts link and notice the Account listing renders
+                    without a header, navigation, or footer.
+                    The same holds true for an account's details.
+                    This is because they now assume an overall layout is being applied.
+                    The welcome page, on the other hand, still embeds the layout with its content.
+                </p><p>
+                    To complete this lab, you need to factor the layout information in
+                    the welcome page into a single layout that is applied to all three pages.
+                    You will know you are complete when the welcome, account listing,
+                    and account details pages all render with the correct layout, and
+                    there is a clear separation between your content and the page layout.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-layout-factor-out-layout"></a>3.3.1.2.&nbsp;Factor out the layout information in welcome.jsp</h4></div></div></div><p>
+                    First open <code class="filename">/WEB-INF/welcome.jsp</code>
+                    (CTRL+Shift+R) and review what is there.
+                    Notice there is a root "page" div defining the overall page structure.
+                    Within page are "header", "content", and "footer" sub elements.
+                    The content element is split into two sections, "main", for the
+                    main content area, and "nav", for the navigation menu.
+                    The body of the main element contains the content specific
+                    to this welcome page definition.
+                    This structure is shown graphically below:
+                </p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="mvc-layout-page-layout"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/mvc-layout/page-layout.png" align="middle" alt="Typical Page Structure"></div></div><p class="title"><b>Figure&nbsp;3.2.&nbsp;Typical Page Structure</b></p></div><br xmlns="" class="figure-break"></div><p>
+                    In this step, you will factor out the shared page structure into a
+                    generic layout, leaving just the main content specific to this page.
+                </p><p>
+                    <span class="bold"><strong>TASK 2:</strong></span>
+                    Complete this step by first creating a
+                    <code class="filename">standard.jsp</code> in
+                    <code class="filename">/WEB-INF/layouts</code>.
+                    Cut the common page structure out of welcome.jsp and into the
+                    layout, leaving only the content of the &lt;div id="main"&gt;.
+                    Have the main content body in your layout simply be empty for now.
+                    Verify you completed this step successfully by refreshing your
+                    welcome page and confirming all that renders is its content: a
+                    title and caption.
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                            Keep in mind your welcome.jsp still needs to import the
+                            JSTL fmt tag library since it uses it to generate its main
+                            content.
+                        </p></td></tr></table></div><p>
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-layout-configure-tiles"></a>3.3.1.3.&nbsp;Configure Tiles</h4></div></div></div><p>
+                    You have successfully separated your page layout from its content.
+                    In this step, you will create Tiles definitions and configure
+                    Tiles for use with Spring MVC. 
+                </p><p>
+                    <span class="bold"><strong>TASK 3-1:</strong></span>
+                    Start by setting up a tiles definition file.  To help you
+                    <code class="filename">tiles.xml</code> already exists in your
+                    <code class="filename">/WEB-INF</code> directory.
+                    It i mostly empty, but contains the DOCTYPE and root element for
+                    you to start from.
+                </p><p>
+                    Go ahead and create two definitions.  A standard layout page
+                    that uses the <code class="filename">standard.jsp</code> from the previous
+                    section. And one for the welcome page that uses the standard
+                    layout definition.
+                </p><p>
+                    After you create and save the Tiles definition, try refreshing
+                    your welcome page.
+                    
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                            You'll need to restart the server whenever you make a change
+                            to your Tiles definitions, just like you do when you make
+                            Spring configuration modifications.
+                        </p></td></tr></table></div><p>
+                    
+                    The layout is still not yet being applied!
+                    This is because Spring MVC is currently configured to render your
+                    JSP pages directly, rather than render Tiles definitions.
+                    Confirm this by inspecting your <code class="filename">mvc-config.xml</code>
+                    and reviewing the view-resolver configuration.
+                    Notice you have a <code class="classname">InternalViewResolver</code>
+                    configured that maps logical view names to JSP resources inside 
+                    <code class="filename">/WEB-INF</code>.
+                    Instead of resolving JSPs directly, you need to map view names
+                    to tiles definitions. Tiles will then handle rendering these
+                    definitions, which define page compositions.
+                </p><p>
+                    Plug in the Tiles rendering engine by adding a 
+                    <code class="classname">TilesViewResolver</code> and making sure it gets
+                    used before the existing <code class="classname">InternalViewResolver</code>.
+                    Also recall that Tiles must be initialized before it can be used, so
+                    you will need to perform one more initialization step in your
+                    <code class="code">mvc-config.xml</code> (another bean is needed).
+                </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>You can control what order view-resolvers are used via their
+                    <span class="property">order</span> property.
+                    </p></td></tr></table></div><p>
+                    Now restart the server and try refreshing the welcome page.
+                    The page will render with the layout applied but without the
+                    main content (the Welcome heading and sub-heading).
+                    This confirms your welcome definition was successfully resolved
+                    by Tiles as part of the Spring MVC pipeline.
+                    The layout template however needs a little more work.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-layout-complete-layout-template"></a>3.3.1.4.&nbsp;Complete the Layout Template</h4></div></div></div><p>
+                    To complete the layout you will need to define the places where
+                    content may be inserted. You assign each of these places a unique
+                    name. Then, in your tiles definition you create a matching
+                    attribute that is a String or points to a JSP.  Tiles does the rest.
+                </p><p>
+                    For this lab, recall you should insert your page content into the
+                    "main" element of your layout.
+                    This is shown visually below:
+                    </p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="mvc-layout-page-layout-diagram"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/mvc-layout/tiles-composition.png" align="middle" alt="Tiles Deomposition"></div></div><p class="title"><b>Figure&nbsp;3.3.&nbsp;Tiles Deomposition</b></p></div><br xmlns="" class="figure-break"></div><p>
+                    <span class="bold"><strong>TASK 3-2:</strong></span>
+                    Make this happen by opening
+                    <code class="filename">/WEB-INF/layouts/standard.jsp</code> (CTRL+Shift+R).
+                    Add a tiles taglib declaration (Ctrl+Space inside the
+                    <code class="code">uri</code> attribute should help). Find the <code class="code">div</code>
+                    with <code class="code">id="main"</code>,
+                    which should have an empty body at present.
+                    Use the <code class="code">&lt;tiles:insertAttribute&gt;</code> tag to insert a
+                    page's <code class="code">main</code> content at this spot.
+                    Finally, go back to <code class="filename">/WEB-INF/tiles.xml</code> and
+                    use the <code class="code">&lt;tiles:put-attribute&gt;</code> tag to set the
+                    <code class="literal">main</code> content to be your welcome content.
+                </p><p>
+                    Refresh the welcome page to test your changes. The page may fail
+                    with the error: <span class="errortext">"NoSuchAttributeException: Attribute
+                    'main' not found"</span>.
+                    It means you have not defined a matching attribute in the tiles definition.
+                    Open <code class="filename">/WEB-INF/tiles.xml</code>, correct the problem,
+                    and restart the server.
+                </p><p>
+                    Once the welcome page is rendering with the standard layout applied, do
+                    the same for the two remaining (accounts) pages of the RewardsOnline application.
+                    You should not have to change the page templates or the layout to do this.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-layout-fix-page-titles"></a>3.3.1.5.&nbsp;Fix Page Titles</h4></div></div></div><p>
+                     All the pages currently have the same HTTP page title
+                     <code class="literal">"Welcome to RewardsOnline"</code>.
+                     (If using STS internal web-browser it's the text in the tab.
+                     If using a stand-alone browser like Internet Explorer, Chrome or
+                     Firefox, it is the text in the window's tab and title bar.)
+                </p><p>
+                    <span class="bold"><strong>TASK 4:</strong></span>
+                     Fix this by changing the <code class="code">&lt;title&gt;</code> HTML
+                     in <code class="filename">standard.jsp</code> to use
+                     another <code class="code">&lt;tiles:insertAttribute&gt;</code>
+                     called <code class="literal">title</code>.  Replace
+                </p><pre class="programlisting">
+&lt;title&gt;
+    &lt;fmt:message key="welcome.title" /&gt;
+&lt;/title&gt;
+                </pre><p>
+                with
+                </p><pre class="programlisting">
+&lt;title&gt;
+    &lt;fmt:message&gt;
+        &lt;tiles:insertAttribute name="title"/&gt;
+    &lt;/fmt:message&gt;
+&lt;/title&gt;
+                </pre><p>
+                </p><p>
+                    In <code class="filename">tiles.jsp</code> put a new attribute called
+                    <code class="literal">title</code> in each page definition and set it to
+                    the appropriate message code - look in
+                    <code class="filename">/WEB-INF/messages/global.properties.xml</code>
+                    to find the message codes (properties) for each title.
+                </p><p>
+                    When all pages are rendering with the layout applied, you're done.
+                    However you might like to try the two optional sections.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-layout-add-imported-attributes"></a>3.3.1.6.&nbsp;Optional 1: Add imported attributes</h4></div></div></div><p>
+                    Inserted attributes and blocks (as shown above) work well in most
+                    cases.  However, you may occasionally find the need to provide
+                    request attributes  that are controlled by your Tiles definitions.
+                    To do this, we can use the <code class="code">tiles:importAttribute</code> tag
+                    in our JSPs.
+                </p><p>
+                    In this step, we'll add logic to display which section of the
+                    site (accounts or home page) the user is currently viewing.  
+                    This will vary on a page-by-page basis, and is natural for it to be
+                    placed in the Tiles definitions.
+                </p><p>
+                    <span class="bold"><strong>TASK 5:</strong></span>
+                    Add a new attribute named <code class="code">navigationTab</code> to each
+                    of your Tiles definition files.  Provide one distinct value for
+                    the definitions in 
+                   <code class="filename">/WEB-INF/tiles.xml</code> and another for the
+                   definitions in <code class="filename">/WEB-INF/accounts/tiles.xml</code>.
+                </p><p>
+                    Now all that's left is to import the attribute into your layout.
+                    Use a <code class="code">tiles:importAttribute</code> tag to import
+                    "<span class="property">navigationTab</span>". 
+                    into <code class="filename">standardLayout.jsp</code> - do this inside
+                    <code class="literal">&lt;div id="nav"&gt;</code>.  Then use standard JSTL
+                    tags (<code class="code">c:if</code> or <code class="code">c:choose</code>) to 
+                    apply &lt;strong&gt;  tags to the appropriate section in the nav
+                    div.  For example, if the attribute is "home", your JSP might look
+                    like:
+                </p><pre class="programlisting">
+&lt;strong&gt;
+    &lt;a href="&lt;c:url value="/"/&gt;"&gt;
+        &lt;fmt:message key="navigate.home"/&gt;
+    &lt;/a&gt;
+&lt;/strong&gt;
+                </pre><p>
+                    Whereas if it's not, it might look like:
+                </p><pre class="programlisting">
+&lt;a href="&lt;c:url value="/"/&gt;"&gt;
+    &lt;fmt:message key="navigate.home"/&gt;
+&lt;/a&gt;
+                </pre><p>
+                    Apply this to each part of the nav div.  Once each section of the
+                    menu renders properly, you're done!
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-layout-optional-redo-headers"></a>3.3.1.7.&nbsp;Optional 2: Make Heading part of Standard Layout</h4></div></div></div><p>Modify <code class="filename">standard.jsp</code> to use the same 
+                    code in the &lt;h1&gt; element as it already uses in the
+                    &lt;title&gt;.  The page-title and page-heading will now be
+                    derived from the same Tile attribute.</p><p>Remove all the &lt;h1&gt; elements from the
+                    other 3 JSPs and the pages should still look the same.</p></div></div></div></div><div xmlns="http://www.w3.org/TR/xhtml1/transitional" class="navfooter"><hr></hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="mvc-getting-started-lab.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="mvc-views-lab.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;mvc-getting-started: Spring MVC for Beginners&nbsp;</td><td width="20%" align="center"><span style="color:white;font-size:90%;"><a href="http://www.spring.io" title="The Spring Framework">Spring By Pivotal</a></span></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;mvc-views: Views in Spring MVC</td></tr></table></div></body></html>

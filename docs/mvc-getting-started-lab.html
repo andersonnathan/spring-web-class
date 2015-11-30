@@ -1,0 +1,543 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;2.&nbsp;mvc-getting-started: Spring MVC for Beginners</title><link rel="stylesheet" href="css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.0"><link rel="start" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="up" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="prev" href="rewards-online-lab.html" title="Chapter&nbsp;1.&nbsp;rewards-online: Getting Started with the Development&#xA;  Environment"><link rel="next" href="mvc-layout-lab.html" title="Chapter&nbsp;3.&nbsp;mvc-layout: Using Tiles Layouts in Spring MVC"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="background-color:white;border:none;height:73px;border:1px solid black;"><a style="border:none;" href="http://www.pivotal.io" title="Pivotal"><img style="border:none;" src="images/heading-logo-lhs.jpg"></img></a><a style="border:none;" href="http://www.spring.io" title="The Spring Framework"><img style="border:none;position:absolute;padding-top:5px;right:42px;" src="images/heading-logo-rhs.jpg"></img></a></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="mvc-getting-started-lab"></a>Chapter&nbsp;2.&nbsp;mvc-getting-started: Spring MVC for Beginners</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mvc-getting-started-lab-introduction"></a>2.1.&nbsp;Introduction</h2></div></div></div><p>This lab will get you started and productive with Spring MVC.
+            In it, you will implement several use cases of the RewardsOnline
+            application using the MVC programming model.
+        </p><div class="orderedlist"><p class="title"><b>What you will learn:</b></p><ol type="1" compact><li><p>How a typical Spring web application is set up</p></li><li><p>How to design and implement annotated @Controllers</p></li><li><p>How to configure Spring to resolve JSP views</p></li><li><p>How to configure Spring to resolve messages from a resource
+                    bundle
+                </p></li></ol></div><p>The instructions in this lab are divided into several sections. In the
+            first part, you will learn the functional requirements you will
+            implement in this lab and then you will become familiar
+            with the existing code and configuration that has been provided for
+            you. In    the remaining sections, you will actually implement the
+            functional requirements using Spring MVC.
+        </p><p>
+            These lab instructions often contain notes, tips and warning.  Read
+            to the end of each numbered section in case a helpful tip is on the
+            next page or off the bottom of the screen.  Otherwise you may waste
+            time trying to solve a problem, when there was extra help available.
+        </p><p>Estimated time to complete: 60 minutes</p><p>URL for this project: <a href="http://localhost:8080/mvc-getting-started" target="_top"> http://localhost:8080/mvc-getting-started</a>.</p><p>Solution URL: <a href="http://localhost:8080/mvc-getting-started-solution" target="_top"> http://localhost:8080/mvc-getting-started-solution</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mvc-getting-started-application-overview"></a>2.2.&nbsp;The Application</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="mvc-getting-started-functional-requirements"></a>2.2.1.&nbsp;Functional Requirements</h3></div></div></div><p>You have been tasked to implement three screens of the
+                RewardsOnline application.
+                </p><div class="orderedlist"><ol type="1" compact><li><p>The first screen welcomes the user
+                        and provides navigation to other top-level screens.</p></li><li><p>The second screen displays a listing of
+                        all member Accounts in the database.</p></li><li><p>The third screen should display the details of
+                        a single Account.</p></li></ol></div><p>
+            </p><p>Each of these screens should be bound to a unique,
+                independently addressable resource URL. The desired URL bindings and
+                relationship between screens is shown on the site diagram below:
+            </p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="mvc-getting-started-site-map"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/mvc-getting-started/site-map.png" align="middle" alt="Site Map"></div></div><p class="title"><b>Figure&nbsp;2.1.&nbsp;Site Map</b></p></div><br xmlns="" class="figure-break"></div><p>In the diagram, the outermost box represents the root of the
+                web application, which is bound to the
+                <code class="literal">/mvc-getting-started</code> URL. It corresponds to the WAR
+                file in the usual way (in STS open Project properties, look under
+                <code class="literal">Web Project Settings</code> and it is the
+                <code class="literal">Context Root</code> setting).
+            </p><div class="orderedlist"><ol type="1" compact><li><p><code class="literal">/home</code> (1) displays the
+                    welcome screen.</p></li><li><p><code class="literal">/accounts</code>
+                    (2) displays the Account Listing.</p></li><li><p><code class="literal">/accounts/{accountNumber}</code> 
+                    (3) displays Details screen.</p></li><li><p>Accessing the root URL of the application should
+                     simply redirect the user to the welcome screen.</p></li></ol></div><p>
+                You can see this URL structure and the actual screens in action by
+                deploying the <code class="literal">mvc-getting-started-solution</code>
+                project.  The home page
+                should appear in a browser window in STS. If it doesn't appear it hasn't
+                deployed properly.  Check the console to see what is wrong.  Ask your
+                instructor if you have problems.</p><p>You can use the browser of your choice by using this URL:
+                <a href="http://localhost:8080/mvc-getting-started-solution" target="_top">http://localhost:8080/mvc-getting-started-solution </a>
+                Once you have finished close the
+                <code class="literal">mvc-getting-started-solution</code> project so you don't
+                modify it by mistake.  As a general rule, only keep one project open
+                at a time.
+            </p><p>When you are comfortable with the functional requirements, move
+                on to the next section.
+            </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="mvc-getting-started-review-existing-code"></a>2.2.2.&nbsp;Existing Code and Configuration</h3></div></div></div><p>Some code and configuration has already been provided for you
+                in the mvc-getting-started project as a starting point. First, the
+                overall structure of the project has been established. Second, Spring
+                has been pre-configured to initialize your application when it
+                deploys. Finally, the backend service you will invoke to load Account
+                information from the database has been written for you. In this
+                section, you'll become familiar with this existing code and
+                configuration.
+            </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-getting-started-deploy-web-application"></a>2.2.2.1.&nbsp;Deploy the web application</h4></div></div></div><p>Start by deploying the mvc-getting-started project to the
+                    server.
+                    Check the logging output and confirm it does initialize
+                    successfully.
+                </p><p>
+                    Now try accessing the web application at
+                    <a href="http://localhost:8080/mvc-getting-started" target="_top"> http://localhost:8080/mvc-getting-started</a>.
+                    You should receive a 404 and see the following warning appear in
+                    your logging output:
+                </p><pre class="programlisting">
+  WARN : org.springframework.web.servlet.PageNotFound
+  No mapping found for HTTP request with URI [/mvc-getting-started/admin/home] in
+     DispatcherServlet with name 'admin'
+                </pre><p>The Spring MVC DispatcherServlet is working, but it does not
+                    know how to handle your request for the /home resource. You will
+                    implement the welcome screen later. For now, lets review the
+                    existing code that is already there for you.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-getting-started-review-project-structure"></a>2.2.2.2.&nbsp;Review project structure</h4></div></div></div><p>In this step, you will become familiar with the overall
+                    structure of the <code class="literal">mvc-getting-started</code>
+                    project. It has the same structure
+                    that is used for all of the lab projects.
+                </p><p>
+                    Expand the <code class="literal">mvc-getting-started</code>
+                    project from within the Package Explorer of the Tool Suite:
+                </p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: left"><div xmlns="" class="figure"><a name="mvc-getting-started-package-explorer"></a><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="531"><tr><td><img src="images/mvc-getting-started/package-explorer.png" width="531" alt="This project in Package Explorer"></td></tr></table></div></div><p class="title"><b>Figure&nbsp;2.2.&nbsp;This project in Package Explorer</b></p></div><br xmlns="" class="figure-break"></div><p>
+                    Your source code resides under
+                    <code class="filename">src/main/java</code>. Your unit and integration tests
+                    reside under
+                    <code class="filename">src/test/java</code>. What about web content? Expand the
+                    <code class="filename">src</code>
+                    directory and navigate to
+                    <code class="filename">main/webapp</code>. This is the webapp root directory
+                    where your public web content resides, such as images and styles.
+                    Inside the
+                    <code class="filename">WEB-INF</code>
+                    subdirectory is where your protected web resources reside, such as
+                    <code class="filename">web.xml</code>
+                    and your JSP page templates.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-getting-started-review-web-xml"></a>2.2.2.3.&nbsp;Review web.xml</h4></div></div></div><p>
+                    The configuration of every Java EE web application, including
+                    those powered by Spring, starts in
+                    <code class="filename">web.xml</code>. In
+                    this step, you'll learn how the web application is configured.
+                    Open
+                    <code class="filename">web.xml</code>
+                    and note the declaration of a Spring MVC
+                    <code class="classname">DispatcherServlet</code>
+                    with two initialization
+                    parameters.
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                            If you prefer keyboard shortcuts to the Package Explorer,
+                            you can use CTRL+SHIFT+R to load any resource (non-Java)
+                            file. Be sure that you're opening the file from the correct
+                            project - we recommend you close projects that you're not
+                            actively working on to avoid confusion.
+                        </p><p><span class="emphasis"><em>Always</em></span> leave
+                            <code class="filename">00-reward-network</code> and
+                            <code class="filename">Other Projects </code> open, they are used
+                            by every lab. Close all the other projects except for
+                            the current one - <code class="filename">mvc-getting-started</code>.
+                        </p></td></tr></table></div><p>
+                </p><p>
+                    The <code class="literal">contextConfiguration</code>
+                    parameter specifies the Spring configuration files to use. In
+                    this application you'll use all the files inside
+                    <code class="filename">/WEB-INF/spring</code>.
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>Co-locating Spring configuration files in a directory like
+                            <code class="filename">/WEB-INF/spring</code> is a useful practice;
+                             it makes it easy to locate your configuration and make
+                             changes to it.
+                        </p></td></tr></table></div><p>
+                </p><p>
+                    Note the servlet mapping used for the
+                    <code class="classname">DispatcherServlet</code>. The servlet handles all
+                    requests into the application and is mapped to the
+                    <code class="filename">/admin/*</code> path. It is possible to eliminate the 
+                    servlet element (i.e. /admin) from the URL. We will discuss how to
+                    do this following the lab. For now, just accept the
+                    servlet element as part of the URL.
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>Mapping by logical path such as /admin/* is considered a
+                            best practice over mapping by extension (*.do, *.htm, etc).
+                        </p></td></tr></table></div><p>
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-getting-started-review-spring-config"></a>2.2.2.4.&nbsp;Review Spring configuration</h4></div></div></div><p>Spring manages the internal components of your application,
+                    and the Spring MVC Dispatcher Servlet handles mapping web requests
+                    to those components for processing. In this step, you'll review the
+                    Spring configuration that has been provided for you, and see what
+                    you will need to configure yourself.
+                </p><p>
+                    Expand the
+                    <code class="filename">/src/main/webapp/WEB-INF/spring</code>
+                    directory. Notice there are two Spring configuration files:
+                    <code class="filename">app-config.xml</code>
+                    and
+                    <code class="filename">mvc-config.xml</code>.
+                    <code class="filename">app-config.xml</code>
+                    contains core application
+                    configuration not necessarily related to
+                    the web layer.
+                    <code class="filename">mvc-config.xml</code>
+                    contains specific configuration
+                    used to initialize Spring MVC. Most
+                    of the labs in this course use
+                    this configuration.
+                </p><p>
+                    First, open <code class="filename">app-config.xml</code>
+                    and notice the two includes.  The business back-end of the
+                    application is in the shared <code class="filename">rewards</code>
+                    project (in <code class="filename">00-reward-network</code>).  It contains
+                    three repositories and a service processing rewards - the 
+                    <code class="classname">RewardNetwork</code>. The database layer is
+                    defined by <code class="filename">datasource/db-config.xml</code> and the
+                    rest by <code class="filename">rewardnetwork/app-config.xml</code>. Both are
+                    in the <code class="filename">src/main/resources</code> folder of the
+                    <code class="filename">rewards</code>project.  XML configuration is used
+                    because it is easier to understand and this setup will not change
+                    at all in this course.  If you took the Core Spring course, it is
+                    the application you built during that course.  These classes are
+                    used by every other project in your workspace.
+                </p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="mvc-getting-started-reward-application"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/mvc-getting-started/reward-application.png" align="middle" width="918" alt="The Reward Application"></div></div><p class="title"><b>Figure&nbsp;2.3.&nbsp;The Reward Application</b></p></div><br xmlns="" class="figure-break"></div><p>
+                    The component-scan directive at the bottom of <code class="filename">app-config.xml</code>
+                    directive tells    Spring to scan the <code class="filename">rewardsonline</code>
+                    package and its sub-packages for @Component classes to deploy as
+                    Spring beans. Classes annotated with
+                    <code class="classname">@Controller</code>,
+                    <code class="classname">@Repository</code>, or
+                    <code class="classname">@Service</code>
+                    are all types of components. Spring will discover each class
+                    annotated with one of these annotations and automatically create
+                    and configure an instance of it.  From the <code class="filename">rewards</code>
+                    project it will pick up three additional service layer components - 
+                    <code class="classname">AccountManagerImpl</code>,
+                    <code class="classname">RewardManagerImpl</code>
+                    <code class="classname">DiningFormProviderImpl</code>.  The 
+                    <code class="classname">RewardNetwork</code> is not used by this course.
+                </p><p>
+                    To review these services, use CTRL-T and enter
+                    <code class="classname">AccountManager</code>.
+                    This is the interface implemented by
+                    <code class="classname">AccountManagerImpl</code> 
+                    and as you can see it provides access to <code class="classname">Account</code>
+                    details.  The <code class="classname">AccountController</code> you are about
+                    to write will need to use the <code class="classname">AccountManager</code>.
+                </p><p>
+                    Similarly the <code class="classname">RewardManager</code> is the
+                    interface for the <code class="classname">RewardManagerImpl</code> and the
+                    <code class="classname">DiningFormProvider</code> interface is implemented
+                    by the <code class="classname">DiningFormProviderImpl</code>.
+                    These services are used by the Webflow labs.
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                            Each concrete implementation class in the 
+                            <code class="filename">rewards</code> project has an
+                            associated unit test located in
+                            <code class="filename">src/test/java</code>.
+                            Feel free to review the tests and even run them to verify they
+                            pass.
+                        </p></td></tr></table></div><p>
+                </p><p>
+                    Quickly open the
+                    <code class="filename">mvc-config</code>
+                    containing the Spring MVC configuration. Notice it doesn't define
+                    any beans. You will be completing the MVC configuration as necessary
+                    to implement the Welcome, Account Listing, and Account Details use
+                    cases in the remaining parts of this lab. When you are ready to code,
+                    move on to the next section!
+                </p></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mvc-getting-started-task-view-setup"></a>2.3.&nbsp;Configure the TODOs in STS</h2></div></div></div><p>In the labs, you will often be asked to work with TODO
+        instructions. They are displayed in the <code class="literal">Tasks</code> view
+        in Eclipse/STS. If not already displayed, click on
+        <code class="literal">Window -&gt; Show View -&gt; Tasks</code>
+        (be careful, <span class="emphasis"><em>not <code class="literal">Task List</code></em></span>).
+        If you can't see the <code class="literal">Tasks</code> view, try clicking
+        <code class="literal">Other ...</code> and looking under <code class="literal">General</code>.</p><p>By default, you see the TODOs for all the active projects in
+        Eclipse/STS. To limit the TODOs for a specific project, execute the
+        steps summarized in the following screenshots:</p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="mvc-getting-started-task1"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/mvc-getting-started/task1.png" align="middle" width="810" alt="Configure TODOs - Configure Contents"></div></div><p class="title"><b>Figure&nbsp;2.4.&nbsp;Configure TODOs - Configure Contents</b></p></div><br xmlns="" class="figure-break"></div><p></p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="mvc-getting-started-task2"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/mvc-getting-started/task2.png" align="middle" width="810" alt="Configure TODOs - Select Current Project Only"></div></div><p class="title"><b>Figure&nbsp;2.5.&nbsp;Configure TODOs - Select Current Project Only</b></p></div><br xmlns="" class="figure-break"></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>It is possible, you
+        might not be able to see the TODOs defined within the XML files. The TODOs
+        are numbered - check now to see if any are any missing. In
+        this case, you can check the configuration in <code class="literal">Preferences -&gt; General -&gt; Editors -&gt; Structured Text Editor -&gt; Task Tags</code>
+        pane.  Make sure <code class="literal">Enable searching for Task Tags</code> is selected.
+        On the <code class="literal">Filters</code> tab, verify if XML content type is
+        selected.</p><p>In case of Eclipse refresh issues, click on the <code class="literal">Clean and redetect Tasks</code> button.  Click <code class="literal">Apply</code> and wait 3-5 seconds
+        to see if it works.</p><p>As a last resort, you may have to uncheck and
+        then check again. the "Enable Searching for Task Tags" check-box.
+        Click <code class="literal">Apply</code> each time you change its value.
+        The TODOs may take a few seconds to appear, so again wait 3-5 seconds
+        to see if it worked or not.  If you still have no luck
+        ask your instructor.</p></td></tr></table></div><p>You should see something similar to the figure below.</p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="mvc-getting-started-tasks"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/mvc-getting-started/tasks.png" align="middle" alt="TODOs in the Tasks view"></div></div><p class="title"><b>Figure&nbsp;2.6.&nbsp;TODOs in the Tasks view</b></p></div><br xmlns="" class="figure-break"></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mvc-getting-started-lab-quick-instructions"></a>2.4.&nbsp;Quick Instructions</h2></div></div></div><p>If you feel you have a good understanding of the material, just follow
+        the embedded <code class="literal">TODO</code> steps in order to complete the lab.
+        </p><p>
+            The tasks can be summarized as follows:
+        
+            </p><div class="orderedlist"><ol type="1"><li><p>Implement the Welcome Controller.  Details
+                <a href="mvc-getting-started-lab.html#mvc-getting-started-welcome-page" title="2.5.1.&nbsp;Implementing the Welcome Page">here</a>.</p></li><li><p>Setup a view-resolver.  Details
+                <a href="mvc-getting-started-lab.html#mvc-getting-started-view-resolver" title="2.5.1.2.&nbsp;Optimize view resolution">here</a>.</p></li><li><p>Modify the Accounts Controller to show a list
+                of all accounts.  Details
+                <a href="mvc-getting-started-lab.html#mvc-getting-started-account-listing" title="2.5.2.&nbsp;Implementing the Account Listing Page">here</a>.</p></li><li><p>Modify the Accounts Controller again to show
+                individual account details.  Details
+                <a href="mvc-getting-started-lab.html#mvc-getting-started-account-details" title="2.5.3.&nbsp;Implementing the Account Details Page">here</a>.</p></li><li><p>Create Unit Tests for your controllers.  Details
+                <a href="mvc-getting-started-lab.html#mvc-getting-started-tests" title="2.5.4.&nbsp;Unit Tests">here</a>.</p></li><li><p>Optional Step: Investigate a message-source. You will
+                need more than TODOs - read the details
+                <a href="mvc-getting-started-lab.html#mvc-getting-started-message-source" title="2.5.5.&nbsp;Message Configuration (Optional)">here</a>.</p></li></ol></div><p>
+        </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mvc-getting-started-lab-instructions"></a>2.5.&nbsp;Detailed Instructions</h2></div></div></div><p>
+            These instructions are much more detailed.  As you progress, the
+            <code class="literal">TODO</code> steps will provide extra information.
+        </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="mvc-getting-started-welcome-page"></a>2.5.1.&nbsp;Implementing the Welcome Page</h3></div></div></div><p>
+                The first and simplest page to implement is the welcome page.
+                Recall that when you access the root URL of the
+                application, there is a redirect to <code class="filename">/admin/home</code>
+                which fails (404 NOT FOUND) because the DispatcherServlet doesn't
+                know how to handle it.  Access the URL again:
+                <a href="http://localhost:8080/mvc-getting-started" target="_top"> http://localhost:8080/mvc-getting-started</a>
+                and check the console output - you should see this in the logging output:
+            </p><pre class="programlisting">
+  WARN : org.springframework.web.servlet.PageNotFound - No mapping found for HTTP
+    request with URI [/mvc-getting-started/admin/home] in DispatcherServlet with name 'admin'
+            </pre><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-getting-started-implement-home-page"></a>2.5.1.1.&nbsp;Implement the Home Page</h4></div></div></div><p>
+                    The template for a welcome page has already been authored for
+                    you and is located at
+                    <code class="filename">/WEB-INF/welcome.jsp</code>.
+                    Quickly open this file (Ctrl+Shift+R) and check its contents - a
+                    simple JSP that uses JSTL tags to render a welcome message. This is
+                    the JSP that should render when the welcome resource is accessed.
+                </p><p>
+                    Since we are using Spring MVC we need a Controller: all HTTP
+                    requests are mapped to Controllers for processing - requests
+                    never go directly to views. Your first task is to write a
+                    <code class="classname">WelcomeController</code> to handle the
+                    request (in this case there is nothing to do) and
+                    <span class="emphasis"><em>then</em></span>
+                    select the appropriate view to render the
+                    response. The logic looks like this:
+                </p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="mvc-getting-started-welcome-controller"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/mvc-getting-started/welcome-controller.png" align="middle" width="756" alt="Welcome Controller"></div></div><p class="title"><b>Figure&nbsp;2.7.&nbsp;Welcome Controller</b></p></div><br xmlns="" class="figure-break"></div><p>
+                    <span class="bold"><strong>TASK 1:</strong></span>
+                    An empty WelcomeController already exists in the
+                    <code class="filename">rewardsonline</code> package. Make it an annotated
+                    @Controller and define a single
+                    method to handle GET requests.  What request-mapping will you
+                    specify?  Remember the Dispatcher Servlet is already mapped
+                    to <code class="filename">/admin</code>. Have your request
+                    handler method select the
+                    <code class="filename">/WEB-INF/welcome.jsp</code>
+                    view to render. Keep your implementation very explicit for now; do
+                    not apply any conventions.  Do not worry about a
+                    <code class="classname">ViewResolver</code> - that's the next step.
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                            Recall: when a class is annotated as a
+                            <code class="classname">@Controller</code>
+                            , a type of
+                            <code class="classname">@Component</code>
+                            , no configuration is needed to
+                            deploy it as a bean. The one-line
+                            component-scan directive in
+                            <code class="filename">app-config</code>
+                            will find it!
+                        </p></td></tr></table></div><p>
+                </p><p>
+                    After you have completed your WelcomeController implementation,
+                    see if it works. Try accessing
+                    <a href="http://localhost:8080/mvc-getting-started" target="_top"> http://localhost:8080/mvc-getting-started</a>
+                    again. You should see the welcome page render successfully! If you
+                    still get a 404, check your logging output.  Also consider placing a
+                    breakpoint on your WelcomeController method.  Is it being used?
+                    Ask your instructor if you are stuck.
+                </p><p>When your welcome page is rendering successfully, move on to
+                    the next step!
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-getting-started-view-resolver"></a>2.5.1.2.&nbsp;Optimize view resolution</h4></div></div></div><p>
+                    Congratulations! Your welcome page renders successfully, handled
+                    by your WelcomeController. However, using the hard-coded path
+                    to /WEB-INF/welcome.jsp in not good practice. This strong coupling
+                    between your Controller    and a specific view template makes it hard to
+                    change the 1) location of your views later, 2) to use a
+                    different view technology other than JSP or 3) return
+                    alternative views (representations) of the same resource (such as
+                    PDF or JSON format - unlikely for a home page, but not when we
+                    move to displaying account information in the next section).
+                </p><p>
+                    Best practice has a Controller return a
+                    <span class="emphasis"><em>logical view name</em></span>
+                    instead of a physical path. Then, the Dispatcher Servlet can map
+                    that logical view name to a physical resource, such as a JSP,
+                    using a view-resolver.  This keeps your Controllers simpler
+                    and provides more flexibility and security. This is the next step.
+                </p><p>
+                    <span class="bold"><strong>TASK 2:</strong></span>
+                    In the WelcomeController, just return the logical view name
+                    <span class="emphasis"><em>welcome</em></span>.
+                </p><p>
+                    After making this change, refresh your welcome page. You
+                    should see a 404 NOT FOUND with the following in your log:
+                    </p><pre class="programlisting">
+  WARN : org.springframework.web.servlet.PageNotFound
+  No mapping found for HTTP request with URI [/mvc-getting-started/admin/welcome] in
+        DispatcherServlet with name 'admin'
+                    </pre><p>
+                    This is because the DispatcherServlet tried to forward
+                    to the /welcome resource (it treated your welcome view name as a
+                    relative resource path). To fix this, return to your
+                    <code class="filename">mvc-config.xml</code>
+                    and configure Spring MVC to map logical view names to
+                    <code class="filename">.jsp</code> templates inside your
+                    <code class="filename">/WEB-INF/</code> directory using a suitable
+                    view-resolver.
+                </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                        Note that Tomcat/tc Server does
+                        <span class="emphasis"><em>not</em></span>
+                        automatically detect changes to Spring configuration files. Make
+                        sure you stop and restart the server after you change
+                        <code class="filename">mvc-config.xml</code>
+                        .
+                    </p></td></tr></table></div><p>With your <code class="classname">ViewResolver</code> defined,
+                    refresh your welcome page. It
+                    should render successfully again, and your
+                    <code class="classname">WelcomeController</code> no longer explicitly
+                    specifies a JSP. Move on to the next step!
+                </p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="mvc-getting-started-account-listing"></a>2.5.2.&nbsp;Implementing the Account Listing Page</h3></div></div></div><p>Congratulations! You have successfully implemented your first
+                @Controller, as well as adding some Spring MVC configuration (the view-resolver
+                is a "one-time" setup. You don't have to do it again to use more JSPs.
+                To continue you create an AccountController to implement the two
+                remaining use cases - show all accounts and details for any single
+                account.
+            </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-getting-started-devise-technical-approach"></a>2.5.2.1.&nbsp;Devise technical approach</h4></div></div></div><p>
+                    Open your /home page in your browser and access the
+                    <a href="http://localhost:8080/mvc-getting-started/admin/accounts" target="_top"> Accounts</a>
+                    link. You should receive a 404. Your task in this section is to
+                    implement a controller that handles this request. You'll know it's
+                    working when you see a listing of all accounts in your browser.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-getting-started-create-accounts-controller"></a>2.5.2.2.&nbsp;Create the AccountsController</h4></div></div></div><p>
+                    <span class="bold"><strong>TASK 3:</strong></span>
+                    Modify the empty <code class="classname">AccountsController</code> in the
+                    <code class="filename">rewardsonline.accounts</code>
+                    package. Make it a Spring MVC Controller and implement a method to
+                    handle GET <code class="filename">/accounts</code> requests. Within
+                    the body of this method, use the <code class="classname">AccountManager</code>
+                    to find the list of accounts. Where will you put these accounts so
+                    the view can display them? We will use the
+                    <code class="filename">accounts/list</code> view for rendering.
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>You can instruct Spring to inject a dependency such as an
+                            <code class="classname">AccountManager</code> by annotating a
+                            constructor argument or setter method with
+                            <code class="classname">@Autowired</code>.  We are using
+                            component-scanning so XML configuration is not possible.
+                        </p></td></tr></table></div><p>
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                            The view template has already been created for you at
+                            <code class="filename">/WEB-INF/accounts/list.jsp</code>
+                        </p></td></tr></table></div><p>
+                </p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="mvc-getting-started-account-details"></a>2.5.3.&nbsp;Implementing the Account Details Page</h3></div></div></div><p>
+                <span class="bold"><strong>TASK 4:</strong></span>
+                Complete this final section by implementing the use case to
+                show account details. You can confirm this use case has not been
+                implemented when you click on one of the accounts from the list page
+                - another 404 page.  Look at the URL that failed, it contains the
+                account number - a controller method must match it.  The JSP you
+                need already exists <code class="filename">accounts/show</code> - open it
+                to see what model attribute is needed.
+                </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>It is a best practice to group methods that act on the same
+                        logical resource, such as accounts, together in the same
+                        @Controller    class.  So add a new method to the
+                        <code class="classname">AccountsController</code>.
+                    </p></td></tr></table></div><p>
+            </p><p>
+                You'll know you have it working when you see details displaying successfully.  
+            </p><p>Once you see the details of selected accounts, you have
+                completed this section! Congratulations - you are well own your way to
+                becoming a Spring MVC expert.
+            </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="mvc-getting-started-tests"></a>2.5.4.&nbsp;Unit Tests</h3></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-getting-started-implement-controller-tests"></a>2.5.4.1.&nbsp;Implement @Controller unit tests</h4></div></div></div><p>
+                    @Controllers are easy to test because they often have few
+                    dependencies. In this step, setup unit tests for your
+                    <code class="classname">WelcomeController</code> and
+                    <code class="classname">AccountsController</code> classes within the
+                    <code class="filename">src/test</code>
+                    tree. A <code class="classname">StubAccountManager</code> has been
+                    provided to help test your
+                    <code class="classname">AccountsController</code> - it defines a single
+                    test account.
+                </p><p>
+                    <span class="bold"><strong>TASK 5:</strong></span>
+                    The <code class="classname">WelcomeControllerTests</code> already exist
+                    as an example, however it is disabled because the
+                    <code class="methodname">welcome()</code>
+                    method didn't do anything until you modified it. Just remove the
+                    <code class="classname">@Ignore</code>, run as a JUnit test and it should
+                    pass.
+                </p><p>
+                    Add a test method to the <code class="classname">AccountControllerTests</code>
+                    for the 2 controller methods you wrote. In each test, assert that the
+                    view returned by the controller method has the right name and
+                    check the <code class="classname">Model</code> to see that it contains the
+                    correct attribute and that the attribute value is also as expected.
+                </p><p>
+                    When all tests are passing, you have completed
+                    this section and the whole lab. Congratulations!
+                </p><p>If you have time, there is a short optional section below.
+                </p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="mvc-getting-started-message-source"></a>2.5.5.&nbsp;Message Configuration (Optional)</h3></div></div></div><p>Hard-coding strings is always a bad idea in code or in
+                web-pages. Good practice is to externalize them in a separate file
+                somewhere. Java supports this by using resource bundles: text
+                strings defined in a simple properties file. The property name is a
+                key identifying the resource and its value is the text you want to
+                use.
+            </p><p>
+                Spring supports this facility via a <code class="classname">MessageSource</code>.
+                One was already setup in
+                <code class="filename">WEB-INF/spring/mvc-config.xml</code>
+                when you started. To see what it does, edit
+                <code class="filename">mvc-config.xml</code>
+                and comment it out
+                - highlight the
+                <code class="literal">messageSource</code>
+                bean definition, then press
+                <code class="literal">CTRL-/</code>
+                to comment out. Now restart the server and go to
+                the welcome page.
+                </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+                        You have not covered message-sources yet, but they are
+                        easy to use and this last section is a sneak preview.
+                    </p></td></tr></table></div><p>
+            </p><p>
+                Notice that your welcome view rendered message placeholders like
+                <code class="literal">???welcome.title???</code>
+                instead of the actual messages. Without the message-source, the
+                system
+                doesn't know what to do with them. Open
+                <code class="filename">welcome.jsp</code>
+                . It uses the standard JSTL
+                <code class="literal">&lt;fmt:message&gt;</code>
+                tags and the
+                <code class="literal">key</code>
+                references the placeholder - for example in
+                <code class="code">&lt;fmt:message key="welcome.title" /&gt;</code>
+                .
+            </p><p>
+                Messages for the application reside in
+                <code class="filename">/WEB-INF/messages/global.properties</code> .
+                Quickly open this file (Ctrl+Shift+R) and scan what is there -
+                you'll see messages organized by page and by domain object. Each
+                placeholder is a property and the text to be output is its value.
+            </p><p>
+                To plug these messages into the Dispatcher Servlet's view
+                rendering context, all that is required is the
+                <code class="literal">messageSource</code>
+                bean. Spring MVC then automatically configures the bean to handle
+                message lookups initiated by the
+                <code class="literal">&lt;fmt:message&gt;</code>
+                tags in your JSP templates.
+            </p><p>
+                Go back to
+                <code class="filename">mvc-config.xml</code>
+                and uncomment the
+                <code class="classname">ReloadableResourceBundleMessageSource</code>
+                bean - highlight the commented code and press
+                <code class="literal">CTRL-\</code>
+                to uncomment.
+                See where the
+                <code class="literal">basename</code>
+                property specifies
+                <code class="filename">/WEB-INF/messages/global</code>
+                .
+                That's how it knows where to find the placeholders. It is assumed
+                to be a Java Properties file, so it will look for
+                <code class="filename">/WEB-INF/messages/global.properties</code>
+                . This is a reloadable message-source and the
+                <code class="literal">cacheSeconds</code>
+                property is set to zero (meaning no caching at all). So if the
+                properties file is changed, the changes will be seen immediately.
+            </p><p>After your messageSource has been uncommented, restart the
+                server then refresh the welcome page again and verify the messages
+                now resolve successfully.
+            </p><p>
+                Try modifying
+                <code class="filename">/WEB-INF/messages/global.properties</code>
+                by changing the value of the
+                <code class="literal">welcome.title</code>
+                text like
+                this
+                <code class="code">welcome.title=RewardsOnline Application</code>
+                . Refresh the welcome page to
+                see the new title.
+            </p><p>
+                Message Sources will be covered in detail later in the course.
+                Or you can find the details online at the Spring web-site.
+                They are covered near the end of the
+                <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/beans.html#context-functionality-messagesource" target="_top">IOC Container section</a>
+                (currently section 5 in the Spring documentation, but section
+                numbers change over time).
+            </p></div></div></div><div xmlns="http://www.w3.org/TR/xhtml1/transitional" class="navfooter"><hr></hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="rewards-online-lab.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="mvc-layout-lab.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;rewards-online: Getting Started with the Development
+  Environment&nbsp;</td><td width="20%" align="center"><span style="color:white;font-size:90%;"><a href="http://www.spring.io" title="The Spring Framework">Spring By Pivotal</a></span></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;mvc-layout: Using Tiles Layouts in Spring MVC</td></tr></table></div></body></html>

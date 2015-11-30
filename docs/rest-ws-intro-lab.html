@@ -1,0 +1,283 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;8.&nbsp;rest-ws-intro: Building RESTful Clients with Spring MVC</title><link rel="stylesheet" href="css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.0"><link rel="start" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="up" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="prev" href="mvc-personalization-lab.html" title="Chapter&nbsp;7.&nbsp;mvc-personalization: Enable Site Personalization Through Locale And Theme Switching"><link rel="next" href="rest-ws-mvc-lab.html" title="Chapter&nbsp;9.&nbsp;rest-ws-mvc: Building a REST Server using Spring MVC"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="background-color:white;border:none;height:73px;border:1px solid black;"><a style="border:none;" href="http://www.pivotal.io" title="Pivotal"><img style="border:none;" src="images/heading-logo-lhs.jpg"></img></a><a style="border:none;" href="http://www.spring.io" title="The Spring Framework"><img style="border:none;position:absolute;padding-top:5px;right:42px;" src="images/heading-logo-rhs.jpg"></img></a></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="rest-ws-intro-lab"></a>Chapter&nbsp;8.&nbsp;rest-ws-intro: Building RESTful Clients with Spring MVC</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-ws-intro-lab-introduction"></a>8.1.&nbsp;Introduction</h2></div></div></div><p>In this lab you'll use some of the features that were added
+            in Spring 3.0 to support RESTful clients.
+        </p><div class="orderedlist"><p class="title"><b>What you will learn:</b></p><ol type="1" compact><li><p>Writing a programmatic HTTP client to consume RESTful web
+                    services
+                </p></li><li><p>Using
+                    Spring's
+                    <code class="classname">RestTemplate</code>
+                </p></li></ol></div><p>
+            The RESTful service that you need has already been implemented. In
+            this lab you will write a client application to access it.
+            First you'll test retrieving existing data using a
+            <code class="classname">RestTemplate</code>.
+            Then you'll send requests to make changes to account beneficiaries.
+        </p><p>Estimated time to complete: 30 minutes</p><p>URL for this project <a href="http://localhost:8080/rest-ws-intro" target="_top">
+            http://localhost:8080/rest-ws-intro/</a>.</p><p>Solution URL: <a href="http://localhost:8080/rest-ws-intro-solution" target="_top">
+            http://localhost:8080/rest-ws-intro-solution/</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="webflow-language-essentials-lab-task"></a>8.2.&nbsp;The Task: Build a RESTful Client using
+            <code class="classname">RestTemplate</code></h2></div></div></div><p>
+            The RESTful service that you need has already been implemented. In
+            this lab you will write a client application to access it.
+            First you'll test retrieving existing data (accounts and beneficiaries)
+            using a <code class="classname">RestTemplate</code>.
+            Then you'll send requests to make changes to account beneficiaries.
+        </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="rest-ws-intro-lab-inspect-application"></a>8.2.1.&nbsp;Inspect the current application</h3></div></div></div><p>
+                Under the <code class="filename">src/test/java</code>
+                source folder you'll find an
+                <code class="classname">AccountClientTests</code>
+                JUnit test case: this is what you'll use to interact with
+                the RESTful web services on the server. Your task will
+                be to implement different tests in this class.
+            </p><p>
+                Firstly, deploy the application to your local server, start the
+                server and verify that the application deployed successfully by
+                accessing
+                <a href="http://localhost:8080/rest-ws-intro" target="_top"> http://localhost:8080/rest-ws-intro</a>
+                from a browser. When you see the welcome page, the application was
+                started successfully.
+            </p><p>
+                Now try to fetch all the accounts in JSON format by clicking on the
+                <code class="filename">[JSON]</code>
+                link on the welcome page. You should get a popup containing a
+                scrollable list of all the accounts using JSON representation
+                (JavaScript Object Notation). If so, the server is working properly
+                and the REST service is working.
+            </p><p>
+                Hover over the <code class="filename">JSON</code> link with your mouse and you
+                will see the URL being passed to fetch the accounts - you will need
+                this int the next section.
+            </p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-ws-intro-lab-quick-instructions"></a>8.3.&nbsp;Quick Instructions</h2></div></div></div><p>If
+            you feel you have a good grasp of how REST and Spring's
+            <code class="classname">RestTemplate</code>
+            work, all you need to do is open
+            <code class="classname">AccountClientTests</code>
+            and implement all the TODOs in turn. The
+            <code class="filename">[JSON]</code>
+            links in the web-application will help you visualise the JSON
+            data available.
+        </p><p>
+            Otherwise, detailed, step by step instructions follow.
+        </p><p>
+            To see the TODOs, open the
+            <code class="literal">Tasks</code> view  (Window -&gt; Show view -&gt; Tasks
+            (<span class="emphasis"><em>not Task List</em></span>)).  Following the TODOs is the
+            recommended way to do this lab.  Each TODO step is describe in
+            detail below if you need more help. Just search for TODO-XX in the 
+            current chapter.
+        </p><p>
+            Occasionally, TODO'S defined within XML files may fail to appear in 
+            the <code class="literal">Tasks</code> view (i.e. gaps in the number sequence).  To
+            correct this, go to <code class="literal">Preferences -&gt; General -&gt; Editors -&gt;
+            Structured Text Editor -&gt; Task Tags</code> pane.  Check <code class="literal">Enable
+            searching for Task Tags</code> and click <code class="literal">Clean and Redetect
+            Tasks</code>.  On the <code class="literal">Filters</code> tab, ensure XML content
+            type is checked.  Changes may take 3-5 secs to take effect.
+        </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rest-ws-intro-lab-instructions"></a>8.4.&nbsp;Instructions</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="rest-ws-intro-lab-fetch-accounts-list"></a>8.4.1.&nbsp;Retrieve a list of accounts using a
+                <code class="classname">RestTemplate</code></h3></div></div></div><p>A client can process the JSON contents anyway it sees
+                fit. In our case, we'll rely on an HTTP Message Converter
+                to deserialize the JSON contents into
+                <code class="classname">Account</code>
+                objects. Open the
+                <code class="classname">AccountClientTests</code>
+                class under the
+                <code class="filename">src/test/java</code>
+                source folder in the
+                <code class="literal">accounts.client</code>
+                package. This class uses a plain
+                <code class="classname">RestTemplate</code>
+                to connect to the server. Use the supplied template to
+                retrieve the
+                list of accounts from the server, from the same URL that you
+                used in
+                your
+                browser (
+                <code class="literal">TODO 01</code>
+                ).
+                </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                        You can use the
+                        <code class="varname">BASE_URL</code>
+                        variable to come up with the
+                        full URL to use.
+                    </p></td></tr></table></div><p>
+                </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+                        We cannot assign to a
+                        <code class="literal">List&lt;Account&gt;</code>
+                        here,
+                        since Jackson won't be able to determine the generic
+                        type to
+                        deserialize to in that case: therefore we use an
+                        <code class="literal">Account[]</code>
+                        instead.
+                    </p></td></tr></table></div><p>
+                When you've completed this
+                <code class="literal">TODO</code>
+                , run the test and make
+                sure that the
+                <code class="methodname">listAccounts</code>
+                test succeeds. You'll
+                make the other test methods pass in the
+                following steps.
+            </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="rest-ws-intro-lab-expose-single-account"></a>8.4.2.&nbsp;Access a Single Account</h3></div></div></div><p>To access a single account, we'll use the same
+                <code class="literal">/accounts</code> URL followed
+                by the <code class="literal">number</code>
+                of the <code class="classname">Account</code>, e.g.
+                <code class="literal">/accounts/123456789</code>
+                .
+            </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+                    If you go to
+                    <a href="http://localhost:8080/rest-ws-intro/accounts" target="_top"> http://localhost:8080/rest-ws-intro/accounts</a>
+                    each account in the list has two links. If you click on its
+                    account number you will get the details as an HTML page. If you
+                    click on the <code class="filename">[JSON]</code>
+                    link you will get the same data as JSON.  The same URL is invoked
+                    each time - but the Accept header in the request is different.
+                    (If you are interested, check the JavaScript in
+                    <code class="filename">getAsJson.js</code>
+                    to see how the JSON call works. Use CTRL-R to open this file
+                    (it's in the <code class="literal">rewards</code> project and included by
+                    <code class="filename">src/main/webapp/WEB-INF/layouts/standard.jsp</code>).
+                </p><p>
+                    One of the nice features of RESTful interfaces is that you
+                    can invoke them directly from a standard browser (unlike SOAP
+                    web-services for example).
+                </p></td></tr></table></div><p>
+                Complete <code class="literal">TODO 02</code> in the
+                <code class="classname">AccountClientTests</code>
+                by retrieving the account with number 123456789.
+                </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                        The
+                        <code class="classname">RestTemplate</code>
+                        also supports URI templates,
+                        so use one and pass
+                        "123456789" as the value for the
+                        <code class="varname">urlVariables</code>
+                        varargs parameter.
+                    </p></td></tr></table></div><p>
+                Run the test and ensure that the <code class="methodname">getAccount</code>
+                test now succeeds as well.
+            </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="rest-ws-intro-lab-create-new-account"></a>8.4.3.&nbsp;Create a New Account</h3></div></div></div><p>So far we've only exposed resources by responding to GET
+                methods: now
+                we'll try creating a new account as a new
+                resource.
+            </p><p>
+                Complete <code class="literal">TODO 03</code> by POSTing the given
+                <code class="classname">Account</code> to the
+                <code class="literal">/accounts</code> URL. The
+                <code class="classname">RestTemplate</code>
+                has two methods for this: use the one
+                that returns the location of
+                the newly created resource and assign that
+                to a variable. Then complete
+                <code class="literal">TODO 04</code> by retrieving the new
+                account on the given location. The returned
+                <code class="classname">Account</code>
+                will be equal to the one you POSTed, but will also have received a
+                new account <code class="varname">number</code>
+                when it was saved to the database.
+            </p><p>
+                Run the tests again and see if the
+                <code class="methodname">createAccount</code>
+                test runs successfully. Regardless of whether this is the case or
+                not, proceed with the next step!
+            </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="rest-ws-intro-lab-using-tcp-monitor"></a>8.4.4.&nbsp;Seeing what happens at the HTTP level</h3></div></div></div><p>
+                If your test did not work, you may be wondering what caused an
+                error.
+                Because of all the help that you get from Spring, it's
+                actually not that
+                easy to see what's happening at the HTTP
+                transport level in terms
+                of requests and responses when you exercise
+                the application.
+            </p><p>
+                For debugging or monitoring HTTP traffic, Eclipse ships with a
+                built-in tool that can be of great value: the TCP/IP Monitor. To
+                open this tool, which is just an Eclipse View, press Ctrl+3 and type
+                'tcp' in the resulting popup window; then press Enter to
+                open the TCP/IP Monitor View.  Click the small arrow pointing
+                downwards and choose "properties".
+            </p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="rest-ws-intro-lab-tcp-monitor-properties"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/rest-ws-intro/monitor-properties.png" align="middle" alt="The &#34;properties&#34; menu entry of the TCP/IP Monitor view"></div></div><p class="title"><b>Figure&nbsp;8.1.&nbsp;The "properties" menu entry of the
+                        TCP/IP Monitor view</b></p></div><br xmlns="" class="figure-break"></div><p>
+                Choose "Add..." to add a new monitor. As local monitoring
+                port, enter 8081
+                since this port is probably unused. As host name,
+                enter
+                "localhost" and as
+                port enter 8080 since this is the
+                port that Tomcat is running on. Press
+                OK
+                and then press
+                "Start" to start the newly defined monitor.
+                </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>Don't forget to start the monitor after adding it! The
+                        most
+                        common error at this point is to forget to start the monitor.
+                    </p></td></tr></table></div><p>
+            </p><p>
+                Now switch to the
+                <code class="classname">AccountClientTests</code>
+                and change the
+                <code class="varname">BASE_URL</code>
+                's port number to 8081 so all requests pass through
+                the
+                monitor.
+                </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+                        This assumes that you've used that variable to
+                        construct all
+                        your URLs:
+                        if that's not the case, then make
+                        sure to update the other
+                        places
+                        in your code that contain the port
+                        number as well!
+                    </p></td></tr></table></div><p>
+            </p><p>
+                Now run the tests again and switch back to the TCP/IP Monitor View
+                (double-click on the
+                tab's title to maximize it if it's
+                too small). You'll see your
+                requests and corresponding
+                responses. Click on the small menu arrow again and now choose
+                'Show
+                Header': this will
+                also show you the HTTP headers,
+                including the Location header you
+                speficied for the
+                response to the
+                POST that created a new account.
+                </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+                        Actually, there's one request missing: the request to
+                        retrieve the
+                        new account. This
+                        is because the monitor rewrites the
+                        request to use port 8080, which
+                        means the Location
+                        header will
+                        include that port number instead of the 8081 the original
+                        request
+                        was made to.
+                        We won't try to fix that in this lab, but it
+                        wouldn't be
+                        too hard to come up with some
+                        interceptor that
+                        changes the port number to make all requests pass through
+                        the
+                        filter.
+                    </p></td></tr></table></div><p>
+            </p><p>
+                If your
+                <code class="methodname">createAccount</code>
+                test method didn't work yet, then use the monitor to debug it.
+                Proceed to the next step when the test runs successfully.
+            </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>If your server is not working (for example producing a 500
+                    error),
+                    try looking at its output. Click on the console tab, then
+                    click on the console selection icon (the monitor symbol) on the
+                    right hand side and select the monitor for Apache Tomcat. You will
+                    probably see a stack-trace from the server.
+                </p></td></tr></table></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="rest-ws-intro-lab-working-with-beneficiary"></a>8.4.5.&nbsp;Create and delete a beneficiary</h3></div></div></div><p>
+                Still in <code class="classname">AccountClientTests</code>, complete
+                <code class="literal">TODO</code>s
+                5 to 8. When you're done, run the test and verify
+                that all test methods run successfully. If so, you've completed
+                the lab!
+            </p></div></div></div><div xmlns="http://www.w3.org/TR/xhtml1/transitional" class="navfooter"><hr></hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="mvc-personalization-lab.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="rest-ws-mvc-lab.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;7.&nbsp;mvc-personalization: Enable Site Personalization Through Locale And Theme Switching&nbsp;</td><td width="20%" align="center"><span style="color:white;font-size:90%;"><a href="http://www.spring.io" title="The Spring Framework">Spring By Pivotal</a></span></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;9.&nbsp;rest-ws-mvc: Building a REST Server using Spring MVC</td></tr></table></div></body></html>

@@ -1,0 +1,212 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;4.&nbsp;mvc-views: Views in Spring MVC</title><link rel="stylesheet" href="css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.0"><link rel="start" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="up" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="prev" href="mvc-layout-lab.html" title="Chapter&nbsp;3.&nbsp;mvc-layout: Using Tiles Layouts in Spring MVC"><link rel="next" href="mvc-forms-setup-lab.html" title="Chapter&nbsp;5.&nbsp;mvc-forms-setup: Building Forms in Spring MVC - Part 1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="background-color:white;border:none;height:73px;border:1px solid black;"><a style="border:none;" href="http://www.pivotal.io" title="Pivotal"><img style="border:none;" src="images/heading-logo-lhs.jpg"></img></a><a style="border:none;" href="http://www.spring.io" title="The Spring Framework"><img style="border:none;position:absolute;padding-top:5px;right:42px;" src="images/heading-logo-rhs.jpg"></img></a></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="mvc-views-lab"></a>Chapter&nbsp;4.&nbsp;mvc-views: Views in Spring MVC</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mvc-views-lab-introduction"></a>4.1.&nbsp;Introduction</h2></div></div></div><p>
+            In this lab, you will add support for downloading content in Microsoft
+            Excel format (and optionally as JSON format data).
+        </p><div class="orderedlist"><p class="title"><b>What you will learn:</b></p><ol type="1" compact><li><p>How to render data in Microsoft Excel format using Apache POI</p></li><li><p>How to configure Spring MVC for use with multiple view technologies</p></li></ol></div><p>Estimated time to complete: 30 minutes</p><p>URL for this project <a href="http://localhost:8080/mvc-views" target="_top">
+            http://localhost:8080/mvc-views/</a>.</p><p>Solution URL: <a href="http://localhost:8080/mvc-views-solution" target="_top">
+            http://localhost:8080/mvc-views-solution/</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mvc-views-quick-instructions"></a>4.2.&nbsp;Quick Instructions</h2></div></div></div><p>
+            This lab involves the following steps.
+        </p><div class="orderedlist"><ol type="1" compact><li><p>Submit requests for different content types. Details 
+                <a href="mvc-views-lab.html#mvc-views-lab-excel" title="4.3.1.&nbsp;Return Accounts in Microsoft Excel format">here</a>.</p></li><li><p>Use a <code class="classname">BeanNameViewResolver</code> to route
+                    requests to a custom Excel view. Details 
+                <a href="mvc-views-lab.html#mvc-views-lab-excel-view" title="4.3.1.1.&nbsp;Plug in the AccountsExcelView">here</a>.</p></li><li><p>Last, configure a <code class="classname">ContentNegotiatingViewResolver</code>
+                    for detecting multiple content types. Details 
+                <a href="mvc-views-lab.html#mvc-views-lab-cnvr" title="4.3.1.2.&nbsp;Configure the ContentNegotiatingViewResolver">here</a>.</p></li><li><p>Optional bonus "extra credit" section
+                    demonstrates returning JSON. Details 
+                <a href="mvc-views-lab.html#mvc-views-lab-extra-credit" title="4.3.2.&nbsp;EXTRA CREDIT: Return Accounts as JSON">here</a>.</p></li></ol></div><p>Quick instructions for this exercise have been embedded within the
+        lab materials  in the form of TODO comments.  To display them, open the
+        <code class="literal">Tasks</code> view  (Window -&gt; Show view -&gt; Tasks
+        (<span class="emphasis"><em>not Task List</em></span>)).  Following the TODOs is the
+        recommended way to do this lab.  Each TODO step is describe in
+        detail below if you need more help. Just search for TODO-XX in the 
+        current chapter.</p><p>Occasionally, TODO'S defined within XML files may fail to appear in 
+        the <code class="literal">Tasks</code> view (i.e. gaps in the number sequence).  To
+        correct this, go to <code class="literal">Preferences -&gt; General -&gt; Editors -&gt;
+        Structured Text Editor -&gt; Task Tags</code> pane.  Check <code class="literal">Enable
+        searching for Task Tags</code> and click <code class="literal">Clean and Redetect
+        Tasks</code>.  On the <code class="literal">Filters</code> tab, ensure XML content
+        type is checked.  Changes may take 3-5 secs to take effect.</p><p>Alternatively, detailed instructions follow.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mvc-views-lab-instructions"></a>4.3.&nbsp;Instructions</h2></div></div></div><p>
+            The instructions for this lab are divided into several steps. 
+            Initially you see how to submit requests for different content types.
+            Next you will use a <code class="classname">BeanNameViewResolver</code> to route
+            requests to a custom Excel view.
+            Lastly you will configure a <code class="classname">ContentNegotiatingViewResolver</code>
+            for detecting content types.
+            The optional bonus "extra credit" section demonstrates returning JSON.
+        </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="mvc-views-lab-excel"></a>4.3.1.&nbsp;Return Accounts in Microsoft Excel format</h3></div></div></div><p>
+                Most web applications primarily generate HTML content, but
+                for some use cases they also need to generate other content
+                representations such as Adobe PDF or Microsoft Excel.
+                In this section, you will enhance the RewardsOnline application
+                to also be capable of rendering an Account listing as a
+                Microsoft Excel spreadsheet.
+            </p><p>
+                Get started by accessing the welcome page and navigating to the Accounts page.
+                From there, select the "Show as Excel" link.
+                Notice selecting this link just reloads the HTML page; it should instead download an Excel document.
+                You need to first understand what is going on.
+            </p><p>
+                First, notice that the "Show as Excel" URL ends
+                in <code class="literal">/accounts.xls</code>.
+                In your browser's address bar, try removing the
+                ".xls" extension or replacing it with another
+                extension like ".html" or ".pdf".
+                This makes no difference, and the HTML page reloads each time.
+                In fact, all of these URLs are handled by the same method of
+                <code class="classname">AccountsController</code> because its
+                <code class="literal">@RequestMapping</code> rule ignores the extension. 
+                This is to your advantage because it is possible to reuse the
+                <code class="methodname">AccountsController.list()</code> method to load
+                the same model data, while varying the view rendering technology.
+                Basically, when <code class="literal">/accounts</code> is requested, the
+                list should be rendered in the default content type, HTML. 
+                When <code class="literal">/accounts.xls</code> is requested, the same list
+                should be rendered in Microsoft Excel format.
+                In essence, the client should use the file extension to
+                request the desired representation of the resource.
+                The same <code class="methodname">list()</code> Controller
+                method should execute for both representations; what varies is the view.
+            </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-views-lab-excel-view"></a>4.3.1.1.&nbsp;Plug in the AccountsExcelView</h4></div></div></div><p>
+                    Open <code class="classname">AccountsExcelView</code> (Ctrl+Shift+T).
+                    This class extends from Spring MVC's <code class="classname">AbstractExcelView</code>, which uses the Apache POI library to generate Excel documents.
+                    Take a few moments to study the code.
+                    Notice how the accountList model is retrieved and the Apache POI API is used to generate the document.
+                    The base class takes care of writing the document to the HTTP response stream for you.
+                </p><p>
+                    Fortunately, this class is already complete.
+                    All you need to do is to plug it in so that when the "accounts.xls"
+                    view is selected, your AccountsExcelView is rendered.
+                    To do this, edit <code class="filename">mvc-config.xml</code> and setup the
+                    <code class="classname">AccountsExcelView</code> as a bean (<code class="literal">TODO-04</code>)
+                    and configure a view resolver chain that involves the
+                    <code class="classname">BeanNameViewResolver</code>,
+                    and then the <code class="classname">TilesViewResolver</code>
+                    (<code class="literal">TODO-05</code>) - set the 
+                    order property on the <code class="classname">BeanNameViewResolver</code> to
+                    force the order.
+                </p><p>
+                    You're done when the "Show as Excel" link returns a Microsoft Excel representation of the account list.
+                    If your computer has a program for displaying Excel documents you will be able to open the document.
+                    If not, you will be prompted to save the document to a file on the local disk.
+                </p><p>
+                    Next remove the .xls extension in the URL and try loading the Accounts Listing page.
+                    You should get Excel content yet again.  This because we asked you to configure
+                    the BeanNameViewResolver first in the order of priority, so it always does the rendering.
+                    What you really want is the ability to display HTML or a spreadsheet
+                    based on the file extension in the URL.    
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-views-lab-cnvr"></a>4.3.1.2.&nbsp;Configure the ContentNegotiatingViewResolver</h4></div></div></div><p>
+                    The <code class="classname">ContentNegotiatingViewResolver</code> is a view
+                    resolver which can delegate to other resolvers based on the
+                    type of content to be rendered. 
+                    We'll use this resolver to render the view properly as
+                    either HTML or Excel content.    
+                </p><p>
+                    (<code class="literal">TODO-06</code>)
+                    Open <code class="filename">mvc-config.xml</code> and add an instance of the
+                    <code class="classname">ContentNegotiatingViewResolver</code> (CNVR).
+                    This will use file extensions by default to determine the type to
+                    render, which matches your goal.
+                    </p><p>
+                    Once your <code class="classname">ContentNegotiatingViewResolver</code>
+                    has been configured, try the Accounts Listing page and the
+                    "Show as Excel" link again.
+                    This time you should get the right content for each request.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-views-lab-not-acceptible"></a>4.3.1.3.&nbsp;Controlling Default Content Type</h4></div></div></div><p>
+                    (<code class="literal">TODO-07</code>) Try clicking on the
+                    "Show as JSON" link - you will get the
+                    HTML page again because JSON is not setup yet.
+                    If you type the URLs ending in any path extension (other than
+                    <code class="literal">/accounts.xls</code>), such as 
+                    <code class="literal">/accounts.xxx</code> and <code class="literal">/accounts.do</code>
+                    directly into your browser, the HTML page will be rendered,
+                    using the <code class="classname">TilesView</code>. 
+                    This is because the browser has set
+                    the Accept header property in your HTTP request to indicate
+                    that HTML is acceptable.  Note that the CNVR has no default
+                    media type setup initially.
+                </p><p>
+                    (<code class="literal">TODO-08</code>) Since we don't know how to generate
+                    JSON, asking for it should return an error - a status code 406 in 
+                    fact.  We can arrange this by setting the CNVR property
+                    <span class="property">useNotAcceptableStatusCode</span> to true. 
+                    This will result in an HTTP response with a status code 406 if no
+                    suitable view is found.  To try this out requires bit more
+                    configuration:
+                </p><div class="orderedlist"><ol type="1" compact><li>
+                        Define a <code class="classname">ContentNegotiationManager</code>
+                        bean using a <code class="classname">ContentNegotiationManagerFactoryBean</code>
+                        - just uncomment the bean that we have given you - look for a
+                        bean with <code class="literal">id="cnManager"</code>.
+                    </li><li>
+                        Note its <span class="property">ignoreAcceptHeader</span>,
+                        <span class="property">defaultMediaType</span> and 
+                        <span class="property">mediaTypes</span> properties.
+                    </li><li>
+                        Inject the manager into the CNVR using a property setter.
+                    </li><li>
+                       Finally set the CNVR's
+                        <span class="property">useNotAcceptableStatusCode</span> to true.
+                    </li></ol></div><p>
+                    Try loading the Accounts list page using the "Show as JSON" link
+                    and you should get the 406 error.  Why?  Because the URL Extension
+                    specified .json, we have explicitly said we support
+                    JSON (via <span class="property">mediaTypes</span> property), but Spring
+                    doesn't how to generate JSON output - there is no suitable View
+                    (yet - see optional section below).
+                </p><p>
+                    (<code class="literal">TODO-09</code>)
+                    This configuration is very precise.  If the properties
+                    are not setup correctly the behaviour changes.  Follow the
+                    TODO steps 9a, 9b and 9c to see the effect of changing properties
+                    on the <code class="classname">ContentNegotiationManager</code>.
+                </p><p>
+                    Congratulations! You have completed this lab.
+                </p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="mvc-views-lab-extra-credit"></a>4.3.2.&nbsp;EXTRA CREDIT: Return Accounts as JSON</h3></div></div></div><p>
+                This section shows how to return Account data in JavaScript
+                Object Notation format (JSON).    We will be using the
+                MappingJacksonJsonView which always converts the content of the
+                Model to JSON data using the Jackson object to JSON
+                marshalling tool.    This is one way to support REST using Spring MVC.
+            </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-views-lab-json-view-resolver"></a>4.3.2.1.&nbsp;Setting up the JSON View Resolver</h4></div></div></div><p>
+                    First of all navigate to any individual account and click
+                    on the "View as JSON" link. You will just get the HTML
+                    page again.  You will just get the HTML page again due to the default
+                    we configured in the previous section.
+                </p><p>
+                    A <code class="classname">JsonViewResolver</code> exactly as described in
+                    the notes has been written it for you - it is
+                    <code class="classname">rewardsonline.accounts.JsonViewResolver</code>.
+                    Now we need to use it.
+                </p><p>
+                    (TODO-10) In the servlet configuration file
+                    <code class="literal">mvc-config.xml</code>,
+                    modify the CNVR bean definition to support JSON as a media type.
+                    If you look at the <code class="classname">MappingJacksonJsonView</code> you
+                    will see the content-type that it returns.
+                </p><p>
+                    Now add the <code class="classname">JsonViewResolver</code> as another resolver.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-views-lab-configure-jackson-mapper"></a>4.3.2.2.&nbsp;Configuring the Jackson Mapper</h4></div></div></div><p>
+                    The mapper tries its best to work out how to convert objects to and from JSON,
+                    but sometimes it needs help.    When you make Spring create beans automatically
+                    you have to add annotations to your class so it knows which constructors and
+                    setters to use.    Jackson has the same problem.    If you refresh the accounts.json
+                    page again, you will get a Jackson error saying it doesn't know how to convert the
+                    Percentage class to JSON data.
+                </p><p>
+                    (TODO-11) We need to tell Jackson how to convert our <code class="classname">Percentage</code>
+                    class to JSON data.
+                    To do that we need to annotate the constructor 
+                    that takes a <code class="literal">BigDecimal</code> with
+                    <code class="literal">@JsonCreator</code>.    We also need to
+                    tell it which getter to use by annotating the
+                    <code class="literal">asBigDecimal</code> method with
+                    <code class="literal">@JsonValue</code>.    Jackon now
+                    knows how to create a Percentage object and how to get the value inside it.
+                    If you are not sure what to do, look at
+                    <code class="classname">MonetaryAmount</code> as we have already done this class for you.
+                    <span class="emphasis"><em>Use the Percentage class in this project</em></span>.
+                </p><p>
+                    Refresh that web-page yet again and you should see account details in
+                    JSON format.
+                </p></div></div></div></div><div xmlns="http://www.w3.org/TR/xhtml1/transitional" class="navfooter"><hr></hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="mvc-layout-lab.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="mvc-forms-setup-lab.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;mvc-layout: Using Tiles Layouts in Spring MVC&nbsp;</td><td width="20%" align="center"><span style="color:white;font-size:90%;"><a href="http://www.spring.io" title="The Spring Framework">Spring By Pivotal</a></span></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;mvc-forms-setup: Building Forms in Spring MVC - Part 1</td></tr></table></div></body></html>

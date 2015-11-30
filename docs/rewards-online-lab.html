@@ -1,0 +1,255 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;1.&nbsp;rewards-online: Getting Started with the Development
+  Environment</title><link rel="stylesheet" href="css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.0"><link rel="start" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="up" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="prev" href="reference-domain.html" title="Reward Dining: The Course Reference Domain"><link rel="next" href="mvc-getting-started-lab.html" title="Chapter&nbsp;2.&nbsp;mvc-getting-started: Spring MVC for Beginners"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="background-color:white;border:none;height:73px;border:1px solid black;"><a style="border:none;" href="http://www.pivotal.io" title="Pivotal"><img style="border:none;" src="images/heading-logo-lhs.jpg"></img></a><a style="border:none;" href="http://www.spring.io" title="The Spring Framework"><img style="border:none;position:absolute;padding-top:5px;right:42px;" src="images/heading-logo-rhs.jpg"></img></a></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="rewards-online-lab"></a>Chapter&nbsp;1.&nbsp;rewards-online: Getting Started with the Development
+  Environment</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rewards-online-lab-introduction"></a>1.1.&nbsp;Introduction</h2></div></div></div><p>This lab will introduce you to the suite of reference applications
+    you will work on throughout this training course. Your goal is to learn
+    the end user requirements of these applications and the overall system
+    architecture. After you have a solid understanding of the architecture and
+    functionality that must be implemented, you will be in a great position to
+    dive into design and implementation details in subsequent labs.</p><p>This lab will also introduce you to the
+    <span class="emphasis"><em>Spring Tool Suite</em></span>, as
+    well as <span class="emphasis"><em>tc Server</em></span>, the server used to deploy and run
+    applications on in this course. By the end of this lab, you should
+    understand what problems the reference applications solve, how they are
+    architected, and how to deploy them to the server using the tool.</p><div class="orderedlist"><p class="title"><b>What you will learn:</b></p><ol type="1" compact><li><p>How to deploy projects to the tc Server inside the
+        Spring Tool Suite (or IntelliJ IDEA if you prefer)</p></li><li><p>Background on the business domain used in this course</p></li><li><p>Tools for debugging web applications</p></li></ol></div><p>Estimated time to complete: 30 minutes</p><p>URL for this project <a href="http://localhost:8080/rewards-online" target="_top">
+        http://localhost:8080/rewards-online/</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="rewards-online-lab-instructions"></a>1.2.&nbsp;Instructions</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="rewards-online-getting-started"></a>1.2.1.&nbsp;Getting started with the Spring Tool Suite</h3></div></div></div><p>In this section, you will become familiar with the Spring
+      Tool Suite and how the projects you will work on are structured.
+      </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top">
+      If you would prefer to use IntelliJ IDEA, refer to 
+      <a href="appendix-intellij-labs.html" title="Appendix&nbsp;C.&nbsp;Instructions for IntelliJ IDEA Users">Appendix&nbsp;C, <i>Instructions for IntelliJ IDEA Users</i></a> 
+      for how to setup the labs in IntelliJ IDEA instead.
+      One you have the labs setup continue from
+      <a href="rewards-online-lab.html#rewards-online-review-typical-project" title="1.2.1.2.&nbsp;Review Typical Lab Project Structure">Section&nbsp;1.2.1.2, &#8220;Review Typical Lab Project Structure&#8221;</a> 
+      below.  All the lab instructions assume you are using STS, so you will have to
+      interpret them for IDEA.
+      </td></tr></table></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="rewards-online-launch-sts"></a>1.2.1.1.&nbsp;Launch the Tool Suite</h4></div></div></div><p>Start by launching the Spring Tool Suite application using
+        the link on your desktop.  If there isn't one, the executable can be found:
+        </p><p>
+          </p><div class="itemizedlist"><ul type="disc" compact><li>On your C: drive (MS Windows):
+              <code class="filename">c:\spring-web-{version}\sts-{version}\STS.exe</code></li><li>
+                In Applications (MacOS):
+              <code class="filename">/Applications/spring-web-{version}/sts-{version}/STS.exe</code>.
+            </li><li>
+              In your home directory (Linux):
+              <code class="filename">~/spring-web-{version}/sts-{version}/STS.exe</code>.
+            </li></ul></div><p>
+        </p><p>From now on, we will refer to the location of the 
+        <code class="filename">spring-web-{version}</code> directory as the 
+        as the <code class="literal">COURSE-HOME</code> directory.</p><p> 
+        The first time STS is launched, the course workspace will be built and all
+        lab projects imported. Building all projects will take some time. You
+        will see ongoing build activities in the status bar at the bottom
+        right. Please wait until building is complete.  Then you can close
+        the STS welcome screen and move on to the next step.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="rewards-online-review-typical-project"></a>1.2.1.2.&nbsp;Review Typical Lab Project Structure</h4></div></div></div><p>Within the Package Explorer, each lab is organized into a
+        Working Set. In general, within a lab's working set there are two
+        projects. The first project is where you will work; it is the starting
+        point for a lab. The second project is the completed solution. This
+        project allows you to compare your work with the work of Spring
+        experts.  If you have problems during the course, please ask your
+        instructor for help.</p><p>Quickly expand the Working Set for the next lab,
+        <code class="filename">02-mvc-getting-started</code>, 
+        and confirm its structure. The
+        <span class="emphasis"><em>mvc-getting-started</em></span> project
+        is where you would work and the
+        <span class="emphasis"><em>mvc-getting-started-solution</em></span>
+        project contains the Spring solution. Subsequent labs have a
+        similar structure.</p><p>
+            </p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>
+            It is recommended to keep all projects closed <span class="emphasis"><em>except</em></span>
+            the one you are working on.  It is very easy to waste time modifying
+            the wrong lab by mistake.  If you do refer to the solution, remember to
+            switch back to the working project before making changes.</p><p>However, do
+            <span class="emphasis"><em>not</em></span> close shared projects in
+            <code class="filename">00-reward-network</code>
+            or <code class="literal">Other Projects</code> working sets, or your code will not
+            build!</p></td></tr></table></div><p>
+        </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="rewards-online-review-common-projects"></a>1.2.1.3.&nbsp;Review the Common Projects</h4></div></div></div><p>The Reward Network module has been predefined for use in all labs.
+        It defines the back end of an overall Financial Rewards application
+        (it is the end result of the Core Spring course).
+        Note that this project is not deployed as a separate web module,
+        but simply included within every other lab project.</p><p>Expand the <code class="filename">00-reward-network</code> working set and
+        note the single <span class="emphasis"><em>rewards</em></span> project inside. Note the different
+         packages contained in <code class="filename">src/main/java</code>. The
+        <span class="emphasis"><em>common</em></span> package
+        contains foundational types needed by the other modules. The
+        <span class="emphasis"><em>rewards</em></span> package carries out complex business transactions 
+        and provides access to the system's relational database.</p><p>
+          </p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Clearly this project was built using Maven, has a Maven
+          structure and a POM.  However they are <span class="emphasis"><em>no longer</em></span>
+          Maven based.  They have been converted to Eclipse projects and Maven will
+          not work with them.  Please <span class="emphasis"><em>do not</em></span>
+          use Maven tools with these projects or they will
+          break and you will have to reinstall.
+          </p></td></tr></table></div><p>
+        </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="rewards-online-review-this-lab"></a>1.2.1.4.&nbsp;Review the Projects for this Lab</h4></div></div></div><p>The project for this lab, called "RewardsOnline" is
+        organized a little differently. This is because you will not implement
+        any code here, instead you will walk through the reference application
+        architecture and end-user functionality.</p><p>Expand the <code class="filename">01-rewards-online</code>
+        Working Set and note the single project. This module,
+        <span class="emphasis"><em>rewards-online</em></span>, is a web application that allows
+        business to be conducted online.</p><p>As a web application, rewards-online is the highest-level module
+        and depends on the rewards project for several foundational types, to
+        carry out complex business transactions, and to access data needed by
+        several administrative screens.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="rewards-online-deploy-to-tc-server"></a>1.2.2.&nbsp;Deploying to tc Server</h3></div></div></div><p>In this section, you'll deploy the modules of the rewards system
+      and bring the full-system on-line.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="rewards-online-verify-erver"></a>1.2.2.1.&nbsp;Verify The tc Server Installation</h4></div></div></div><p>A tc Server installation has already been extracted onto your
+        filesystem under <code class="literal">COURSE-HOME</code> into the
+        <code class="filename">tc-server-{version}</code>
+        directory. In this step, you'll learn how to access and manage it
+        within STS so you can deploy projects without leaving the
+        environment.</p><p>Navigate to the Servers view (under <code class="literal">Other Projects</code>).
+        You will see an entry for Pivotal tc Server, which points to a
+        tc Server installation on the file system (it may be under its former name
+        of VMware vFabric tcServer).</p><p>
+          </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>If you don't see tc Server in the Servers view, try closing
+            and reopening the view. The easiest way to reopen it is to press
+            Ctrl+3 and type 'Servers'.</p><p> If it's still not there you my need to create it. Step-by-step
+            details on setting up a server can be found in
+            <a href="appendix-wtp-server.html" title="Appendix&nbsp;E.&nbsp;Using Web Tools Platform (WTP)">Appendix&nbsp;E, <i>Using Web Tools Platform (WTP)</i></a>.
+            Please check with your instructor.</p></td></tr></table></div><p>
+        </p><p>Double-click the entry to get to the server properties editor.
+        Click on the Runtime Environment link (on the left under Overview)
+        and verify the tc
+        Server installation directory. When you're ready dismiss the window
+        and close the server properties editor.</p><p>Right click on the <code class="code">rewards-online</code> project and select
+        <code class="code">Run As &gt; Run on Server</code>, select tc Server, click Next,
+        make sure rewards-online is the only project in the Configured box on the
+        right and click Finish.  For full details on running up a server see
+        <a href="appendix-wtp-server.html" title="Appendix&nbsp;E.&nbsp;Using Web Tools Platform (WTP)">Appendix&nbsp;E, <i>Using Web Tools Platform (WTP)</i></a>.
+        </p><p>If the application deploys successfully, STS will popup a browser
+        window showing the application home page.  Check the output in the Console
+        window for any errors.</p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>At any time you can create a new browser window in STS by clicking
+            on the world globe icon in the toolbar at the top.</p><p>Always keep an eye on the Console window when Tomcat or tc Server
+            is running.  Any application expections will appear here.</p></td></tr></table></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="rewards-online-deploy-app"></a>1.2.2.2.&nbsp;Deploy the rewards-online application</h4></div></div></div><p>The RewardsOnline application is one face of the RewardNetwork,
+        allowing rewards to be initiated using a rich browser interface. It
+        also allows administrators to manage member and vendor accounts
+        on-line. Since this course is about developing spring web
+        applications, you'll be spending most of your time designing and
+        implementing this application.</p><p>Deploy the rewards-online application in one of the following
+        three ways: drag the project to tc Server, right-click the project and
+        select "Run As... Run on Server", or right-click tc Server and select
+        Add/Remove Projects. Verify it deploys successfully. Access the
+        application at <a href="http://localhost:8080/rewards-online/login" target="_top">http://localhost:8080/rewards-online/login</a>.</p><p>When you see the Login page for the rewards-online application
+        appear, congratulations! Now move on to the next section to
+        familiarize yourself with the functionality of the application
+        itself.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="rewards-online-using-rewards-online"></a>1.2.3.&nbsp;Using RewardsOnline</h3></div></div></div><p>The RewardsOnline application allows administrators to reward
+      members for dining at in-network restaurants using a rich browser
+      interface. It also allows member and vendor accounts to be managed
+      on-line. Behind the scenes, this application invokes the rewards
+      module to actually carry out transactional processing. In this section,
+      you will walk through the on-line application. Your goal is to further
+      cement your understanding of the reference domain, as well as the
+      technical UI requirements addressed by this web application.</p><p>The site map for the RewardsOnline application looks like:</p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="rewardsonline-site-map"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/rewards-online/rewardsonline-site-map.png" align="middle" width="648" alt="Rewards Online Site-Map"></div></div><p class="title"><b>Figure&nbsp;1.1.&nbsp;Rewards Online Site-Map</b></p></div><br xmlns="" class="figure-break"></div><p>Notice how the web site is partitioned into two areas: in the
+      first area you work with rewards, in the second area you work with
+      member accounts. In the next few steps, you'll exercise the
+      functionality across the pages in these areas.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="rewards-online-login"></a>1.2.3.1.&nbsp;Login</h4></div></div></div><p>Before the application can be used, you must login. Go ahead and
+        login from the home page by entering the mock credentials provided.
+        When you have authenticated successfully, move onto the next
+        step.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="rewards-online-create-reward"></a>1.2.3.2.&nbsp;Create a Reward</h4></div></div></div><p>RewardsOnline allows you to create dining rewards using a rich
+        browser interface. Click on the "New Reward" navigation link to begin
+        the New Reward wizard. Fill out the form provided. </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>Credit card number 1234123412341234 is a valid credit card
+            in the database.</p></td></tr></table></div><p>Once you have entered a valid dining transaction, select Reward.
+        The RewardNetwork will attempt to match the credit card you entered to
+        a member account, then calculate the amount to reward that account for
+        dining at the selected restaurant. You will be redirected to a
+        confirmation page that can be safely refreshed. The transaction is now
+        complete!</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="rewards-online-manage-accounts"></a>1.2.3.3.&nbsp;Manage Accounts</h4></div></div></div><p>RewardsOnline also allows you to manage member accounts on-line.
+        You can search accounts, review account details, and update account
+        details.</p><p>Select the Accounts navigation link to begin a new search.
+        First, try simply searching for the letter "a". You should get many
+        results back, too many for one page. Use the provided Next and
+        Previous links to page through the results.</p><p>Now refine your search by selecting Change Search. Enter Keith
+        as the search string. Since there is only one Keith in the database,
+        you should be taken directly to his account details screen.</p><p>Review Keith's details and select Edit to update them. Save to
+        commit your updates and confirm they committed successfully.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="rewards-online-review-i18n"></a>1.2.3.4.&nbsp;Review Internationalization</h4></div></div></div><p>Support for multiple locales is a requirement of RewardsOnline.
+        Test this out by selecting the Francais (French) link. Notice how all
+        text in the application is now in French. The text remains in French
+        even if you close your browser and restart it.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="rewards-online-review-themes"></a>1.2.3.5.&nbsp;Review Personalization</h4></div></div></div><p>Support for personalized themes is another requirement for users
+        of RewardsOnline. Test this out by selecting the Blue link. Notice how
+        the skin of the application changes from green to blue. The
+        application remains blue even if you close your browser and restart
+        it.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="rewards-online-using-spring-insight"></a>1.2.4.&nbsp;Optional Section: Spring Insight</h3></div></div></div><p>One feature of tc Server is the ability to setup and use predefined
+        Tomcat configurations called templates.  One template that comes with
+        tc Server Developer Edition is <span class="emphasis"><em>insight</em></span>.  Spring Insight
+        allows you to watch your application as it is running.  To use Spring Insight
+        we have to perform some one-time setup first.
+        </p><p>Before doing anything else:
+            <span class="strong"><strong>Stop the Server</strong></span> now.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="rewards-online-setup-spring-insight"></a>1.2.4.1.&nbsp;Setup Spring Insight</h4></div></div></div><p>Spring Insight is just a specially configurer tc Server instnce, so we
+            need to create it as a new Server in STS.  To do this follow the instructions
+            in the <a href="appendix-spring-insight.html" title="Appendix&nbsp;B.&nbsp;Monitoring with Spring Insight">Appendix&nbsp;B, <i>Monitoring with Spring Insight</i></a>.
+            Once you have the server installed, return and carry on.
+          </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="rewards-online-spring-insight"></a>1.2.4.2.&nbsp;Running with Spring Insight</h4></div></div></div><p>Right click on the <code class="code">rewards-online</code> project and rerun it
+        using <code class="code">Run As &gt; Run on Server</code> but this time select the
+        Insight server.</p><p>The first time you start the server you will see the following
+        prompt:
+        </p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="spring-insight-prompt"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/rewards-online/spring-insight-prompt.jpg" align="middle" alt="Spring Insight Popup"></div></div><p class="title"><b>Figure&nbsp;1.2.&nbsp;Spring Insight Popup</b></p></div><br xmlns="" class="figure-break"></div><p>Spring Insight weaves lightweight performance tracing
+        into an application as it gets deployed to tc Server. Press "Yes" in
+        response to this question and allow the server to start up. When your
+        server is running successfully, move on to the next step.</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p> Spring Insight works with classes at the bytecode level and was broken by
+          changes in Java 8.  So you must have a version of tc Server that is compatible
+          with Java 8 - these labs use Java 8.
+          </p><p>
+          If you have an incompatible version, you will see (in the Console view)
+          an <code class="code">IllegalArgumentException</code>
+          in <code class="code">org.springframework.asm.ClassReader</code> and/or warnings about
+          <code class="code">stackmap</code> (typical errors are <code class="code"> AspectJ Internal Error: unable
+          to add stackmap attributes</code> and/or <code class="code">java.lang.VerifyError: Expecting
+          a stackmap frame at branch target ...</code>).
+          </p><p>
+          The workaround for this problem is to download a later version of
+          tc Server Developer (from
+          <a href="https://network.pivotal.io/products/pivotal-tcserver" target="_top">here</a>
+           - select the Resources tab, downlaod the latest Developer Edition as a zip).
+          Unzip, create a new Spring Insight instance manually, then create a new
+          tc Server instance using your Spring Insight instance. (refer back to
+          <a href="appendix-spring-insight.html#appendix-spring-insight-new-server-cmd" title="B.1.2.&nbsp;Using the Command Line">Section&nbsp;B.1.2, &#8220;Using the Command Line&#8221;</a> for step-by-step
+          instructions).
+          </p><p>
+          As this is an optional part of the lab, you may choose to give up now!
+          </p></td></tr></table></div><p>Right-click the Insight tc Server instance in the Servers view and
+        select "Open Dashboard". If the option is greyed out, you can alternatively
+        open a browser to <a href="http://localhost:8080/insight" target="_top">http://localhost:8080/insight</a>
+        You will see the start page for Spring Insight.  If you get a 404 and errors
+        in the Console view, refer to the warning below the diagram</p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="spring-insight-trace-history"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/rewards-online/spring-insight-trace-history.jpg" align="middle" alt="Spring Insight Trace History"></div></div><p class="title"><b>Figure&nbsp;1.3.&nbsp;Spring Insight Trace History</b></p></div><br xmlns="" class="figure-break"></div><p>The Spring Insight dashboard presents a sequence of
+        incoming application requests over a timeline. Under All Applications
+        (on the left) select the name of your web application
+        "/rewards-online". This will filter out requests for
+        other web applications. Next, switch to the Recent Activity tab and
+        see the same information as a bar chart. Move your mouse over any of
+        the bars in the timeline and click it. This will show a list of traces
+        corresponding to specific requests along with trace details as seen
+        below:</p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="spring-insight-trace-details"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/rewards-online/spring-insight-trace-details.jpg" align="middle" alt="Spring Insight Trace Details"></div></div><p class="title"><b>Figure&nbsp;1.4.&nbsp;Spring Insight Trace Details</b></p></div><br xmlns="" class="figure-break"></div><p>Select any request and examine the trace details.
+        Each line in a trace detail represents an entry point into an
+        application or a server component much like a stack trace in a
+        debugger. Use the little arrows on the right to get more details for
+        each line in the trace. You will get information about HTTP
+        request/response headers, Spring MVC controller invocations, return
+        values, transactional methods, JDBC queries and more. Within an
+        expanded trace detail you will also see a "Go to Source" link that
+        will take you directly to the source code.</p><p>Getting a break down for an individual request is very useful.
+        However, at some point you will probably run a load test and will want
+        to get the same information. Spring Insight is well suited for that
+        because it is lightweight and doesn't alter the performance of the
+        application. Return to the first tab - Browse Resources. On the left
+        hand side, under All Applications you should find the current
+        application - rewards-online. Click to show
+        application details. You should see a screen that looks approximately
+        like this:</p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="spring-insight-endpoints"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/rewards-online/spring-insight-endpoints.jpg" align="middle" alt="Spring Insight Endpoints"></div></div><p class="title"><b>Figure&nbsp;1.5.&nbsp;Spring Insight Endpoints</b></p></div><br xmlns="" class="figure-break"></div><p>This is where you can get useful information after
+        running a load test. What you see is a list of endpoints. An endpoint
+        is a call to a server or an application component for which you want
+        to aggregate statistics. For example for a given Spring MVC Controller
+        you'd like to know how often it was invoked and what was the average
+        response time. Click on any endpoint and see a response time
+        histogram. From here you can select a specific request that took
+        longer than others and examine the trace details.</p><p>Before ending the lab you will see how to turn the gathering of
+        statistics with Spring Insight on and off. Double-click the Insight tc Server
+        instance in the Servers View. Select the middle tab (at the bottom of
+        the view).</p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="tc-server-config-editor"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/rewards-online/tc-server-config-editor.png" align="middle" alt="tc Server Configuration Editor"></div></div><p class="title"><b>Figure&nbsp;1.6.&nbsp;tc Server Configuration Editor</b></p></div><br xmlns="" class="figure-break"></div><p>In the resulting screen you will see a section titled
+        Overview with a checkbox. Use this checkbox to enable and disable the
+        gathering of statistics (metrics) at any time during the class. We recommend
+        that you keep it off until you need it.  If you prefer not to use Spring
+        Insight, you could simply use the other (original) tc Server instance.</p></div><p>Congratulations! You have completed this lab. You should now have
+      a solid understanding of the development environment, the reference application
+      architecture and the functionality that must be implemented.
+      You are in a great position to do the rest of the labs.</p></div></div></div><div xmlns="http://www.w3.org/TR/xhtml1/transitional" class="navfooter"><hr></hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="reference-domain.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="mvc-getting-started-lab.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Reward Dining: The Course Reference Domain&nbsp;</td><td width="20%" align="center"><span style="color:white;font-size:90%;"><a href="http://www.spring.io" title="The Spring Framework">Spring By Pivotal</a></span></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;2.&nbsp;mvc-getting-started: Spring MVC for Beginners</td></tr></table></div></body></html>

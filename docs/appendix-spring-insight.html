@@ -1,0 +1,70 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Appendix&nbsp;B.&nbsp;Monitoring with Spring Insight</title><link rel="stylesheet" href="css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.0"><link rel="start" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="up" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="prev" href="appendix-spring-configuration.html" title="Appendix&nbsp;A.&nbsp;Spring XML Configuration Tips"><link rel="next" href="appendix-intellij-labs.html" title="Appendix&nbsp;C.&nbsp;Instructions for IntelliJ IDEA Users"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="background-color:white;border:none;height:73px;border:1px solid black;"><a style="border:none;" href="http://www.pivotal.io" title="Pivotal"><img style="border:none;" src="images/heading-logo-lhs.jpg"></img></a><a style="border:none;" href="http://www.spring.io" title="The Spring Framework"><img style="border:none;position:absolute;padding-top:5px;right:42px;" src="images/heading-logo-rhs.jpg"></img></a></div><div class="appendix" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="appendix-spring-insight"></a>Appendix&nbsp;B.&nbsp;Monitoring with Spring Insight</h2></div></div></div><p>
+    One of the features of Pivotal tc Server is that it comes with predefined
+    configurations called templates.  Each template defines a useful Tomcat
+    configuration that can be cloned to make a new server.  Spring Insight is
+    simply one such template that includes the Spring Insight WAR ready to run.
+  </p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="appendix-spring-insight-new-server"></a>B.1.&nbsp;Adding an Insight Server</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="appendix-spring-insight-new-server-ide"></a>B.1.1.&nbsp;Using the STS/Eclipse IDE</h3></div></div></div><div class="orderedlist"><p class="title"><b>There are three ways to add a new server:</b></p><ol type="1" compact><li><p>Right click in the Servers view (in the Spring Perspective it is at
+            the bottom left).</p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="appendix-spring-insight-new-1-figure"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/spring-insight/new-server-1.png" align="middle" alt="New server - Option 1"></div></div><p class="title"><b>Figure&nbsp;B.1.&nbsp;New server - Option 1</b></p></div><br xmlns="" class="figure-break"></div></li><li>From the menu bar select
+          <code class="code">File &gt; New &gt; Other &gt; Server &gt; Server</code></li><li><p>Alternatively use the Preferences dialog.  Find Server on the 
+            left, open up its group and select "Runtime Environment (or just type
+            'Runtime Env' in the search box at the top).  Click the Add button on
+            the top right.</p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="appendix-spring-insight-new-12-figure"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/spring-insight/new-server-2.png" align="middle" alt="New server - Option 2"></div></div><p class="title"><b>Figure&nbsp;B.2.&nbsp;New server - Option 2</b></p></div><br xmlns="" class="figure-break"></div></li></ol></div><p>The New Server popup lists most popular servlet and application servers.
+      Firstly, <span class="emphasis"><em>and most important</em></span>, stick <code class="code">Insight</code>
+      at the front of the <span class="emphasis"><em>Server Name</em></span> as
+      shown by the red arrow on the diagram (this way you can identify the Insight
+      server from any other tc Server instance you may have).</p><p>At the bottom of the list is the VMware folder.  Open it up and there is
+      just one item <span class="emphasis"><em>VMware vFabric tc Server v2.5 - v.29</em></span> or
+      something similar (the version may well be V3 by the time you read this).
+      Select and click <code class="code">Next</code>.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top">Due to a joint marketing agreement, tc Server currently retains its
+      VMware branding</td></tr></table></div><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="appendix-spring-insight-new-server-step-1-figure"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/spring-insight/new-server-step-1.png" align="middle" alt="New Server - Step 1"></div></div><p class="title"><b>Figure&nbsp;B.3.&nbsp;New Server - Step 1</b></p></div><br xmlns="" class="figure-break"></div><p>At the next dialog select <span class="emphasis"><em>Create new instance</em></span>
+      and click <code class="code">Next</code>.</p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="appendix-spring-insight-new-server-step-2-figure"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/spring-insight/new-server-step-2.png" align="middle" alt="New Server - Step 2"></div></div><p class="title"><b>Figure&nbsp;B.4.&nbsp;New Server - Step 2</b></p></div><br xmlns="" class="figure-break"></div><p>Finally we create an Spring Insignt instance.  It must have a name
+      (here we have gone with <span class="emphasis"><em>myInsight</em></span> but you can choose
+      any name).  Then under templates, select <span class="emphasis"><em>insight</em></span>.</p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="appendix-spring-insight-new-server-step-3-figure"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/spring-insight/new-server-step-3.png" align="middle" alt="New Server - Step 3"></div></div><p class="title"><b>Figure&nbsp;B.5.&nbsp;New Server - Step 3</b></p></div><br xmlns="" class="figure-break"></div><p>Keep the other defaults: <span class="emphasis"><em>Separate</em></span> (under Layout) and
+      <span class="emphasis"><em>Use Default Instance Location</em></span> should both be selected.
+      </p><p>Click <code class="code">Finish</code> to create the server.</p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="appendix-spring-insight-new-server-done-figure"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/spring-insight/insight-server.png" align="middle" alt="New Server Appears in Servers Panel"></div></div><p class="title"><b>Figure&nbsp;B.6.&nbsp;New Server Appears in Servers Panel</b></p></div><br xmlns="" class="figure-break"></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="appendix-spring-insight-new-server-cmd"></a>B.1.2.&nbsp;Using the Command Line</h3></div></div></div><p>It is also possible to create tc Server instances manually
+      using a script.  If you want to use a different version of tc Server to the
+      one that comes with STS, this is how.</p><p>There are two steps:</p><p>
+        </p><div class="itemizedlist"><ul type="disc" compact><li>Create a tc Server instance that uses Spring Insight.</li><li>Use the instance to create a new server in STS.</li></ul></div><p>
+      </p><div class="simplesect" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="appendix-spring-insight-manual-instance"></a>Step 1: Create Instance Manually</h4></div></div></div><p>
+          Open a commmand shell or window (for example run <code class="code">CMD.EXE</code>
+          on MS Windows or open a <code class="code">Terminal</code> window in MacOS or Linux).
+          Change to the tc server installation directory.  If you
+          accepted the defaults during course installation, it will be
+          at the following location depending on platform:</p><p>
+          </p><div class="itemizedlist"><ul type="disc" compact><li>On your C: drive (MS Windows):
+              <p><code class="code">cd c:\spring-web-{version}\vfabric-tc-server-developer-{version}</code></p></li><li>
+              In Applications (MacOS):
+              <p><code class="code">cd /Applications/spring-web-{version}/vfabric-tc-server-developer-{version}</code></p></li><li>
+              In your home directory (Linux):
+              <p><code class="code">cd ~/spring-web-{version}/vfabric-tc-server-developer-{version}</code></p></li></ul></div><p>
+        </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>If you have downloaded a different tc Server version to the one in STS,
+          unzip it now into a known location, and change to that directory.  For example
+          if you unzipped <code class="code">pivotal-tc-server-developer-3.1.0.RELEASE.zip</code>
+          to <code class="code">C:\</code>, then open your <code class="code">CMD</code> window and run:</p><pre class="programlisting">cd c:\pivotal-tc-server-developer-3.1.0.RELEASE</pre></td></tr></table></div><p>
+          Now run the create-script.  
+          </p><div class="itemizedlist"><ul type="disc" compact><li>On Windows run this:
+                <code class="code">tcruntime-instance create myInsight -t insight</code></li><li> On MacOS or Linux run:
+                <code class="code">./tcruntime-instance.sh create myInsight -t insight</code></li></ul></div><p>
+        </p></div><div class="simplesect" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="appendix-spring-insight-existing-instance"></a>Step 2: Create Server from Existing Instance</h4></div></div></div><p>
+        <span class="emphasis"><em>Step 2:</em></span>
+        Now go back to STS and create a new server (as described in previous section).
+        The first two steps are the same, but then it changes
+        </p><div class="itemizedlist"><ul type="disc" compact><li>
+            Launch the <code class="code">New Server</code> dialog.
+          </li><li>
+            Select VMware folder and then VMware vFabric tc Server.
+          </li><li>
+            Change the Server name by putting Insight at the front, The new name will
+            be something like "Insight VMware vFabric tc Server ...".  Click
+            <code class="code">Next</code>.
+          </li><li><p>
+            Now the sequence events changes.  This time select 
+            <span class="emphasis"><em>Existing instance</em></span> and find the <code class="code">myInsight</code>
+            directory you just created.  Select the instance and click
+            <code class="code">Open</code>.</p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="appendix-spring-insight-find-existing-instance-figure"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/spring-insight/select-instance.png" align="middle" alt="Select your New Instance"></div></div><p class="title"><b>Figure&nbsp;B.7.&nbsp;Select your New Instance</b></p></div><br xmlns="" class="figure-break"></div></li><li><p>When you return to the <code class="code">New Server</code> dialog, click
+            <code class="code">Finish</code>.</p></li></ul></div><p>
+        </p><p>
+        The new server should appear in the Servers View as before.</p></div></div><p>If you came here as part of the Rewards Online lab, return to
+    <a href="rewards-online-lab.html#rewards-online-spring-insight" title="1.2.4.2.&nbsp;Running with Spring Insight">Section&nbsp;1.2.4.2, &#8220;Running with Spring Insight&#8221;</a>.</p></div></div><div xmlns="http://www.w3.org/TR/xhtml1/transitional" class="navfooter"><hr></hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="appendix-spring-configuration.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="appendix-intellij-labs.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Appendix&nbsp;A.&nbsp;Spring XML Configuration Tips&nbsp;</td><td width="20%" align="center"><span style="color:white;font-size:90%;"><a href="http://www.spring.io" title="The Spring Framework">Spring By Pivotal</a></span></td><td width="40%" align="right" valign="top">&nbsp;Appendix&nbsp;C.&nbsp;Instructions for IntelliJ IDEA Users</td></tr></table></div></body></html>

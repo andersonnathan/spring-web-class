@@ -1,0 +1,134 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;10.&nbsp;ajax: Building an AJAX Search</title><link rel="stylesheet" href="css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.0"><link rel="start" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="up" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="prev" href="rest-ws-mvc-lab.html" title="Chapter&nbsp;9.&nbsp;rest-ws-mvc: Building a REST Server using Spring MVC"><link rel="next" href="webflow-getting-started.html" title="Chapter&nbsp;11.&nbsp;webflow-getting-started: Getting Started with Spring Web Flow"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="background-color:white;border:none;height:73px;border:1px solid black;"><a style="border:none;" href="http://www.pivotal.io" title="Pivotal"><img style="border:none;" src="images/heading-logo-lhs.jpg"></img></a><a style="border:none;" href="http://www.spring.io" title="The Spring Framework"><img style="border:none;position:absolute;padding-top:5px;right:42px;" src="images/heading-logo-rhs.jpg"></img></a></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="ajax-lab"></a>Chapter&nbsp;10.&nbsp;ajax: Building an AJAX Search</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ajax-lab-introduction"></a>10.1.&nbsp;Introduction</h2></div></div></div><p>Many web applications use forms to process user input of some kind.
+        In a prior lab you performed a typical 'edit' scenario where a form was
+        used to capture changes and then POSTed back to the server. You may have
+        optionally implemented the search scenario by also submitting a request to
+        the server using a GET type invocation and then were re-directed to a new
+        page with the search results. In this lab, you will put into practice some
+        of the AJAX principles in order to build a richer style of interaction
+        for performing the search.</p><div class="orderedlist"><p class="title"><b>What you will have a chance to practice:</b></p><ol type="1" compact><li><p>How to use the JQuery library to decorate and modify the HTML
+                elements on the page</p></li><li><p>How to formulate an AJAX request using the JQuery library</p></li><li><p>How to handle the AJAX response by dynymaically updating the
+                page with the response data</p></li></ol></div><p>Estimated time to complete: 45 minutes</p><p>URL for this project <a href="http://localhost:8080/ajax" target="_top">
+            http://localhost:8080/ajax/</a>.</p><p>Solution URL: <a href="http://localhost:8080/ajax-solution" target="_top">
+            http://localhost:8080/ajax-solution/</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ajax-lab-quick-instructions"></a>10.2.&nbsp;Quick Instructions</h2></div></div></div><p>If    you feel you have a good grasp of how AJAX and Spring work, all you
+        need to do is follow the TODO steps - see the Tasks window in STS.  If they aren't
+        showing open
+        <code class="filename">src/main/webapps/WEB-INF/accounts/search.jsp</code> - most of the
+        TODO steps are in this file. At any point full instructions are given in the next
+        section.</p><p>You may wish to view the exchange of HTTP requests.  Either use the 
+        TCP/IP Monitor in STS - see
+        <a href="rest-ws-intro-lab.html#rest-ws-intro-lab-using-tcp-monitor" title="8.4.4.&nbsp;Seeing what happens at the HTTP level">Section&nbsp;8.4.4, &#8220;Seeing what happens at the HTTP level&#8221;</a> or use
+        Firebug as explained <a href="ajax-lab.html#ajax-optional-bonus-2" title="10.3.3.&nbsp;Optional Bonus 2">Section&nbsp;10.3.3, &#8220;<span class="emphasis"><em>Optional Bonus 2</em></span>&#8221;</a>.</p><p>Steps are:</p><div class="orderedlist"><ol type="1" compact><li><p>First run the project on the Server and check it works.
+                Click on accounts, enter A in the Search String input box and click the blue
+                Search button (this is <code class="literal">TODO-01</code>).</p></li><li><p>Implement the AJAX JavaScript in <code class="filename">search.jsp</code>
+                (<code class="literal">TODO-02</code> to <code class="literal">TODO-07</code>).  You will
+                need to examine the RESTful search method you will be using - see
+                <code class="methodname">search2()</code> in
+                <code class="classname">AccountSearchController</code>
+                (<code class="literal">TODO-06</code>)</p></li><li><p>Rerun the search using the the green JSON-Search button.  The
+                 Results table should appear below the search form on the same page
+                 titled <span class="emphasis"><em>JSON Results</em></span>.
+                </p></li><li><p><span class="emphasis"><em>Optional Bonus 1:</em></span> Further modify
+                 <code class="filename">search.jsp</code> to enable an
+                account details popup. (<code class="literal">TODO-08</code>).  Rerun the search
+                and click on an account number in the results table.
+                </p></li><li><p><span class="emphasis"><em>Optional Bonus 2:</em></span> Use Firebug to see the
+                AJAX call happening - see 
+                <a href="ajax-lab.html#ajax-optional-bonus-2" title="10.3.3.&nbsp;Optional Bonus 2">Section&nbsp;10.3.3, &#8220;<span class="emphasis"><em>Optional Bonus 2</em></span>&#8221;</a> for instructions.
+                </p></li></ol></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ajax-lab-instructions"></a>10.3.&nbsp;Instructions</h2></div></div></div><p>In this lab you will modify the Account Search feature to use the
+        AJAX style of invocation.</p><p>Here is a graphic illustrating the desired page flow:</p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="ajax-lab-account-flow"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/ajax/ajax-account-search.png" align="middle" alt="Account Search Flow"></div></div><p class="title"><b>Figure&nbsp;10.1.&nbsp;Account Search Flow</b></p></div><br xmlns="" class="figure-break"></div><p>Note that the use of the path <code class="literal">/accounts</code> is the same one used 
+         in previous labs. We have already extended the Controllers to generate the JSON data
+         we need.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ajax-account-edit"></a>10.3.1.&nbsp;Implement JQuery and AJAX functionality to perform a filtered search</h3></div></div></div><p>Start by deploying the <code class="filename">ajax</code> project and
+            accessing it at <a href="http://localhost:8080/ajax" target="_top">http://localhost:8080/ajax/</a>.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="ajax-lab-current-implementation"></a>10.3.1.1.&nbsp;Assess the Current Implementation</h4></div></div></div><p>Select the <code class="literal">Accounts</code> link to display the search form.
+                There are now two buttons a blue Search and a green JSON-Search.  The blue button
+                performs a non-AJAX search, sending the user to a results page.  Enter A in
+                the Search String input box and click Search (this is <code class="literal">TODO-01</code>).
+                A Search Results page will be displayed.  Click the <code class="literal">Accounts</code>
+                link again and return to search form.
+                </p><p>Notice that
+                under the search criteria form there is a Results section with two labels;
+                <code class="filename">Account</code> and <code class="filename">Name</code>. Open the
+                <code class="filename">accounts/search.jsp</code> file under the
+                <code class="filename">WEB-INF</code> directory and scroll down to the bottom
+                of the file. You should find the start of a table definition inside a &lt;div&lt;
+                with id <code class="literal">accountsListingFragment</code>. This is
+                where the search results will ultimately be displayed.</p><p>Next, open the <code class="filename">layouts/standard.jsp</code> file
+                and notice there is already an instruction to load the JQuery javascript library.
+                This means that JQuery Javascript functionality is available on all
+                pages that use this template layout file.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="ajax-lab-use-jquery"></a>10.3.1.2.&nbsp;Use JQuery to Initially Hide the Table</h4></div></div></div><p>As a first step, you will want to hide the table until it
+                has some data in.  Notice there is already a
+                '<code class="code">&lt;script ...&gt;</code>' block at the end of the
+                file with an empty JQuery document ready handler function.
+                Use the appropriate JQuery selector to
+                select the <code class="code">div</code> block that wraps the table and
+                then use the hide method (<code class="literal">TODO-02</code>). </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>Review the slides on using JQuery and if you're still unsure
+                    ask the instructor.</p></td></tr></table></div><p>Save the JSP and refresh the page.
+                Verify that the table header is indeed now hidden.</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Every time you modify the JavcaScript in <code class="filename">search.jsp</code>
+                remember to reload the page to pull in the new script.</p></td></tr></table></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="ajax-lab-configure-button"></a>10.3.1.3.&nbsp;Attach Button Clicked Handler to the JSON-Search Button</h4></div></div></div><p>In this step, you will add an event handler to intercept the
+                JSON SearcH button click event. You will direct the click event to a
+                Javascript function that will process the form data and send an AJAX
+                request to a request handler method on the
+                <code class="filename">AccountSearchController</code> class.</p><p>First, bind an event handler function for the click event on the
+                <code class="filename">JSON-Search</code> button in the document ready handler
+                (<code class="literal">TODO-03</code>). Map this click event to the pre-defined
+                <code class="code">processAjaxSubmit()</code> function. Note that the function returns
+                <code class="filename">false</code> so that pressing the
+                <code class="filename">JSON Search</code> button doesn't submit the form
+                or generate an http <code class="filename">GET</code> request.</p><p>Next, implement functionality to obtain the values of
+                the <code class="filename">searchString</code> and
+                <code class="filename">maximumResults</code> form fields (<code class="literal">TODO-04</code>).
+                </p><p>We have already added a test to ensure the
+                <code class="filename">searchString</code> field has content. If not, focus is forced
+                to the input box using the JQuery <code class="filename">focus()</code> method.</p><p>You will want to create a simple JSON object to hold the request
+                parameters. Only set the <code class="filename">searchString</code> and
+                <code class="filename">maximumResults</code> fields for this search
+                (<code class="literal">TODO-05</code>).</p><p>Open the <code class="classname">AccountSearchController</code>
+                and find <code class="literal">TODO-06</code>.  Review the method and work out
+                what the URL is to invoke it - you can run it manually by entering the
+                URL in a browser.  The URL is something like:
+                <code class="filename">http://some/path.json?searchString=a&amp;maxuimumResults=5</code>.
+                Note the use of the <code class="code">.json</code> suffix to tell Spring you want
+                JSON data.
+                </p><p>Finally,
+                invoke a JSON GET request, passing the target URL to invoke, the JSON
+                params object and the name of the callback function that will be called on
+                successful execution (<code class="literal">TODO-06</code>) -
+                The callback function has already been implemented for you to simply
+                display a list of the matching accounts.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="ajax-lab-review-and-test-search"></a>10.3.1.4.&nbsp;Review and Test the Search</h4></div></div></div><p>Take a few moments to review the <code class="code">displayResults()</code> function
+                to see how we process the results returned from the AJAX call.</p><p>In the prior step when monitoring the returned JSON object, you
+                should have observed that what was returned was a list of objects that
+                can be indexed. Thus the function uses a <code class="code">for</code> loop to
+                iterate over the list and display a row of table
+                data representing the current account values. </p><p>Rerun the search using the green <code class="literal">JSON-Search</code>
+                button.</p><p>Once are able to view the Results table of matching accounts,
+                you have completed this lab. Note that the account numbers in the results
+                table are links that don't work yet. If you'd like you
+                can fix this by proceeding with the bonus sections.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ajax-optional-bonus-1"></a>10.3.2.&nbsp;<span class="emphasis"><em>Optional Bonus 1</em></span></h3></div><div><h4 class="subtitle">Implement The Account Details Functionality Using AJAX</h4></div></div></div><p>In this section, you will add additional functionality to display
+                the account details using an AJAX style request.    We will need to help the
+                underlying <code class="classname">MappingJacksonJsonView</code> generate the JSON.</p><p>The following illustration describes the flow of the Account
+                Details scenario:</p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="ajax-bonus-account-details-flow"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/ajax/ajax-account-details.png" align="middle" alt="Account Details Flow"></div></div><p class="title"><b>Figure&nbsp;10.2.&nbsp;Account Details Flow</b></p></div><br xmlns="" class="figure-break"></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="ajax-lab-add-link-to-account"></a>10.3.2.1.&nbsp;Modify Displayed Account Data to Include Details Link</h4></div></div></div><p>In the prior section, you simply displayed the account number
+                and account name as plain text in a table. In this step, you will
+                modify the display of the account number to include a link that will
+                trigger a javascript event, passing the associated account
+                number to a function (already provided) that makes the JSON call to get account details.</p><p>In your callback function for displaying the table of matching
+                accounts, modify the existing simple table data item for the account
+                number to turn this into a link.</p><p>
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>You will want this to be a link that does not go anywhere
+                        but will have an onclick event handler associated to it. Your
+                        modified link will look something like this:</p><p><code class="classname">&lt;a href="#" onclick="clickEventHandlingMethod(customValue)"&gt;data&lt;/a&gt;</code>.
+                        You will want to reference the already defined function
+                        <code class="classname">processAjaxAccountDetails()</code> and find a way to
+                        provide the account number as an argument for each account
+                        item (<code class="literal">TODO-08</code>).</p></td></tr></table></div><p>
+                </p><p>
+                Rerun the JSON search and click on an account number in the results table.
+                A popup dialog of account details should appear.    Note that the date of birth
+                is a long number - it's the underlying long value used to represent a Date
+                in Java.    We will fix this next</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ajax-optional-bonus-2"></a>10.3.3.&nbsp;<span class="emphasis"><em>Optional Bonus 2</em></span></h3></div><div><h4 class="subtitle">See AJAX in Action</h4></div></div></div><p> It is useful to watch the data exchanged by using Firebug.</p><p>Open <a href="http://localhost:8080/ajax" target="_top">http://localhost:8080/ajax</a> in Firefox
+                and navigate to the search page. Use F12 to open Firebug.
+                Select the Net tab and ensure that it is enabled.</p><p> Next, go to the XHR tab. Now, submit the search again and you
+                should see a GET request populated in the display area. Expand the
+                request and examine the Response where you will see the raw JSON object
+                data that was returned. You can also select the JSON tab to get a better
+                idea of how to navigate the returned object.</p></div></div></div><div xmlns="http://www.w3.org/TR/xhtml1/transitional" class="navfooter"><hr></hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="rest-ws-mvc-lab.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="webflow-getting-started.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;9.&nbsp;rest-ws-mvc: Building a REST Server using Spring MVC&nbsp;</td><td width="20%" align="center"><span style="color:white;font-size:90%;"><a href="http://www.spring.io" title="The Spring Framework">Spring By Pivotal</a></span></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;11.&nbsp;webflow-getting-started: Getting Started with Spring Web Flow</td></tr></table></div></body></html>

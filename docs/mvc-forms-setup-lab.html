@@ -1,0 +1,361 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;5.&nbsp;mvc-forms-setup: Building Forms in Spring MVC - Part 1</title><link rel="stylesheet" href="css/html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.0"><link rel="start" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="up" href="index.html" title="Spring Web Training - Lab Documentation"><link rel="prev" href="mvc-views-lab.html" title="Chapter&nbsp;4.&nbsp;mvc-views: Views in Spring MVC"><link rel="next" href="mvc-forms-submit-lab.html" title="Chapter&nbsp;6.&nbsp;mvc-forms-submit: Building Forms in Spring MVC - Part 2"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="background-color:white;border:none;height:73px;border:1px solid black;"><a style="border:none;" href="http://www.pivotal.io" title="Pivotal"><img style="border:none;" src="images/heading-logo-lhs.jpg"></img></a><a style="border:none;" href="http://www.spring.io" title="The Spring Framework"><img style="border:none;position:absolute;padding-top:5px;right:42px;" src="images/heading-logo-rhs.jpg"></img></a></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="mvc-forms-setup-lab"></a>Chapter&nbsp;5.&nbsp;mvc-forms-setup: Building Forms in Spring MVC - Part 1</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mvc-forms-setup-lab-introduction"></a>5.1.&nbsp;Introduction</h2></div></div></div><p>
+            Most web applications use forms to process user input of some
+            kind.
+            In this lab, you will learn how to setup forms with Spring MVC
+            by
+            starting the implementation of the Account Edit page.
+            In the bonus
+            section you can also setup the Account Search page.
+            Form submission is
+            covered by the next lab.
+        </p><p>
+            Please
+            <span class="emphasis"><em>read all of each section first</em></span>
+            - there are hints and tips after the instructions, which sometimes go
+            over the page/off the screen, and you may waste time struggling when
+            the hint or tip would have helped.
+        </p><p>
+            If you are not sure what views are available, refer to
+            <code class="filename">WEB-INF/accounts/tiles.xml</code>
+            and
+            <code class="filename">WEB-INF/tiles.xml</code>
+            .
+        </p><div class="orderedlist"><p class="title"><b>What you will learn:</b></p><ol type="1" compact><li><p>How to use the Spring Form Tag library to render forms
+                    populated with data.
+                </p></li><li><p>How to apply formatting with formatting annotations.</p></li></ol></div><p>Estimated time to complete: 20 minutes</p><p>URL for this project: <a href="http://localhost:8080/mvc-forms-setup" target="_top">
+                http://localhost:8080/mvc-forms-setup</a>.</p><p>Solution URL: <a href="http://localhost:8080/mvc-forms-setup-solution" target="_top">
+                http://localhost:8080/mvc-forms-setup-solution</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mvc-forms-setup-task-description"></a>5.2.&nbsp;The Task: Setup Account Editing</h2></div></div></div><p>
+            In this lab you will implement the first part of the Account
+            Edit page
+            - setting up and displaying a form.
+        </p><p>
+            Here is a graphic illustrating the desired page flow:
+        </p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="mvc-forms-setup-edit-flow-diagram"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/mvc-forms-setup/accounts-site-map-short.png" align="middle" alt="Page flow for Account Edit"></div></div><p class="title"><b>Figure&nbsp;5.1.&nbsp;Page flow for Account Edit</b></p></div><br xmlns="" class="figure-break"></div><p>
+            This is the HTTP contract desired for this functionality:
+            </p><div class="table"><a name="mvc-forms-setup-http-contract"></a><p class="title"><b>Table&nbsp;5.1.&nbsp;HTTP Contract for RewardsOnline Account Processing</b></p><div class="table-contents"><table summary="HTTP Contract for RewardsOnline Account Processing" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>
+                                HTTP Method
+                            </th><th>
+                                Resource
+                            </th><th>
+                                Path Variables
+                            </th><th>
+                                Description
+                            </th></tr></thead><tbody><tr><td>
+                                GET
+                            </td><td>
+                                /accounts/{number}
+                            </td><td>
+                                number: required, String
+                            </td><td>
+                                Get the Account with the given account number. (This lab)
+                            </td></tr><tr><td>
+                                GET
+                            </td><td>
+                                /accounts/{number}/edit
+                            </td><td>
+                                number: required, String
+                            </td><td>
+                                Get the form for editing the specified Account. (This lab)
+                            </td></tr><tr><td>
+                                POST
+                            </td><td>
+                                /accounts/{number}
+                            </td><td>
+                                number: required String
+                            </td><td>
+                                Update the specified Account. (Next lab)
+                            </td></tr></tbody></table></div></div><p><br class="table-break">
+        </p><p>
+            You can also view the page flow by deploying the
+            mvc-forms-setup-solution project and accessing it at
+            <a href="http://localhost:8080/mvc-forms-setup-solution/accounts/123456789" target="_top">http://localhost:8080/mvc-forms-setup-solution/accounts/123456789
+            </a>
+            .
+            The URL's in the solution should corresponds to the table and
+            graphic above.
+            When you have a good grasp of the requirements move on
+            to the first section.
+            </p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>
+                    Be careful not to edit the files in the solution by mistake -
+                    closing the
+                    <code class="literal">mvc-forms-setup-solution</code>
+                    project is a good way to avoid this.
+                </p></td></tr></table></div><p>
+        </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mvc-forms-setup-lab-quick-instructions"></a>5.3.&nbsp;Quick Instructions</h2></div></div></div><p>If you feel you have a good grasp of how Spring form handling
+            works, all you
+            need to do is follow the TODO steps - see the Task List
+            window in STS.  If the TODOs are not appearing in the
+            <span class="emphasis"><em>Tasks</em></span> view, follow the instructions
+            <a href="mvc-getting-started-lab.html#mvc-getting-started-task-view-setup" title="2.3.&nbsp;Configure the TODOs in STS">here</a>.
+        </p><p>In this lab you will setup form creation and display for editing
+            Accounts.
+        </p><p>Steps are:</p><div class="orderedlist"><ol type="1"><li><p>(<code class="literal">TODO-01</code>)
+                    First run the project on the Server and check it
+                    works.  Click on all accounts, pick the first account in the list and
+                    show its details.
+                    Click on the edit link - you should get a 404 error.
+                </p></li><li><p>
+                    Open
+                    <code class="classname">AccountsController.java</code>
+                    and add
+                    an
+                    <code class="code">edit()</code>
+                    method to process an edit request (this is the main part of 
+                    <code class="literal">TODO-01</code>).
+                </p></li><li><p>
+                    Open
+                    <code class="filename">/WEB-INF/accounts/edit.jsp</code>
+                    (use Ctrl+Shift+R) and convert the form to use Spring form tags
+                    (<code class="literal">TODO-03</code>).
+                </p></li><li><p>
+                    Enable formatting for the date of birth field. Edit
+                    <code class="classname">Account.java</code>
+                    and annotate the
+                    <em class="structfield"><code>dateOfBirth</code></em>
+                    to specify a date format
+                    pattern
+                    <code class="literal">yyyy-MM-dd</code>
+                    (<code class="literal">TODO-03</code>).
+                </p></li><li><p>
+                    Retry the edit link (<code class="literal">TODO-04</code>), modify some
+                    data in the form and see if it is reported correctly
+                    when you
+                    click Submit.
+                </p></li><li><p>
+                    If you have time, try the Bonus section, to implement the
+                    account
+                    search facility - see
+                    <span class="emphasis"><em>
+                        <a href="mvc-forms-setup-lab.html#mvc-forms-setup-bonus-work" title="5.5.&nbsp;Optional Bonus Task: Setup an Account Search Page">Section&nbsp;5.5, &#8220;Optional Bonus Task: Setup an Account Search Page&#8221;</a>
+                    </em></span>
+                    below.
+                </p></li></ol></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mvc-forms-setup-lab-instructions"></a>5.4.&nbsp;Detailed Instructions</h2></div></div></div><p>Setup an Account edit-form.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="mvc-forms-setup-account-edit"></a>5.4.1.&nbsp;Implement The Account Edit Page</h3></div></div></div><p>
+                Deploy the
+                <code class="filename">mvc-forms-setup</code>
+                project and access the Account Details page:
+                <a href="http://localhost:8080/mvc-forms-setup/accounts/123456789" target="_top">http://localhost:8080/mvc-forms-setup/accounts/123456789
+                </a>
+                .
+                Or you can navigate to the account using the "List All Accounts"
+                link on the home page - it is the first account
+                in the list.
+                The page
+                should display the account data but the "Edit" link will not work.
+                Confirm that you get a 404 error when you select "Edit".
+            </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-forms-setup-lab-display-edit-form"></a>5.4.1.1.&nbsp;Display The Account Edit Form</h4></div></div></div><p>
+                    Open
+                    <code class="classname">AccountsController.java</code>
+                    and add a method
+                    to process requests for
+                    <code class="filename">/accounts/{number}/edit</code>
+                    .
+                    The method should be similar to the existing show() method except
+                    that
+                    it's based on the
+                    <code class="filename">accounts/edit</code>
+                    view
+                    (<code class="literal">TODO-01</code>).
+                    When this is done reload the edit page.
+                    You should now see a form
+                    although the form fields will be empty.
+                    Why?
+                </p><p>
+                    Open
+                    <code class="filename">/WEB-INF/accounts/edit.jsp</code>
+                    (use Ctrl+Shift+R)
+                    and examine the form.
+                    It's not at all surprising
+                    that the form shows empty fields, is it?
+                    Your next task is to bind
+                    the form fields to the properties of the
+                    Account model attribute (<code class="literal">TODO-02</code>).
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                            Review the slides on using the Spring MVC form tag library
+                            and if you're still unsure ask the instructor.
+                        </p></td></tr></table></div><p>
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                            Remember that using a custom tag library requires a taglib
+                            declaration.
+                            Fortunately code completion (Ctrl+Space) is available
+                            to help.
+                        </p></td></tr></table></div><p>
+                </p><p>
+                    You're ready with this step when the form displays actual
+                    account data.
+                    The data may not be properly formatted just yet.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-forms-setup-lab-form-tags"></a>5.4.1.2.&nbsp;Add Form Field Formatting</h4></div></div></div><p>
+                    Look closely at the
+                    <code class="filename">Date of Birth</code>
+                    field in the Account form.
+                    This uses the default format (e.g.
+                    "1981-04-11 00:00:00.0").
+                    You'll need to format that according to
+                    application requirements instead.
+                    While JSTL format tags can be used
+                    to render the date, they'll be of no help when the form is
+                    submitted.
+                    You need a solution that correctly prints the date during
+                    rendering and parses it during form submission.
+                </p><p>
+                    Open
+                    <code class="filename">Account.java</code>
+                    , and use the
+                    <code class="code">@DateTimeFormat</code>
+                    annotation on the
+                    <code class="code">dateOfBirth</code>
+                    field to specify the pattern to use, which is "
+                    <code class="literal">yyyy-MM-dd</code>
+                    ".
+                    Both Spring MVC form tags (rendering) and the data binding
+                    mechanism
+                    (form submission) will be influenced by the
+                    <code class="code">@DateTimeFormat</code>
+                    annotation.
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                            Remember that date formatting is automatically enabled when
+                            using
+                            the custom MVC namespace
+                            <code class="code">annotation-driven</code>
+                            element and the Joda Time library is available on the classpath.
+                        </p></td></tr></table></div><p>
+                </p><p>
+                    Verify the formatting has been applied by refreshing the page
+                    in the browser.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-forms-setup-lab-save-account"></a>5.4.1.3.&nbsp;Save Account Changes</h4></div></div></div><p>
+                    Try submitting the form. You should get a minimal page showing
+                    you the data submitted. If all the data is there, you are done
+                    for now. Processing the form submission is the subject of the
+                    next section of the course and its lab.
+                </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-forms-test-account-edit"></a>5.4.1.4.&nbsp;A Unit Test for Account Edit</h4></div></div></div><p>
+                    Just to confirm all is working correctly, a unit-test is useful.
+                    One already exists - you just have to enable it and see that it
+                    runs OK.  Go to <code class="classname">AccountsControllerTests</code>
+                    and follow the <code class="literal">TODO</code> instructions to finish
+                    the test.  Run the tests and make sure you get a green bar.
+                </p><p>
+                    Congratulations you have finished this lab.
+                </p></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mvc-forms-setup-bonus-work"></a>5.5.&nbsp;Optional Bonus Task: Setup an Account Search Page</h2></div></div></div><p>
+            As mentioned above, you have now completed the lab.
+            However, you
+            have the choice to continue with the following bonus material.
+            Please
+            note that you will probably need to do this outside normal class
+            time
+            unless you finish early.
+        </p><p>
+            By this point, you should have the ability to view and edit a
+            selected account.
+            However, how do you select an account in the first
+            place?! In this
+            section, you will start to add the capability to
+            search for and select
+            accounts. We will just get the search form
+            setup. Implementing the
+            search
+            forms the bonus section of the next lab.
+        </p><p>
+            The following illustration describes the full flow of the Account
+            Search and Account Edit pages:
+        </p><!--NEW FIGURE DIV--><div xmlns="http://www.w3.org/TR/xhtml1/transitional" style="text-align: center"><div xmlns="" class="figure"><a name="mvc-forms-setup-lab-full-flow-diagram"></a><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/mvc-forms-setup/accounts-site-map.png" align="middle" alt="Combined flow for Account Search, Display and Edit"></div></div><p class="title"><b>Figure&nbsp;5.2.&nbsp;Combined flow for Account Search, Display and Edit</b></p></div><br xmlns="" class="figure-break"></div><p>
+            This includes several new HTTP resources, as defined in the following
+            table:
+            </p><div class="table"><a name="mvc-forms-setup-search-http-contract"></a><p class="title"><b>Table&nbsp;5.2.&nbsp;HTTP Contract for RewardsOnline Account Search Processing
+                </b></p><div class="table-contents"><table summary="HTTP Contract for RewardsOnline Account Search Processing&#xA;                " border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>
+                                HTTP Method
+                            </th><th>
+                                Resource
+                            </th><th>
+                                Request Parameters
+                            </th><th>
+                                Description
+                            </th></tr></thead><tbody><tr><td>
+                                GET
+                            </td><td>
+                                /accounts/search
+                            </td><td>
+                                searchString (String), maxResults (int)
+                            </td><td>
+                                Gets the form for searching accounts. (This lab)
+                            </td></tr><tr><td>
+                                GET
+                            </td><td>
+                                /accounts
+                            </td><td>
+                                searchString (required String), maxResults (int)
+                            </td><td>
+                                Get a list of accounts that meet the provided search
+                                criteria.
+                                (Next lab)
+                            </td></tr></tbody></table></div></div><p><br class="table-break">
+        </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="mvc-forms-setup-bonus-quickinstructions"></a>5.5.1.&nbsp;Quick Instructions</h3></div></div></div><div class="orderedlist"><ol type="1" compact><li><p>
+                        We will perform similar steps to enable account searching.
+                        First try the Search link - it returns an "option not supported"
+                        response.
+                    </p></li><li><p>
+                        Modify the
+                        <code class="classname">AccountsSearchController</code>
+                        (<code class="literal">TODO-07</code>) to return
+                        the search view (see
+                        <code class="filename">WEB-INF/accounts/tiles.xml</code>
+                        to determine view name).
+                    </p></li><li><p>
+                        Edit the search JSP and modity to use Spring's form tags
+                        (<code class="literal">TODO-08</code>). See if the search option works now -
+                        you should be able to see
+                        the data entered (Actually implementing
+                        the search is for the next
+                        lab).
+                    </p></li></ol></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="mvc-forms-setup-bonus-detailed-instructions"></a>5.5.2.&nbsp;Detailed Instructions</h3></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="mvc-forms-setup-lab-bonus-search-form"></a>5.5.2.1.&nbsp;Display The Account Search Form</h4></div></div></div><p>
+                    In this step, you will render the Account Search form.
+                    (<code class="literal">TODO-07</code>) Start by
+                    opening the
+                    <code class="classname">AccountsSearchController</code>
+                    class in the
+                    <code class="classname">rewardsonline.accounts</code>
+                    package.  Modify the existing method to process the request for a
+                    search form.  Currently it returns the
+                    <code class="filename">notsupported</code>
+                    view, but now we need it to select the
+                    <code class="filename">accounts/search</code>
+                    view.
+                    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+                            Recall it is a best practice to group control logic by logical
+                            <span class="emphasis"><em>resource</em></span>
+                            .
+                            You can consider operations against sets of account resources,
+                            like a search, to be distinct from control operations against a
+                            single account resource, like show or edit, for example.
+                            Hence the use of the
+                            <code class="classname">AccountsSearchController</code>
+                            separately from
+                            <code class="classname">AccountsController</code>
+                            .
+                        </p></td></tr></table></div><p>
+                </p><p>
+                    (<code class="literal">TODO-08</code>)
+                    As with accounts, the Account Search form has already been created
+                    for you.  Bind it to the
+                    <code class="filename">accountSearchCriteria</code>
+                    model attribute by using the appropriate Spring MVC form tags to
+                    <code class="filename">accounts/search.jsp</code>.
+                    Remember to add a corresponding object to the model in your
+                    controller method.
+                    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+                            Note that this controller will be used for both new searches
+                            and to modify an existing search.
+                            Treating the
+                            AccountSearchCriteria as a form object with proper data binding
+                            will allow values from the last search to be displayed on the
+                            form.
+                        </p></td></tr></table></div><p>
+                </p><p>
+                    Click on the
+                    <code class="literal">Account Search </code>
+                    link, enter some data into the form
+                    and submit. If you can see the
+                    data you entered, you have done.
+                    In the next lab we will implement
+                    the actual search.
+                </p></div></div></div></div><div xmlns="http://www.w3.org/TR/xhtml1/transitional" class="navfooter"><hr></hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="mvc-views-lab.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="mvc-forms-submit-lab.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;4.&nbsp;mvc-views: Views in Spring MVC&nbsp;</td><td width="20%" align="center"><span style="color:white;font-size:90%;"><a href="http://www.spring.io" title="The Spring Framework">Spring By Pivotal</a></span></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;6.&nbsp;mvc-forms-submit: Building Forms in Spring MVC - Part 2</td></tr></table></div></body></html>
