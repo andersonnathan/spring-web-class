@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<http pattern="/images/**" security="none" />
+	<http pattern="/styles/**" security="none" />
+	<http pattern="/resources/**" security="none" />
+
+	<http auto-config="true">
+		<intercept-url pattern="/login*" access="IS_AUTHENTICATED_ANONYMOUSLY" method="GET"/>
+		<intercept-url pattern="/rewards/newReward" access="ROLE_ADMIN"/>
+		<intercept-url pattern="/accounts/*" access="ROLE_ADMIN" method="PUT"/>
+		<intercept-url pattern="/**" access="ROLE_ADMIN" />
+		<form-login login-page="/login" authentication-failure-url="/login?login_error=1" default-target-url="/" />
+	</http>
+	
+	<authentication-manager>
+		<authentication-provider>
+			<user-service>
+				<user name="joe"   password="spring" authorities="ROLE_USER" />
+				<user name="vince" password="vince" authorities="ROLE_USER" />
+				<user name="edith" password="edith" authorities="ROLE_ADMIN" />
+				<user name="admin" password="spring" authorities="ROLE_ADMIN" />
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>	
+</beans:beans>

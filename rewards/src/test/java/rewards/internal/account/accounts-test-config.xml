@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+
+	<!-- Configuration to support system testing the rewards application. -->
+
+	<!-- Imports an in-memory "rewards" database populated with test data for 
+		fast testing -->
+	<import resource="classpath:datasource/db-config.xml" />
+
+	<context:property-placeholder location="classpath:config.properties" />
+
+	<beans profile="jdbc">
+		<bean id="accountRepository" class="rewards.internal.account.JdbcAccountRepository">
+			<property name="dataSource" ref="dataSource" />
+		</bean>
+
+		<!-- A transaction manager for working with connections from the given 
+			DataSource -->
+		<bean id="transactionManager"
+			class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+			<property name="dataSource" ref="dataSource" />
+		</bean>
+	</beans>
+
+	<beans profile="jpa">
+		<bean id="accountRepository" class="rewards.internal.account.JpaAccountRepository" />
+
+		<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+			<property name="entityManagerFactory" ref="entityManagerFactory" />
+		</bean>
+
+		<!-- Configures the JPA Object Relational Mapper (ORM) for the Admin 
+			and RewardNetwork applications using Hibernate as the provider. -->
+		<bean id="entityManagerFactory"
+			class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+			<property name="dataSource" ref="dataSource" />
+
+			<property name="packagesToScan" value="${entity.packages}" />
+
+			<property name="jpaVendorAdapter">
+				<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+					<property name="database" value="HSQL" />
+					<property name="showSql" value="true" />
+				</bean>
+			</property>
+			<property name="jpaProperties">
+				<value>hibernate.format_sql=true</value>
+			</property>
+		</bean>
+	</beans>
+
+	<beans profile="hibernate">
+		<bean id="accountRepository" class="rewards.internal.account.HibernateAccountRepository">
+			<constructor-arg name="sessionFactory" ref="sessionFactory" />
+		</bean>
+
+		<!-- Drives transactions in a local Hibernate environment -->
+		<bean id="transactionManager"
+			class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+			<property name="sessionFactory" ref="sessionFactory" />
+		</bean>
+
+		<!-- Configures the Hibernate Object Relational Mapper (ORM) for the Admin 
+			and RewardNetwork applications -->
+		<bean id="sessionFactory"
+			class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+			<property name="packagesToScan" value="${entity.packages}" />
+			<property name="dataSource" ref="dataSource" />
+		</bean>
+	</beans>
+
+</beans>

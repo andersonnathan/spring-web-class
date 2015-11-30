@@ -1,0 +1,208 @@
+body, div, td {
+  font-family:Arial, Helvetica, sans-serif;
+  font-size:12px;
+  color:#666;
+}
+
+body {
+  background-color: #fff;
+  background-image: url(../images/springsource_banner_green.png);
+  background-position: top center;
+  background-repeat: no-repeat;
+  text-align:center;
+  min-width:600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.error {
+  color: red;
+  position: absolute;
+  width: 25%;
+  margin-left: 1em;
+}
+
+h1{
+  font-family:Helvetica, sans-serif;
+  color:#7db223;
+  font-size:26px;
+  line-height:40px;
+}
+
+h2{
+  font-family:Helvetica, sans-serif;
+  color:#7db223;
+  font-size:18px;
+  line-height:36px;
+}
+
+h3{
+  font-family:Helvetica, sans-serif;
+  color:#7db223;
+  font-size:16px;
+  line-height:32px;
+}
+
+a:link{color:#7db223; text-decoration:none; font-size:13px;}
+a:visited{color:#7db223; text-decoration:none; font-size:13px;}
+a:hover{color:#456314; text-decoration:none; font-size:13px;}
+a:active{color:#7db223; text-decoration:none; font-size:13px;}
+
+ul {
+  list-style: disc url(../images/bullet.gif);
+}
+
+li {
+  padding-top:5px;
+}
+
+li ul {
+  list-style: square url(../images/sub-bullet.gif);
+}
+
+li ul li ul {
+  list-style: circle none;
+}
+
+#main_wrapper, #page {
+  margin:0 auto;
+  position:relative;
+  top: 85px;
+  left:20px;
+  width:600px;
+  text-align:left;
+}
+
+div.clearfix#header {
+	height: 4px;
+}
+
+div.clearfix#content {
+}
+
+div.clearfix#footer {
+	border-top: solid black 1px;
+	text-align: center;
+}
+
+ul.clearfix, ul.controlLinks, #beneficiaries ul {
+	list-style: none;
+}
+
+ul.controlLinks a:link{text-decoration:underline;}
+
+table {
+  background:#e0e7d3;
+  margin: 0;
+  border: 4px solid #e0e7d3;
+  border-collapse: collapse;
+  width:60%;
+}
+
+table table {
+  margin: -5px 0;
+  border: 0px solid #e0e7d3;
+  width:100%;
+}
+
+table td, table th {
+  padding:8px;
+}
+
+table th {
+  font-size:12px;
+  text-align: left;
+  font-weight: bold;
+  color: #800000;
+  border-bottom: thin solid #800000;
+}
+
+table thead {
+  font-weight:bold;
+  font-style:italic;
+  background-color:#c9d3b8;
+}
+
+caption { 
+  caption-side: top; 
+  width: auto;
+  text-align: left;
+  font-size:12px;
+  color:#848f73;
+  padding-bottom:4px;
+}
+
+fieldset {
+  background:#e0e7d3;
+  padding:4px;
+  padding-bottom:12px;
+  border: solid 2px;
+  width:560px;
+}
+
+fieldset legend {
+  margin: 1.7em;
+  padding: 0em 1.0em 0.3em 1.0em;
+  background-color: white;
+  font-size: large;
+  font-weight: bold;
+  border: solid 1px;
+  padding-top: 0.3em;
+}
+
+fieldset label {
+  float:left;
+  margin-left:0px;
+  display: block;
+  margin-right: 5px;
+  text-align: right;
+  width: 160px;
+  font-weight: bold;
+  color: #456314;
+}
+
+fieldset ul {
+  list-style: none;
+}
+
+fieldset ul li {
+  margin-bottom: 3em;
+  vertical-align: top;
+}
+
+div.control {
+  float: right;
+  margin-top: 0em;
+  text-align: left;
+  vertical-align: top;
+  width: 65%;
+}
+
+fieldset button {
+  margin-top: 2em;
+  padding: 4px;
+  float: left;
+}
+
+fieldset a {
+  text-align: right;
+  padding: 4px;
+  float: right;
+  text-decoration: none;
+  border: solid 1px;
+  background-color: white;
+  margin: 1em 2em;
+}
+
+input[type="text"], input[type="password"] {
+  width:150px;
+  background-color:#FAF8FF;
+}
+
+fieldset input {
+  height:20px;
+  background-color: white;
+}
+
+fieldset table{width:60%;}
+fieldset th{padding-left:25px;}

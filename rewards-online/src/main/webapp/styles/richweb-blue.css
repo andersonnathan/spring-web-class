@@ -1,0 +1,52 @@
+
+@IMPORT url("entity.css");
+@IMPORT url("forms.css");
+@IMPORT url("tables-blue.css");
+
+body, div, td {
+  font-family:Arial, Helvetica, sans-serif;
+  font-size:12px;
+}
+
+div#header {
+  background: transparent none repeat scroll;
+  margin: 0 0 1.5em;
+  padding: 5px 0;
+}
+
+div#footer {
+  background: transparent none repeat scroll;
+  margin: 0 0 1.5em;
+  padding: 5px 0;
+  color: black;
+}
+
+div#branding {
+  padding:10px 0 10px 0;
+  width:100%;
+}
+
+h1, h2 {
+  color: #0582a0;
+}
+
+div#nav a, div#nav a:link, div#nav a:active, div#nav a:visited {
+  /*background-color: #81aeae;*/
+}
+
+div#nav strong a, div#nav strong a:link, div#nav strong a:active, div#nav strong a:visited, div#nav strong a:hover {
+  /*background-color: #2E9AFE;*/
+}
+
+a:link{color:#0582a0; text-decoration:none; font-size:13px; background:transparent;}
+a:hover{color:#451463; text-decoration:none; font-size:13px; background:transparent;}
+a:active{color:#0582a0; text-decoration:none; font-size:13px; background:transparent;}
+a:visited{color:#0582a0; text-decoration:none; font-size:13px; background:transparent;}
+
+form > fieldset {
+  border-color: #0582a0;
+}
+
+body {
+  text-align: inherit;	
+}
