@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<!-- TODO-08: Update welcome tile definition and specify welcome.jsp as its
+             main content -->
+             
+<!-- TODO-09: Refresh the home page - have the header and footer reappeared? -->
+
+<!-- TODO-12: Add a title attribute to the welcome definition. The message
+              code you need is "welcome.title".  Do the same for accounts -
+              see next TO DO step. -->
+
+<tiles-definitions>
+	<!--  TODO-03: Modify the empty tile definition to define a standard layout
+	                 page using the JSP you just created (standard.jsp) -->
+	                 
+	<definition/>
+
+	<!--  TODO-04: Generate a tile definition for the welcome page using the
+	               the standard layout. If you refresh the home page you
+	               will see only the content because it is rendering the
+	               welcome.jsp directly.  We need to configure Tiles next. -->
+
+ </tiles-definitions>

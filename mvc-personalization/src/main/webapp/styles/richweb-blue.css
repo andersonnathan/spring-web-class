@@ -1,0 +1,57 @@
+body, div, td {
+  font-family:Arial, Helvetica, sans-serif;
+  font-size:12px;
+}
+
+div#header {
+  background: transparent none repeat scroll;
+  margin: 0 0 1.5em;
+  padding: 5px 0;	
+}
+
+div#footer {
+  background: transparent none repeat scroll;
+  margin: 0 0 1.5em;
+  padding: 5px 0;
+  color: black;
+  border-top: solid black 1px;
+  text-align: center;
+}
+
+div#branding {
+  padding:10px 0 10px 0;
+  width:100%;
+}
+
+.dijitTitlePaneTitle {
+	border:1px solid #B8C885;
+	font-weight:bold;
+	height:19px;
+	line-height:19px;
+	margin:0pt;
+	padding:3px 6px 0pt;
+	text-align:left;
+}
+
+h1 {
+  color: #0582a0;
+}
+
+a:link{color:#0582a0; text-decoration:none; font-size:13px; background:transparent;}
+a:hover{color:#451463; text-decoration:none; font-size:13px; background:transparent;}
+a:active{color:#0582a0; text-decoration:none; font-size:13px; background:transparent;}
+a:visited{color:#0582a0; text-decoration:none; font-size:13px; background:transparent;}
+
+form > fieldset {
+  border-color: #0582a0;
+}
+
+ul.clearfix, ul.controlLinks, #beneficiaries ul {
+	list-style: none;
+}
+
+ul.controlLinks a:link{text-decoration:underline;}
+
+body {
+  text-align: inherit;	
+}

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<mvc:annotation-driven />
+
+	<!-- Configures a handler for serving static resources by forwarding to 
+		the Servlet container's default Servlet. -->
+	<mvc:default-servlet-handler />
+
+	<mvc:view-controller path="/" view-name="welcome" />
+	<mvc:view-controller path="/home" view-name="welcome" />
+
+	<!-- Get common stylesheet + images from classpath (see rewards project) -->
+	<mvc:resources mapping="/resources/**" location="classpath:/web-resources/" />
+
+    <!-- TODO-01: Deploy this application to the server to make sure it works. Use
+                Run As -> Run On Server again but after selecting your server, on the
+                next dialog remove any other projects from the right-hand side panel.
+                Ask your teacher if unsure. Removing any previously deployed applications
+                from your server allows for faster startup.
+
+              Access the home page at http://localhost:8080/mvc-views and you should
+                see the same application that you built in mvc-getting-started.
+
+	          Now Click on "Accounts" and then on the "Show as Excel" link. Notice the
+	            URL ends in .xls, but you get HTML anyway. -->
+
+	<!-- WARNING: You must restart the server every time you modify this file. -->
+
+	<!-- TODO-02: To return a spreadsheet, we need a view to generate it - take 
+		a look at the AccountsExcelView class. -->
+
+	<!-- TODO-03: Define an AccountsExcelView instance as a Spring Bean. There 
+		are two ways to do this - just pick one. Either 1. Use XML below or 2. Annotate 
+		the original class. What bean id will you use? If not sure, do the next 
+		TO DO step and then come back. -->
+
+	<!-- TODO-04: Add a view resolver that can find a view using its bean-name. 
+		If you weren't sure what bean id to use in the previous step, consider 
+		it now. The bean-name must be a logical-view name. Look at AccountsController 
+		to see what view-name it returns (remember we are going to display a _list_ 
+		of accounts in the spreadsheet). -->
+
+	<!-- TODO-05: Setup a chain of view-resolvers. You now have two - which 
+		one should be used first? If you aren't sure, set one up, RESTART THE SERVER, 
+		and see if it works. If you still only get HTML, you got it backwards! Once 
+		this is working you should ONLY get the spreadsheet returned, even when you 
+		click Accounts on the home page -->
+
+	<!-- TODO-06: Setup a Content Negotiating View Resolver (CNVR). By default 
+		it will use the path extension on the URL, which is what we want. RESTART 
+		THE SERVER. You should now be able to see the account list in HTML again, 
+		and generate the spreadsheet when "Show as Excel" is clicked. -->
+
+	<!-- TODO-07: If you click on the "Show as JSON" link you will also get 
+		an HTML list. If you modify the URL to end in accounts.do, again you still 
+		get HTML. By default HTML is the default content-type when the suffix is 
+		not recognized because the Accept header defaults to text/html. -->
+
+	<!-- TODO-08: To change this, do the following:
+	       a. Setup a ContentNegotiationManager by uncommenting the XML below.
+	          Note the ignoreAcceptHeader property is enabled, we have explicitly
+	          defined HTML as the default format and  and we have told it that we 
+		      only generate html, json and xls.
+		   b. Inject the manager into the CNVR.
+		   c. Set the CNVR's useNotAcceptableStatusCode to true.
+		   d. Restart the server.
+		Everything should work properly but if you click on the :Show as JSON" link
+		you should get a 406 error because the URL is not recognized.
+	-->
+
+    <!-- 
+	<bean id="cnManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="ignoreAcceptHeader" value="true"/>
+		<property name="defaultContentType" value="text/html"/>
+		<property name="mediaTypes">
+			<map>
+				<entry key="html" value="text/html" />
+				<entry key="json" value="application/json" />
+				<entry key="xls" value="application/vnd.ms-excel" />
+			</map>
+		</property>
+	</bean>
+	-->
+
+	<!-- TODO-09a: This configuration is very precise. Click on the "Show as 
+		JSON" link again and then manually change the URL to end in .xxx instead 
+		of .json. Hit enter and you will get HTML again - xxx is not a recognized 
+		suffix, so it defaults to HTML. You only get a 406 if you have explicitly 
+		told it a mediaType to generate but no view exists ton generate that type. -->
+
+	<!-- TODO-09b Try commenting out the defaultContentType on cnManager and 
+		restarting the server. If you clock on the Accounts link it will popup the 
+		spreadsheet. No default format is configured so it falls back on the first 
+		matching view - the Excel view. If you click on the Accounts.html link you 
+		do get HTML because of the .html suffix in the URL. -->
+
+	<!-- TODO-09c: Restore the defaultContentType on cnManager. Comment out 
+		the mediaTypes property. Restart the server, everything should still work, 
+		but if you click on the "Show as JSON" link you no longer get a 406 error 
+		because it doesn't recognize json as a format - it simply defaults to HTML 
+		instead. Restore the mediaTypes property. -->
+
+	<!-- TODO-10: Optional Bonus 1: A JsonViewResolver has been written for 
+		you. Configure it as a Spring bean. -->
+
+	<!-- TODO-11: Optional Bonus 2: Click on a "Show as Json" and you will get 
+		an error because Jackson doesn't know how to convert an Account to JSON. 
+		You need to annotate the Percentage class to tell Jackson how to use it. 
+		Look in Percentage.java for the TO DO step. Restart the server and try clicking 
+		on a "Show as Json" link and now it should work. -->
+
+	<!-- Resolves view names to Tiles definitions -->
+	<bean id="tilesViewResolver"
+		class="org.springframework.web.servlet.view.tiles3.TilesViewResolver">
+		<property name="contentType" value="text/html" />
+		<property name="order" value="2" />
+	</bean>
+
+	<!-- Configures Tiles -->
+	<bean id="tilesConfigurer"
+		class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/tiles.xml</value>
+				<value>/WEB-INF/accounts/tiles.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Resolves messages to support internationalization -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="/WEB-INF/messages/global" />
+	</bean>
+
+</beans>

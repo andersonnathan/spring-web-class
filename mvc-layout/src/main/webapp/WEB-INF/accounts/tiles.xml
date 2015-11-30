@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+	"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+	"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<!-- TODO-10: Add definitions for the accounts pages.  The JSP pages you
+              need are in WEB-INF/accounts (they do not need changing).
+              The tile definition names should match view names returned
+              by AccountsController.
+              Make sure this file is specified in mvc-config.xml.
+              Check the accounts pages display with header and footer. -->
+
+<!-- TODO-13: Add title attribute to each definition. The message codes 
+              you need are accounts.list.title and accounts.show.title.
+              Check pages now display correct title. -->
+
+<tiles-definitions>
+	
+	<definition />
+
+	<definition />
+	
+</tiles-definitions>
