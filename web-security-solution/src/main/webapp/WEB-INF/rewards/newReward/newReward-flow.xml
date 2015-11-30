@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+        
+    <var name="diningForm" class="rewardsonline.rewards.newreward.DiningForm" />
+
+	<view-state id="enterDiningInformation" model="diningForm">
+		<binder>
+			<binding property="creditCardNumber" required="true"/>  
+			<binding property="merchantNumber" required="true"/>            
+			<binding property="amount" required="true"/>
+			<binding property="date" required="true"/>
+		</binder>
+		<on-render>
+			<evaluate expression="diningFormDataProvider.findAllRestaurants()" result="requestScope.restaurants" />
+		</on-render>
+		<transition on="reward" to="reviewReward" />
+	</view-state>
+
+	<view-state id="reviewReward" model="diningForm">
+		<on-render>
+			<evaluate expression="rewardNetwork.calculateContributionFor(diningForm.createDining())" result="requestScope.accountContribution" />
+			<evaluate expression="diningFormDataProvider.findAllRestaurants()" result="requestScope.restaurants" />
+		</on-render>
+		<transition on="recalculateReward"/>
+		<transition on="confirm" to="rewardConfirmed" bind="false">
+			<evaluate expression="rewardNetwork.rewardAccountFor(diningForm.createDining())" result="flashScope.rewardConfirmation" />
+		</transition>
+	</view-state>
+	
+	<end-state id="rewardConfirmed" view="externalRedirect:contextRelative:/rewards/#{rewardConfirmation.confirmationNumber}" />
+
+</flow>

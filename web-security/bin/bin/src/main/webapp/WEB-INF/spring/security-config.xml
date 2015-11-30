@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/util 
+                           http://www.springframework.org/schema/util/spring-util.xsd
+                           http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<!-- A Security configuration is started for you at the end of this file:
+			PLEASE SCROLL DOWN NOW! -->
+
+ 	<!-- To logout at any time prior to TO DO 07, use this link:
+			http://localhost:8080/web-security/j_spring_security_logout -->
+	
+	<!-- TODO-04: Set the login page so it uses '/login' and the access denied page so it uses '/denied'.
+	              *** PLEASE SCROLL DOWN NOW - look for <security:http ...> ***
+	              *** NOTE: login-page and access-denied-page are attributes of DIFFEREMT elements ***
+				  Check the username/password of the user defined in users.properties and
+				  use it to log into the application. 
+				  This user is not allowed to access the 'Account Search' page yet so,
+				  after log in, you should expect to see access denied to this page. -->
+
+	<!-- TODO-05: Logout, then try to log in using incorrect user/password such as 'foo', 'foo'. You should 
+	              get a 404 error  (file not found) because we have not set up an invalid login page.
+	              In this case, we want to be redirected to '/login?login_error=true'. 
+				  Update <security:form-login> below and set the authentication-failure-url attribute.
+				  Re-deploy the application and try logging in again by using an incorrect username/password.
+				  Look at login.jsp to see how it handles the login_error parameter. -->
+	
+	<!-- TODO-06: As defined below, users with role ROLE_EDITOR can already access '/accounts/account*'. 
+				  Update the configuration so users with role ROLE_VIEWER can also access that same URL pattern.
+				  After completing this task, re-deploy the web application. User 'vince' should now be
+		          able to access the account search, display some accounts and view individual accounts.
+		          But not Edit. Try doing a search, click on the first account in the results list
+		          and then click on the Edit link - you will get Access Denied again. -->
+		 
+	<!-- TODO-07: Add a logout link to the standard.jsp (see the TODO in that file) by copying it
+	              from denied.jsp (see TODO in that file also)
+	              Log out by clicking on the 'log out' link. Notice the link disappears.
+	              It reappears if you login again (click on Accounts to force a login).
+	        
+	              Logout once more and then try to access
+	                   'http://localhost:8080/web-security/accounts/hidden'.
+				  As you can see, this URL is not currently protected.
+				  Add an interecept-url for /hidden (see below). For this pattern, all users should be
+				  authenticated (no specific role required). Try to access this URL again and you should
+				  now be redirected to the login page. Once logged in, you are redirected to the hidden page
+				  successfully. -->
+
+	<!-- TODO-08: See corresponding instructions inside 'users.properties' file --> 
+
+	<!-- TODO-09: See corresponding instructions in WEB-INF/accounts/show.jsp -->
+	
+	<!-- TODO-10: See corresponding instructions in WEB-INF/accounts/show.jsp -->
+
+	<!-- TODO-11: Optional Bonus 1: Note the restriction below on '/rewards/newReward'.
+	                a. In 'users.properties' create an admin user with full privileges (all roles)
+	                     and password 'spring'.
+	                b. Modify stadard.jsp to hide the New Reward link to unauthorized users. -->
+	    
+	<!-- TODO-12: Optional Bonus 2: inside the authentication-provider, improve security by using encryption.
+	              See corresponding instructions inside 'users.properties' file -->
+				  
+	<security:http use-expressions="true" access-denied-page="/TODO-04">
+		
+		<security:form-login login-page="/TODO-04" authentication-failure-url="/TODO-05" />
+
+		<security:intercept-url pattern="/rewards/newReward" access="hasRole('ROLE_ADMIN')"/>
+
+		<security:intercept-url pattern="/accounts/*/edit*"
+			access="hasRole('ROLE_EDITOR')" />
+
+		<security:intercept-url pattern="/accounts/**"
+			access="hasRole('ROLE_EDITOR')" />
+
+        <!-- TODO-07c: Add restriction for /hidden -->
+
+		<security:logout/>
+	 </security:http>
+
+	 <security:authentication-manager>
+		<security:authentication-provider>			
+			<security:user-service properties="/WEB-INF/users.properties" />
+			<!-- TODO-12: Optional Bonus 2: Configure password encoder -->
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+</beans>
