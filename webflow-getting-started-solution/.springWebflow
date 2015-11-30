@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webflow-project-description>
+	<version>1</version>
+	<pluginVersion><![CDATA[2.2.0.v200809261800]]></pluginVersion>
+	<configs>
+		<config>
+			<file>src/main/webapp/WEB-INF/rewards/newReward/newReward-flow.xml</file>
+			<name><![CDATA[newReward-flow]]></name>
+			<beans-config><![CDATA[1:BeansModel|2:com.springsource.training.webflowgettingstarted.solution|4:web-context]]></beans-config>
+		</config>
+	</configs>
+</webflow-project-description>

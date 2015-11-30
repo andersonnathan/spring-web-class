@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<!-- When you run this project, go to: http://localhost:8080/webflow-essentials -->
+
+	<!-- TODO-01: Deploy this application to the server. Access the home page 
+		at http://localhost:8080/webflow-essentials. Remove any previously 
+		deployed applications from your server to allow for faster startup. -->
+
+	<!-- TODO-02a: Implement this view-state. Unless otherwise stated the files 
+		you need are all in this directory: WEB-INF/rewards/newReward. A suitable 
+		JSP with a mock view has been provided for you in . It needs setting up as 
+		a Tile - there is an empty tiles.xml provided. Once this is working clicking 
+		on New Reward should finally show a Dining Form. Now complete related steps 
+		TO DO-2b and TO DO-2c. -->
+	<view-state id="enterDiningInformation" />
+
+	<!-- TODO-03: Add a transition from the "enterDiningInformation" state to 
+		this one. How do you know what event-id to transition on? -->
+	<view-state id="reviewReward" />
+
+	<!-- TODO-04: Finally we need to transition to an end-state once the user 
+		confirms they are happy. Create the end-state now and add a suitable transition 
+		into it. If you run the flow now, you should be able to run straight through 
+		it but at the end, it just starts again. -->
+
+	<!-- TODO-05: A RewardController has been provided to allow reward details 
+		to be displayed. Check the code now and work out what it does and how it 
+		works. From the end-state we want to see the reward just created. A redirect 
+		is needed. What URL will you use? (There is only one reward in the system 
+		currently, it has id 1). When the flow works it should show you a Reward 
+		Details page as confirmation, and you are done! -->
+</flow>

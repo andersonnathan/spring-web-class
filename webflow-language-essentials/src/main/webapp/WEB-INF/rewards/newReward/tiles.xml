@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+	"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+	"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+	<!-- TODO-02b: You need to enter definitions for the TWO mock views provided. 
+		Remember that by default a view-state called "myview" expects a view called 
+		"myview" to be available. Refer to one of the other tiles.xml files if you 
+		aren't sure what to do. Set the "navigationTab" attribute to "newReward". 
+		Page titles can be found in messages.properties. -->
+
+	<definition />   <!-- Replace this with a real definition. -->
+
+</tiles-definitions>

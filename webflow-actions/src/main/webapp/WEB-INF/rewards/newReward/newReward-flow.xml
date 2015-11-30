@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+		http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<!-- TODO-01: Deploy this application to the server. Access the home page 
+		at http://localhost:8080/webflow-action-states. Remove any previously deployed 
+		applications from your server to allow for faster startup. -->
+
+	<!-- TODO-02: Add a flow-scoped variable called diningForm of type DiningForm. 
+		Make it the form model-object for the enterDiningInformation state. -->
+
+	<!-- TODO-03: Add form tags to show.jsp - see TODO in that file. -->
+
+	<view-state id="enterDiningInformation">
+		<!-- TODO-04: Check the DiningFormDataProviderImpl, note its bean id and 
+			available methods. Use it to setup a list of available restaurants in view-scope 
+			when this state is first entered. Modify the restaurant <select> in 'enterDiningInformation.jsp' 
+			to load itself from this list of restaurants using a <form:select>. See the 
+			course notes on form-handling (mvc-form-setup) for details. -->
+
+		<!-- TODO-05: Click on 'New Reward' and confirm that the drop-down for 
+			picking a restaurant is fully populated. Enter some data (1234123412341234 
+			is a valid credit-card number), submit then press the back button. If the 
+			form remembers the data you entered, all is working fine. -->
+
+		<!-- TODO-06: Try entering an invalid date or amount and see the form submission 
+			fails. Why? If it doesn't fail - check that you have specified they are required 
+			fields. -->
+
+		<!-- TODO-06: Why it fails: Look in mvc-config.xml and note the conversion-service 
+			has two formatters defined - one for SimpleDate and one for MonetaryAmount. 
+			The same converter is defined in webflow-config.xml. Note the credit-card 
+			field presently accepts any value - we will fix this later. Error messages 
+			are defined by the file /WEB-INF/rewards/newRewards/messages.properties. -->
+
+		<!-- TODO-07: Try submitting a form with no data in - it should fail, but 
+			doesn't. Modify this view-state to specify the required fields. Resubmit 
+			an empty form and you should see errors. -->
+
+		<transition on="reward" to="reviewReward" />
+	</view-state>
+
+	<!-- TODO-08: Add an action to invoke calculateContributionFor on RewardNetwork 
+		before the reviewReward view is presented. Store the return value - look 
+		in reviewReward.jsp and see that a variable called accountContribution is 
+		expected. You will need DiningForm.createDining() to implement this. What 
+		scope will you use? -->
+
+	<!-- TODO-09: Add an action to create the reward once the user clicks the 
+		confirm button. Save the return value as a variable that will be accessible 
+		in the end state where you'll need the confirmation number. You should now 
+		be able to enter a new reward and display it's data. However if you confirm 
+		it always shows a dummy reward with id 1. -->
+
+	<view-state id="reviewReward">
+		<transition on="confirm" to="rewardConfirmed" />
+	</view-state>
+
+	<!-- TODO-10: Modify this end-state to redirect and display the confirmation 
+		details. At the moment the redirect is always to reward #1. Use the Spring 
+		Expression Language to specify the confirmation number using the variable 
+		you defined in the previous TO DO step - replace 1 with something like #{???}. -->
+
+	<end-state id="rewardConfirmed" view="externalRedirect:contextRelative:/rewards/1" />
+
+	<!-- TODO-11: Open and modify /WEB-INF/rewards/show.jsp and make it show 
+		the reward confirmation just created. Try running a New Reward session from 
+		end to end. Once it works you are done. DO NOT modify /WEB-INF/accounts/show.jsp 
+		by mistake. -->
+
+	<!-- If you have time try either of the next two optional sections - do 
+		which ever one interests you most first. -->
+
+	<!-- TODO-12: Optional Bonus 1 (Credit-card Validation). Add a validation 
+		method to DiningForm to check that the credit card number is valid. See corresponding 
+		TO DO in DiningForm.java -->
+
+	<!-- TODO-13-16: Optional Bonus 2: Unit Test the Flow. Open NewRewardFlowTests 
+		and finish implementing a unit-test for this flow - see TO DO steps in that 
+		file. After each TO DO rerun tests to see if it works. -->
+</flow>

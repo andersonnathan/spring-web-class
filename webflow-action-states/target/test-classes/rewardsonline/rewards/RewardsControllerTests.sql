@@ -1,0 +1,3 @@
+create table T_REWARD (ID integer identity primary key, CONFIRMATION_NUMBER varchar(25) not null, REWARD_AMOUNT double not null, REWARD_DATE date not null, ACCOUNT_NUMBER varchar(9) not null, DINING_AMOUNT double not null, DINING_MERCHANT_NUMBER varchar(10) not null, DINING_DATE date not null, unique(CONFIRMATION_NUMBER));
+create sequence S_REWARD_CONFIRMATION_NUMBER start with 1;
+insert into T_REWARD (CONFIRMATION_NUMBER, REWARD_AMOUNT, REWARD_DATE, ACCOUNT_NUMBER, DINING_AMOUNT, DINING_MERCHANT_NUMBER, DINING_DATE) values (next value for S_REWARD_CONFIRMATION_NUMBER, 3.64,'2008-04-11','123456789',45.50,'1234567890','2008-04-11');

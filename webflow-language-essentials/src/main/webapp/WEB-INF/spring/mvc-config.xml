@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- Enables JSR-330 validation -->
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
+	<!-- Defines basic MVC defaults (handler adapter, mapping, date formatting, etc) -->
+	<mvc:annotation-driven validator="validator"/>
+
+	<!-- 
+	  Configures a handler for serving static resources by forwarding to the 
+	  Servlet container's default Servlet. 
+	-->
+	<mvc:default-servlet-handler />
+
+	<!-- Define controllers which only render pages (i.e. nothing added to the model) -->
+	<mvc:view-controller path="/" view-name="welcome"/>
+	<mvc:view-controller path="/home" view-name="welcome"/>
+
+	<!-- Get common stylesheet + images from classpath (see rewards project) -->
+	<mvc:resources mapping="/resources/**" location="classpath:/web-resources/" />
+
+	<!-- Maps requests to flows in the flowRegistry; e.g. a path of /rewards/newReward looks for a flow with id "rewards/newReward" -->
+	<bean id="flowMappings" class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping">
+		<property name="order" value="-1" />
+		<property name="flowRegistry" ref="flowRegistry" />
+	</bean>
+
+	<!-- Note: No need to explicitly list the AnnotationMethodHandlerAdapter, since we're using mvc:annotation-driven -->
+
+	<!-- Dispatches requests mapped to flows to FlowHandler implementations -->
+	<bean class="org.springframework.webflow.mvc.servlet.FlowHandlerAdapter">
+		<property name="flowExecutor" ref="flowExecutor"/>
+	</bean>	
+
+	<!-- Resolves view names to Tiles definitions -->
+	<bean id="tilesViewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver"/>
+
+	<!-- Configures Tiles -->
+	<!--  TODO-02c: Add your new tiles definition file to the list. -->
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/tiles.xml</value>
+				<value>/WEB-INF/accounts/tiles.xml</value>
+				<value>/WEB-INF/rewards/tiles.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Resolves messages to support internationalization -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>/WEB-INF/messages/global</value>
+			</list>
+		 </property>
+	</bean>
+	
+</beans>

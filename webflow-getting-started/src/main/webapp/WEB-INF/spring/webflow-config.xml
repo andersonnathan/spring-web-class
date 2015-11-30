@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:webflow="http://www.springframework.org/schema/webflow-config"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/webflow-config 
+			http://www.springframework.org/schema/webflow-config/spring-webflow-config.xsd">
+
+	<!-- TODO-01: Deploy this application to the server. Access the home page 
+		at http://localhost:8080/webflow-getting-started. Remove any previously deployed 
+		applications from your server to allow for faster startup. A New Reward link 
+		has been added to the options at the bottom of each page. Clicking it generates 
+		a 404. The next few labs will implement it. -->
+
+	<!-- TODO-02: Set up a Webflow executor bean called "flowExecutor". Use 
+		the default configuration (no properties). You will probably need to refer 
+		to the course notes to do these TO DO steps. -->
+
+	<!-- TODO-03: Create a flow registry bean with no properties - for now. -->
+
+	<!-- TODO-04: Setup the correct handler adapter and mapper setting their 
+		properties. -->
+
+	<!-- TODO-05: You will want your new mapper to be used first, so its order 
+		property must also be set. If you look in mvc-config.xml, you won't see any 
+		handler adapters because they are automatically setup for you by <mvc:annotation-driven> 
+		starting from order 0. To make your new handler the first in the chain, use 
+		a value less than zero such as -1. -->
+
+	<!-- TODO-06: Create a new directory: WEB-INF/rewards/newReward and create 
+		a new flow there called newReward-flow.xml. A template (empty-flow.xml) is 
+		provided for you at the top-level of this project. Copy its contents into 
+		your new XML file. It contains the namespace that you need. -->
+
+	<!-- TODO-07: A flow must contain at least one state. Create a view-state 
+		called "enterDiningInformation". -->
+
+	<!-- TODO-08: Register a new flow with id "/rewards/newReward" -->
+
+	<!-- TODO-09: Try running the application and clicking on the New Reward 
+		link. You should still get a 404 but only because the "enterDiningInformation" 
+		does not exist - check the console output to confirm this. -->
+</beans>

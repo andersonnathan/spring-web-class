@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<var name="diningForm" class="rewardsonline.rewards.newreward.DiningForm" />
+
+	<!-- TODO-10: Try entering a new reward. You should find that you end up 
+		in reviewReward even if the one-click option is selected. The value in the 
+		form is being ignored. Do you know why? Modify this state to fix it. If you 
+		are still not sure, read the first tip in the detailed notes for Requirement 
+		#2. If it works you should get a server 500 error (no reward was actually 
+		generated so the redirect in the end-state fails - no rewardConfirmation). -->
+	<view-state id="enterDiningInformation" model="diningForm">
+		<binder>
+			<!-- DiningForm field white-list. -->
+			<binding property="creditCardNumber" required="true" />
+			<binding property="merchantNumber" required="true" />
+			<binding property="amount" required="true" />
+			<binding property="date" required="true" />
+		</binder>
+		<on-render>
+			<evaluate expression="diningFormDataProvider.findAllRestaurants()"
+				result="requestScope.restaurants" />
+		</on-render>
+		<transition on="reward" to="reviewReward">
+			<!-- TODO-05: Modify this evaluate to use the new action method. Refer 
+				to the action by its bean name. In the browser, try entering a new reward 
+				with a bogus 16 digit credit-card number like: 1111222233334444. -->
+			<!-- TODO-12: Remove this evaluate. Run in a browser to see if it works. -->
+			<evaluate
+				expression="rewardNetwork.calculateContributionFor(diningForm.createDining())"
+				result="flowScope.accountContribution" />
+		</transition>
+	</view-state>
+
+	<!-- TODO-08: First step of REQUIREMENT #2. This step is described at the 
+		bottom of enterDiningInformation.jsp. -->
+
+	<!-- TODO-09: Add a new state to see if the one-click option was selected. 
+		What sort of state will you use? If the one-click is selected jump directly 
+		to rewardConfirmed, otherwise go to reviewReward. -->
+
+	<!-- TODO-11: We need to introduce two action states to do the calculations 
+		we need. One will actually generate a reward, the second just calculates 
+		the reward. In both cases use methods on the NewRewardActions class. Insert 
+		these two new states into the flow. You will need to remove the evaluate 
+		in enterDiningInformation. IMPORTANT: Refer to the flow-diagram in the lab-notes 
+		to see how this should work. -->
+
+	<!-- TODO-14: Add a new transition to allow the user to go back and modify 
+		the details of the new reward. -->
+	<view-state id="reviewReward">
+		<transition on="modifyReward" to="enterDiningInformation" />
+		<transition on="confirm" to="rewardConfirmed">
+			<!-- TODO-07: Modify this evaluate to also use the correct action. You 
+				can't test this yet, until we introduce the one-click option. -->
+			<evaluate expression="rewardNetwork.rewardAccountFor(diningForm.createDining())"
+				result="flowScope.rewardConfirmation" />
+		</transition>
+	</view-state>
+
+	<end-state id="rewardConfirmed"
+		view="externalRedirect:contextRelative:/rewards/#{rewardConfirmation.confirmationNumber}" />
+
+</flow>

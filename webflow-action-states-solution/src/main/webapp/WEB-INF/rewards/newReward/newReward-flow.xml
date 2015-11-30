@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<var name="diningForm" class="rewardsonline.rewards.newreward.DiningForm" />
+
+	<view-state id="enterDiningInformation" model="diningForm">
+		<binder>
+			<binding property="creditCardNumber" required="true"/>	
+			<binding property="merchantNumber" required="true"/>			
+			<binding property="amount" required="true"/>
+			<binding property="date" required="true"/>
+			<binding property="oneClickReward"/>
+		</binder>
+		<on-render>
+			<evaluate expression="diningFormDataProvider.findAllRestaurants()" result="requestScope.restaurants" />
+		</on-render>
+		<transition on="reward" to="isOneClickReward" />
+	</view-state>
+
+	<decision-state id="isOneClickReward">
+		<if test="diningForm.oneClickReward" then="confirmReward" else="calculateAccountContribution" />
+	</decision-state>
+
+	<action-state id="confirmReward">
+		<evaluate expression="newRewardActions.rewardAccountForDining" />
+		<transition on="success" to="rewardConfirmed" />
+		<transition on="error" to="enterDiningInformation" />
+	</action-state>
+
+	<action-state id="calculateAccountContribution">
+		<evaluate expression="newRewardActions.calculateAccountContribution" />
+		<transition on="success" to="reviewReward" />
+		<transition on="error" to="enterDiningInformation" />
+	</action-state>
+
+	<view-state id="reviewReward" model="diningForm">
+		<binder>
+			<binding property="creditCardNumber" required="true"/>	
+			<binding property="merchantNumber" required="true"/>			
+			<binding property="amount" required="true"/>
+			<binding property="date" required="true"/>
+		</binder>	
+		<on-render>
+			<evaluate expression="diningFormDataProvider.findAllRestaurants()" result="requestScope.restaurants" />
+		</on-render>
+		<transition on="confirm" to="rewardConfirmed" bind="false">
+			<evaluate expression="newRewardActions.rewardAccountForDining" />
+		</transition>
+		<transition on="recalculateReward">
+			<evaluate expression="newRewardActions.calculateAccountContribution" />
+		</transition>		
+	</view-state>
+
+	<end-state id="rewardConfirmed" view="externalRedirect:contextRelative:/rewards/#{rewardConfirmation.confirmationNumber}" />
+
+</flow>

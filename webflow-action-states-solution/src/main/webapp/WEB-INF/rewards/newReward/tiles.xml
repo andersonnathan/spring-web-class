@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+	"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+	"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+	<definition name="enterDiningInformation" extends="standardLayout">
+		<put-attribute name="title" value="enterDiningInformation.title" />
+		<put-attribute name="main" value="enterDiningInformation.main" />
+		<put-attribute name="navigationTab" value="newReward"/>
+	</definition>
+
+	<definition name="enterDiningInformation.main" template="/WEB-INF/rewards/newReward/enterDiningInformation.jsp">
+		<put-attribute name="diningForm" value="diningForm.reward" />
+	</definition>
+		
+	<definition name="reviewReward" extends="standardLayout">
+		<put-attribute name="title" value="reviewReward.title" />
+		<put-attribute name="main" value="reviewReward.main" />
+		<put-attribute name="navigationTab" value="newReward"/>
+	</definition>
+
+
+	<!-- 
+	 ... Review reward main content needs two sections. Details for review is pulled in from 
+	 ... a JSP.  This page also pulls in diningForm.recalculate (see reviewReward.jsp)
+	 ... and the diningForm attribute customises it for recalulation not initial entry.
+	 -->
+	<definition name="reviewReward.main" template="/WEB-INF/rewards/newReward/reviewReward.jsp">
+		<put-attribute name="confirmReward" value="/WEB-INF/rewards/newReward/confirmReward.jsp" />
+		<put-attribute name="diningForm" value="diningForm.recalculate" />
+	</definition>
+
+	<!-- 
+	 ... Dining form used in two places - but we need different configuration 
+	 ... in each place. The Form is used to create two Tiles "templates".
+	 ...  1. diningForm.reward: Used to create a new reward in the
+	 ...        enterDiningInformation tile
+	 ...  2. diningForm.recalculate : Used to show recalculated reward
+	 ...        details on the reviewReward tile.
+	 -->
+	<definition name="diningForm.reward" template="/WEB-INF/rewards/newReward/diningForm.jsp">
+		<put-attribute name="showOneClickReward" value="true"/>
+		<put-attribute name="rewardButtonEvent" value="reward"/>
+		<put-attribute name="rewardButtonText" value="command.reward"/>		
+	</definition>
+
+	<definition name="diningForm.recalculate" template="/WEB-INF/rewards/newReward/diningForm.jsp">
+		<put-attribute name="rewardButtonEvent" value="recalculateReward"/>
+		<put-attribute name="rewardButtonText" value="command.recalculateReward"/>		
+	</definition>
+		
+</tiles-definitions>
